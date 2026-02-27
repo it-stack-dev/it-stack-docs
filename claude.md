@@ -2,7 +2,7 @@
 
 > **Purpose:** This document provides AI assistants with full context about the IT-Stack project.  
 > **Last Updated:** February 27, 2026 (rev 2)  
-> **Location:** Place at the workspace root (`C:\IT-Stack\claude.md` or `C:\it-stack-dev\claude.md`)
+> **Location:** Place at the workspace root (`C:\IT-Stack\claude.md` or `C:\IT-Stack\it-stack-dev\claude.md`)
 
 ---
 
@@ -15,7 +15,7 @@
 | **Scale** | 20 modules · 7 categories · 120 lab tests · 4 deployment phases |
 | **License** | Apache 2.0 |
 | **Status** | Phase 0 complete, Phase 1 (GitHub bootstrap) starting |
-| **Dev Machine** | Windows · PowerShell · `C:\IT-Stack\` (docs) · `C:\it-stack-dev\` (dev workspace) |
+| **Dev Machine** | Windows · PowerShell · `C:\IT-Stack\` (docs + dev workspace root) · `C:\IT-Stack\it-stack-dev\` (dev workspace) |
 | **Target** | 50–1,000+ users · 8–9 Ubuntu 24.04 servers · 20 integrated services |
 
 ---
@@ -386,10 +386,10 @@ C:\IT-Stack\
 └── claude.md                      # This file
 ```
 
-### Dev Workspace (to be created)
+### Dev Workspace
 
 ```
-C:\it-stack-dev\
+C:\IT-Stack\it-stack-dev\
 ├── repos/
 │   ├── meta/                   # 6 meta repos
 │   ├── 01-identity/            # freeipa, keycloak

@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
-# clone-meta-repos.ps1 — Clone all 6 meta repos into C:\it-stack-dev\repos\meta\
+# clone-meta-repos.ps1 — Clone all 6 meta repos into C:\IT-Stack\it-stack-dev\repos\meta\
 
-$meta = "C:\it-stack-dev\repos\meta"
+$meta = "C:\IT-Stack\it-stack-dev\repos\meta"
 $org  = "it-stack-dev"
 
 $repos = @(

@@ -1,0 +1,68 @@
+{
+  "folders": [
+    {
+      "name": "📚 IT-Stack Docs",
+      "path": "C:\\IT-Stack"
+    },
+    {
+      "name": "🔧 Dev Workspace",
+      "path": "C:\\IT-Stack\\it-stack-dev"
+    },
+    {
+      "name": "🏠 .github",
+      "path": "C:\\.github"
+    },
+    {
+      "name": "📦 Meta: docs",
+      "path": "C:\\IT-Stack\\it-stack-dev\\repos\\meta\\it-stack-docs"
+    },
+    {
+      "name": "📦 Meta: installer",
+      "path": "C:\\IT-Stack\\it-stack-dev\\repos\\meta\\it-stack-installer"
+    },
+    {
+      "name": "📦 Meta: testing",
+      "path": "C:\\IT-Stack\\it-stack-dev\\repos\\meta\\it-stack-testing"
+    },
+    {
+      "name": "📦 Meta: ansible",
+      "path": "C:\\IT-Stack\\it-stack-dev\\repos\\meta\\it-stack-ansible"
+    },
+    {
+      "name": "📦 Meta: terraform",
+      "path": "C:\\IT-Stack\\it-stack-dev\\repos\\meta\\it-stack-terraform"
+    },
+    {
+      "name": "📦 Meta: helm",
+      "path": "C:\\IT-Stack\\it-stack-dev\\repos\\meta\\it-stack-helm"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": true,
+      "**/node_modules": true
+    },
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "yaml.schemas": {
+      "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+    },
+    "search.exclude": {
+      "**/configs/secrets/**": true,
+      "**/.terraform/**": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "redhat.vscode-yaml",
+      "hashicorp.terraform",
+      "ms-vscode.powershell",
+      "ms-azuretools.vscode-docker",
+      "timonwong.shellcheck",
+      "davidanson.vscode-markdownlint",
+      "github.vscode-github-actions"
+    ]
+  }
+}

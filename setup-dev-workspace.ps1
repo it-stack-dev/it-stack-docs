@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
-# setup-dev-workspace.ps1 — Create C:\it-stack-dev\ local development workspace
+# setup-dev-workspace.ps1 — Create C:\IT-Stack\it-stack-dev\ local development workspace
 
-$base = "C:\it-stack-dev"
+$base = "C:\IT-Stack\it-stack-dev"
 
 Write-Host "Creating IT-Stack dev workspace at $base..." -ForegroundColor Cyan
 
