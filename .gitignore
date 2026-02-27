@@ -1,0 +1,261 @@
+# ============================================================
+# IT-Stack — .gitignore
+# ============================================================
+
+# -------------------------------------------------------
+# SECRETS — Never commit credentials, keys, or tokens
+# -------------------------------------------------------
+configs/secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.pkcs12
+secrets.yml
+secrets.yaml
+secrets.json
+vault-password.txt
+vault_password.txt
+.vault_pass
+.ansible_vault_pass
+*_vault_password*
+*.vault
+
+# Ansible Vault encrypted files (except explicitly tracked)
+!**/vault/**
+
+# Environment files with credentials
+.env
+.env.*
+!.env.example
+!.env.template
+
+# SSH keys
+id_rsa
+id_ed25519
+id_ecdsa
+*.pub
+
+# TLS/SSL Certificates (generated, not source)
+certs/
+ssl/
+tls/
+
+# -------------------------------------------------------
+# TERRAFORM
+# -------------------------------------------------------
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# -------------------------------------------------------
+# DOCKER
+# -------------------------------------------------------
+# Docker volumes and data dirs
+data/
+volumes/
+docker-data/
+postgres-data/
+redis-data/
+elasticsearch-data/
+
+# Docker override files with local settings
+docker-compose.override.yml
+docker-compose.local.yml
+
+# -------------------------------------------------------
+# ANSIBLE
+# -------------------------------------------------------
+*.retry
+.galaxy_token
+host_vars/*/vault.yml
+!host_vars/*/vault.yml.example
+
+# -------------------------------------------------------
+# KUBERNETES / HELM
+# -------------------------------------------------------
+kubeconfig
+*.kubeconfig
+charts/*.tgz
+
+# -------------------------------------------------------
+# PYTHON
+# -------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.pyc
+
+# -------------------------------------------------------
+# NODE / JAVASCRIPT
+# -------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm
+dist/
+.next/
+out/
+
+# -------------------------------------------------------
+# JAVA / MAVEN / GRADLE
+# -------------------------------------------------------
+target/
+*.class
+*.jar
+*.war
+.gradle/
+build/
+
+# -------------------------------------------------------
+# PHP / COMPOSER
+# -------------------------------------------------------
+vendor/
+composer.lock
+
+# -------------------------------------------------------
+# RUBY / GEMS
+# -------------------------------------------------------
+Gemfile.lock
+.bundle/
+
+# -------------------------------------------------------
+# LOGS
+# -------------------------------------------------------
+logs/
+*.log
+*.log.*
+*.log.gz
+npm-debug.log
+yarn-debug.log
+
+# -------------------------------------------------------
+# DATABASES (local / dev dumps)
+# -------------------------------------------------------
+*.sql.gz
+*.dump
+*.sqlite
+*.sqlite3
+*.db
+
+# -------------------------------------------------------
+# EDITORS & IDEs
+# -------------------------------------------------------
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains (IntelliJ, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# -------------------------------------------------------
+# OPERATING SYSTEM
+# -------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# -------------------------------------------------------
+# TEST OUTPUT / COVERAGE
+# -------------------------------------------------------
+coverage/
+.coverage
+htmlcov/
+*.lcov
+test-results/
+junit.xml
+*.test.log
+
+# -------------------------------------------------------
+# TEMP / BUILD ARTIFACTS
+# -------------------------------------------------------
+tmp/
+temp/
+.tmp/
+*.tmp
+*.bak
+*.backup
+*.orig
+*.patch
+
+# -------------------------------------------------------
+# PACKAGE MANAGERS
+# -------------------------------------------------------
+.pnp.js
+.pnp/
+
+# -------------------------------------------------------
+# LAB ENVIRONMENTS (generated at runtime)
+# -------------------------------------------------------
+lab-output/
+lab-results/
+lab-reports/
+
+# -------------------------------------------------------
+# KEEP (force-include important examples)
+# -------------------------------------------------------
+!.env.example
+!.env.template
+!configs/examples/
+!docs/
