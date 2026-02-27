@@ -13,8 +13,6 @@
 
 IT-Stack is a **production-ready enterprise IT platform** that replaces the major commercial SaaS subscriptions most organizations depend on. It targets 50–1,000+ users across 8–9 Ubuntu 24.04 servers and integrates 20 open-source services into a cohesive, SSO-connected platform.
 
-**Estimated 5-year TCO savings vs. commercial equivalent: ~$2,000,000**
-
 ---
 
 ## The Stack at a Glance
