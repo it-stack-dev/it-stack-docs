@@ -172,21 +172,20 @@
 
 ## Phase 4: Module Scaffolding — Deployment Phase 1 (Foundation)
 
-> **Status: ✅ COMPLETE** — 5 repos scaffolded · 30 issues filed · CI passing · Lab 01 real content done
+> **Status: ✅ COMPLETE** — 5 repos scaffolded · 30 issues filed · CI passing · Labs 01–02 real content done (10/120 labs)
 
-### 4.1 GitHub Repositories
-
-- [x] `it-stack-freeipa` — full scaffold + `docker-compose.standalone.yml` + `test-lab-01-01.sh` + CI ✅
-- [x] `it-stack-keycloak` — full scaffold + `docker-compose.standalone.yml` + `test-lab-02-01.sh` + CI ✅
-- [x] `it-stack-postgresql` — full scaffold + `docker-compose.standalone.yml` + `test-lab-03-01.sh` + CI ✅
-- [x] `it-stack-redis` — full scaffold + `docker-compose.standalone.yml` + `test-lab-04-01.sh` + CI ✅
-- [x] `it-stack-traefik` — full scaffold + `docker-compose.standalone.yml` + `test-lab-18-01.sh` + CI ✅
+- [x] `it-stack-freeipa` — full scaffold + `docker-compose.standalone.yml` + `test-lab-01-01.sh` + **`docker-compose.lan.yml` + `test-lab-01-02.sh`** + CI ✅
+- [x] `it-stack-keycloak` — full scaffold + `docker-compose.standalone.yml` + `test-lab-02-01.sh` + **`docker-compose.lan.yml` + `test-lab-02-02.sh`** + CI ✅
+- [x] `it-stack-postgresql` — full scaffold + `docker-compose.standalone.yml` + `test-lab-03-01.sh` + **`docker-compose.lan.yml` + `test-lab-03-02.sh`** + CI ✅
+- [x] `it-stack-redis` — full scaffold + `docker-compose.standalone.yml` + `test-lab-04-01.sh` + **`docker-compose.lan.yml` + `test-lab-04-02.sh`** + CI ✅
+- [x] `it-stack-traefik` — full scaffold + `docker-compose.standalone.yml` + `test-lab-18-01.sh` + **`docker-compose.lan.yml` + `test-lab-18-02.sh`** + CI ✅
 
 All 5 repos have:
 - [x] Full directory structure, manifest YAML, Makefile, Dockerfile
-- [x] 6 Docker Compose files (standalone real · others scaffold)
-- [x] 6 lab test scripts (Lab 01 real · others scaffold)
+- [x] 6 Docker Compose files (standalone + lan real · others scaffold)
+- [x] 6 lab test scripts (Labs 01–02 real · others scaffold)
 - [x] 3 GitHub Actions workflows: `ci.yml`, `release.yml`, `security.yml`
+- [x] `lab-01-smoke` + `lab-02-smoke` CI jobs (all 5 green)
 - [x] CI/ShellCheck passing (all 5 green)
 
 ### 4.2 Lab Issues (30 total)

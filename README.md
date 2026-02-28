@@ -5,7 +5,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-CI%2FCD%20Complete-brightgreen.svg)](docs/project/todo.md)
 [![Modules](https://img.shields.io/badge/Modules-20%20scaffolded-green.svg)](https://github.com/orgs/it-stack-dev/repositories)
-[![Labs](https://img.shields.io/badge/Labs-120%20planned-blue.svg)](docs/labs/overview.md)
+[![Labs](https://img.shields.io/badge/Labs-10%2F120%20complete-blue.svg)](docs/labs/overview.md)
 [![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational.svg)](https://it-stack-dev.github.io/it-stack-docs/)
 [![CI](https://img.shields.io/badge/CI-20%2F20%20passing-success.svg)](https://github.com/orgs/it-stack-dev/repositories)
 
@@ -203,8 +203,10 @@ See the full list of [26 repositories](https://github.com/orgs/it-stack-dev/repo
 | 3 | Docs site (MkDocs Material, GitHub Pages) | ✅ Complete |
 | 4 | All 20 module repos scaffolded | ✅ Complete |
 | 5 | CI/CD workflows (20/20 passing) | ✅ Complete |
-| 6 | Ansible playbooks — Phase 1 modules | 🔲 Next |
-| 7 | Real Lab 01 Docker Compose + test scripts | 🔲 Planned |
+| 6 | Ansible playbooks — Phase 1 modules (76 files, 6 roles) | ✅ Complete |
+| 7 | Lab 01 Docker Compose + test scripts — all 5 Phase 1 modules | ✅ Complete |
+| 8 | Lab 02 LAN stacks + test scripts — all 5 Phase 1 modules | ✅ Complete |
+| 9 | Lab 03 Advanced Features — all 5 Phase 1 modules | 🔲 Next |
 
 ---
 
