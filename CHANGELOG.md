@@ -8,9 +8,47 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 1 Lab 05 Sprint)
-- `docker-compose.integration.yml` + `test-lab-XX-05.sh` for all 5 Phase 1 modules (multi-module ecosystem integration)
+### Planned — Next Up (Phase 1 Lab 06 Sprint)
+- `docker-compose.production.yml` + `test-lab-XX-06.sh` for all 5 Phase 1 modules (HA cluster, monitoring, DR)
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.1.0] — 2026-02-28
+
+### Added — Phase 1 Lab 05: Advanced Integration
+
+All 5 Phase 1 modules have real Lab 05 Docker Compose integration stacks and test suites.
+Lab progress: 20/120 → 25/120 (16.7% → 20.8%). This milestone proves cross-service ecosystem wiring.
+
+| Module | Compose | What's New | Test Lines |
+|--------|---------|------------|------------|
+| FreeIPA (01) | `docker-compose.integration.yml` | FreeIPA + KC + PG + Redis — LDAP :389, KC federation component, Kerberos :88, OIDC discovery | 147 lines |
+| Keycloak (02) | `docker-compose.integration.yml` | KC + OpenLDAP (osixia) + phpLDAPadmin + MailHog + 2 OIDC apps — LDAP federation + client creds flow | 177 lines |
+| PostgreSQL (03) | `docker-compose.integration.yml` | PG multi-DB (keycloak+labapp) + Redis + KC + Traefik LB + Prometheus scraping | 131 lines |
+| Redis (04) | `docker-compose.integration.yml` | Redis LRU+keyspace+AOF + PG + KC + Traefik — sessions, queues, rate-limit sorted sets | 130 lines |
+| Traefik (18) | `docker-compose.integration.yml` | Traefik + KC + oauth2-proxy ForwardAuth + security headers + Prometheus scraping :8082 | 123 lines |
+
+#### Integration Architecture Pattern (Lab 05)
+
+```
+Phase 1 service stack:
+  PostgreSQL  — serves keycloak DB + labapp DB; Prometheus scrapes Traefik
+  Redis       — LRU eviction + keyspace events + AOF; KC token cached in Redis
+  Traefik     — ForwardAuth via oauth2-proxy → Keycloak OIDC; /public open, /protected gated
+  Keycloak    — OpenLDAP federation (osixia); phpLDAPadmin; MailHog; app-a + app-b OIDC
+  FreeIPA     — LDAP :389 + Kerberos :88 + DNS; KC LDAP federation; PG + Redis alongside
+```
+
+#### Supporting Files Added
+- `docker/integration/pg-init.sh` (PostgreSQL) — creates `keycloak` + `labapp` databases on startup
+- `docker/integration/prometheus.yml` (Traefik) — scrape config targeting `traefik:8082`
+
+#### CI Updates
+- All 5 repos: validate section now explicitly validates `docker-compose.integration.yml`
+- All 5 repos: `lab-05-smoke` job added to `ci.yml`
+  - PostgreSQL/Redis/Traefik/Keycloak: full Docker runtime test
+  - FreeIPA: pull + config + `bash -n` + ShellCheck (privileged container CI pattern)
 
 ---
 
