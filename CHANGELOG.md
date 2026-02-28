@@ -8,11 +8,52 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 1 Lab 02 Sprint)
-- `docker-compose.lan.yml` + `test-lab-XX-02.sh` for all 5 Phase 1 modules (multi-container, external deps)
-- `docker-compose.advanced.yml` + `test-lab-XX-03.sh` for all 5 Phase 1 modules (advanced features)
+### Planned — Next Up (Phase 1 Lab 03 Sprint)
+- `docker-compose.advanced.yml` + `test-lab-XX-03.sh` for all 5 Phase 1 modules (production features, performance, scaling)
 - `docker-compose.sso.yml` + `test-lab-XX-04.sh` for all 5 Phase 1 modules (Keycloak OIDC/SAML integration)
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [0.8.0] — 2026-02-28
+
+### Added — Phase 1 Lab 02: External Dependencies
+
+All 5 Phase 1 modules have real Lab 02 Docker Compose stacks and test suites.
+Lab progress: 5/120 → 10/120 (4% → 8%).
+
+| Module | Compose | What’s New | Test Lines |
+|--------|---------|------------|------------|
+| FreeIPA (01) | `docker-compose.lan.yml` | FreeIPA + `ldap-client` (debian:12-slim, ldap-utils + krb5-user) | 141 lines |
+| Keycloak (02) | `docker-compose.lan.yml` | Keycloak + `keycloak-db` (PG16, `db-net` internal) | 161 lines |
+| PostgreSQL (03) | `docker-compose.lan.yml` | Primary + Replica (streaming) + pgAdmin | 155 lines |
+| Redis (04) | `docker-compose.lan.yml` | Master + 2 Replicas + 3 Sentinels (quorum=2) | 158 lines |
+| Traefik (18) | `docker-compose.lan.yml` | Traefik + 4 backends: host routing, path routing, rate limit, LB (3 replicas) | 129 lines |
+
+#### New supporting files
+
+- `it-stack-postgresql/docker/replication/primary-init.sh` — creates `replicator` role + `pg_hba.conf` streaming replication entry
+- `it-stack-postgresql/docker/pgadmin/servers.json` — pre-configures pgAdmin with primary + replica connections
+- `it-stack-freeipa/docker/ldap-client/krb5.conf` — Kerberos client config for `LAB.LOCALHOST` realm
+- `it-stack-freeipa/docker/ldap-client/ldap.conf` — LDAP Base DN + URI via ipa-net alias
+
+#### Test coverage highlights
+
+- **PostgreSQL:** WAL level, `max_wal_senders`, replica `pg_is_in_recovery()`, `pg_stat_replication` streaming count, 3-row cross-node replication, replica write rejection, pgAdmin HTTP
+- **Redis:** Master/replica PING+ROLE, data replication to both replicas, all 3 sentinels PING, sentinel master discovery via `get-master-addr-by-name`, TTL persistence
+- **Traefik:** HTTP→HTTPS redirect, HTTPS backends (self-signed `-k`), path routing `/api/v1/echo`, router count ≥3, security headers, load balancer ≥2 unique backends
+- **Keycloak:** Admin token (proves JDBC), realm CRUD (201/409), restart + realm persists (persistence test), OIDC discovery, `db-net` internal flag
+- **FreeIPA:** Port connectivity from ldap-client, anonymous bind, authenticated bind OUs, user create + LDAP verify, `kinit` from client container
+
+#### CI workflow updates (all 5 repos)
+
+- `validate` step: `docker-compose.lan.yml` now strictly validated with `config -q` (not `--no-interpolate`)
+- New `lab-02-smoke` job added to all 5 CI workflows:
+  - PostgreSQL: waits for primary (`pg_isready` 5432) then replica (5433, 180s), runs `test-lab-03-02.sh`
+  - Redis: waits for master PONG (90s) + 30s sentinel settle, runs `test-lab-04-02.sh`
+  - Traefik: waits for `/ping` (90s), runs `test-lab-18-02.sh`
+  - Keycloak: waits for `/health/ready` (200s), runs `test-lab-02-02.sh`
+  - FreeIPA: pull images + syntax check only (privileged containers cannot run in GitHub Actions)
 
 ---
 
