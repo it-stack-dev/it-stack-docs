@@ -8,9 +8,54 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 1 Lab 04 Sprint)
-- `docker-compose.sso.yml` + `test-lab-XX-04.sh` for all 5 Phase 1 modules (Keycloak OIDC/SAML authentication)
+### Planned — Next Up (Phase 1 Lab 05 Sprint)
+- `docker-compose.integration.yml` + `test-lab-XX-05.sh` for all 5 Phase 1 modules (multi-module ecosystem integration)
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.0.0] — 2026-02-28
+
+### Added — Phase 1 Lab 04: SSO Integration
+
+All 5 Phase 1 modules have real Lab 04 Docker Compose stacks and test suites.
+Lab progress: 15/120 → 20/120 (12.5% → 16.7%). This milestone proves the full SSO chain end-to-end.
+
+| Module | Compose | What's New | Test Lines |
+|--------|---------|------------|------------|
+| FreeIPA (01) | `docker-compose.sso.yml` | FreeIPA + Keycloak + KC-DB — LDAP federation component, user sync, OIDC discovery | 130 lines |
+| Keycloak (02) | `docker-compose.sso.yml` | Keycloak + KC-DB + OIDC app + MailHog — full OIDC/SAML hub | 142 lines |
+| PostgreSQL (03) | `docker-compose.sso.yml` | KC + KC-DB + PostgreSQL + pgAdmin + oauth2-proxy — pgAdmin gated by OIDC | 123 lines |
+| Redis (04) | `docker-compose.sso.yml` | KC + KC-DB + Redis + redis-commander + oauth2-proxy — UI gated by OIDC | 107 lines |
+| Traefik (18) | `docker-compose.sso.yml` | KC + KC-DB + Traefik + oauth2-proxy + whoami×2 — ForwardAuth middleware | 103 lines |
+
+#### SSO Architecture Pattern (same across PostgreSQL, Redis, Traefik)
+
+```
+Browser → Traefik/oauth2-proxy → Keycloak OIDC → protected service
+                                      ↑
+                                 it-stack realm
+                                 oauth2-proxy client (confidential)
+                                 labuser (test user)
+```
+
+#### Test coverage highlights
+
+- **FreeIPA:** LDAP port 389 reachable, admin LDAP bind, users OU present, Keycloak `it-stack` realm creation, LDAP federation component (`rhds` vendor, `cn=users,cn=accounts`), full user sync triggered, FreeIPA users visible in Keycloak, OIDC discovery, JWKS endpoint
+- **Keycloak:** Realm with brute-force protection, OIDC confidential client (service accounts + ROPC), SAML client, test user, client credentials grant, ROPC grant, JWT structure (3 parts + `iss`/`exp`/`iat` claims), token refresh, introspection (`active:true`), OIDC discovery (5 fields), SAML descriptor XML, MailHog :8025 + API
+- **PostgreSQL:** Keycloak + realm + client + user via REST API, client credentials token, JWT validation, OIDC discovery, UserInfo, token introspection, JWKS, oauth2-proxy `:4180` redirects to Keycloak (302), PostgreSQL query via labdb
+- **Redis:** Same OIDC flow + Redis PING/SET/GET/INFO, oauth2-proxy SSO gate redirects (302), JWKS signing keys
+- **Traefik:** Same OIDC flow + Traefik dashboard, `/public` → 200 (no auth), `/protected` → 302/401 (ForwardAuth intercepts), `/oauth2/callback` accessible, router count ≥2
+
+#### CI workflow updates (all 5 repos)
+
+- `validate` step: `docker-compose.sso.yml` now strictly validated with `config -q` individually
+- New `lab-04-smoke` job added to all 5 CI workflows (needs: validate, continue-on-error: true):
+  - PostgreSQL: waits for KC ready (200s) + PG ready (60s) — runs `KC_PASS=Lab04Password! bash test-lab-03-04.sh`
+  - Redis: waits for KC ready (200s) + Redis PONG (60s) — runs `KC_PASS=Lab04Password! bash test-lab-04-04.sh`
+  - Traefik: waits for KC ready (200s) + Traefik API (60s) — runs `KC_PASS=Lab04Password! bash test-lab-18-04.sh`
+  - Keycloak: waits for KC ready (200s) — runs `KC_PASS=Lab04Password! bash test-lab-02-04.sh`
+  - FreeIPA: pull images + `config -q` + `bash -n` + ShellCheck (privileged — full test on real VMs)
 
 ---
 
