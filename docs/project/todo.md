@@ -129,10 +129,11 @@
 
 ## Phase 3: Documentation Migration
 
-> **Status: ✅ COMPLETE** — 2026-02-27 (implemented as MkDocs site instead of numbered folder structure)
+> **Status: ✅ COMPLETE** — 2026-02-27
 
 ### What Was Done
 
+**MkDocs site (docs website):**
 - [x] Reorganized all 14 source docs into MkDocs hierarchy under `docs/`
 - [x] Created `docs/architecture/` — `overview.md`, `integrations.md`
 - [x] Created `docs/deployment/` — `lab-deployment.md`, `enterprise-reference.md`
@@ -144,9 +145,15 @@
 - [x] Created `.github/workflows/docs.yml` — auto-deploy to GitHub Pages
 - [x] **Docs live at: https://it-stack-dev.github.io/it-stack-docs/**
 
-### Not Done (lower priority given MkDocs approach)
-- [ ] Category spec docs (`docs/01-core/*.md`) — 7 architecture deep-dives
-- [ ] ADRs in `docs/07-architecture/`
+**Standard numbered docs structure (repo browsing):**
+- [x] Created `docs/01-core/` — 7 category architecture spec docs (identity, database, collaboration, communications, business, it-management, infrastructure)
+- [x] Created `docs/02-implementation/` — deployment and integration guides (docs 03, 04, 06, 12)
+- [x] Created `docs/03-labs/` — lab manuals parts 1–5 (docs 07–11)
+- [x] Created `docs/04-github/` — GitHub org setup guide (doc 13)
+- [x] Created `docs/05-guides/` — master index, lab structure, framework template (docs 01, 02, 14)
+- [x] Created `docs/06-technical-reference/` — full technical reference (doc 05)
+- [x] Created `docs/07-architecture/README.md` — ADR index placeholder
+- [x] Created `docs/README.md` — documentation navigation index for repo browsing
 
 ---
 
