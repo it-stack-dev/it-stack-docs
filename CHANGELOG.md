@@ -8,9 +8,72 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 1 Lab 06 Sprint)
-- `docker-compose.production.yml` + `test-lab-XX-06.sh` for all 5 Phase 1 modules (HA cluster, monitoring, DR)
+### Planned — Next Up (Phase 2 Sprint)
+- Phase 2 Lab 01 (Standalone) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.2.0] — 2026-02-28
+
+### Added — Phase 1 Lab 06: Production Deployment 🎉 Phase 1 Complete
+
+All 5 Phase 1 modules have real Lab 06 production HA Docker Compose stacks and test suites.
+Lab progress: 25/120 → 30/120 (20.8% → 25.0%). **Phase 1 is complete.** All 30 Phase 1 labs done.
+
+| Module | Compose | HA Pattern | Test Lines |
+|--------|---------|------------|------------|
+| FreeIPA (01) | `docker-compose.production.yml` | Privileged FreeIPA + KC + PG + Redis + Traefik; CI syntax-check only | ~90 lines |
+| Keycloak (02) | `docker-compose.production.yml` | 2-node KC cluster (KC_CACHE=local) + Traefik LB + PG + Redis | ~165 lines |
+| PostgreSQL (03) | `docker-compose.production.yml` | bitnami/postgresql:16 streaming replication (master/slave) + PgBouncer :6432 + postgres-exporter :9187 | ~140 lines |
+| Redis (04) | `docker-compose.production.yml` | Redis master + 2 replicas + 3 Sentinel nodes + redis-exporter :9121 | ~145 lines |
+| Traefik (18) | `docker-compose.production.yml` | TLS :443, rate-limit (20/40 burst), secure-headers, retry(3), access logs JSON, Prometheus :9090 | ~145 lines |
+
+#### Production Architecture Patterns (Lab 06)
+
+```
+PostgreSQL HA:
+  pg-primary (bitnami, :5432, REPLICATION_MODE=master)
+  pg-replica  (bitnami, :5433, replicaof pg-primary)
+  pgbouncer   (:6432, transaction pool, MAX_CLIENT_CONN=200)
+  postgres-exporter (:9187, Prometheus metrics)
+
+Redis HA (Sentinel):
+  redis-master  (:6379, AOF + maxmemory 512mb allkeys-lru)
+  redis-replica-1/2 (:6380/:6381, replicaof redis-master)
+  redis-sentinel-1/2/3 (:26379-26381, quorum=2, monitor mymaster)
+  redis-exporter (:9121, oliver006/redis_exporter)
+
+Traefik Production:
+  traefik (:80/:443/:8080/:8082) + 2x whoami backends + prometheus
+  Middlewares: rate-limit (20avg/40burst/1s), secure-headers, retry(3 attempts)
+  Access logs: JSON → /logs/access.log
+  TLS: auto self-signed on :443
+
+Keycloak HA:
+  keycloak-1 + keycloak-2 (quay.io/keycloak/keycloak:26.0, KC_CACHE=local)
+  Traefik :8080 → round-robin LB to both KC nodes
+  Shared: postgres:16-alpine (kc-db) + redis:7-alpine (session cache)
+  Traefik dashboard: :8081
+
+FreeIPA Production (CI-safe; real deployment on privileged Linux host):
+  freeipa (privileged, 172.22.0.10, freeipa/freeipa-server:fedora-41)
+  keycloak (:8080) + postgres (:5432) + redis (:6379) alongside
+  CI: config -q + bash -n + ShellCheck only
+```
+
+#### Supporting Files Added
+- `docker/production/sentinel.conf` (Redis) — Sentinel monitor config for 3-node quorum
+- `docker/production/prometheus.yml` (Traefik) — scrape config targeting `traefik:8082`
+
+#### CI Updates
+- All 5 repos: validate section now explicitly validates `docker-compose.production.yml` with `config -q`
+- All 5 repos: `lab-06-smoke` job added to `ci.yml`
+  - PostgreSQL: wait PG primary/replica/PgBouncer → run `PG_PASS=Lab06Password! bash test-lab-03-06.sh`
+  - Redis: wait master/replicas/sentinels → run `REDIS_PASS=Lab06Password! bash test-lab-04-06.sh`
+  - Traefik: wait Traefik API + backends → run `bash test-lab-18-06.sh`
+  - Keycloak: wait cluster health (300s) → run `KC_PASS=Lab06Password! bash test-lab-02-06.sh`
+  - FreeIPA: pull + `config -q` + `bash -n` + ShellCheck (privileged pattern)
 
 ---
 
