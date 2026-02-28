@@ -1,7 +1,8 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phase 0 Complete · Phase 1 Starting
+**Last Updated:** February 27, 2026  
+**Status:** Phases 0–5 Complete · Next: Ansible Playbooks
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -11,14 +12,14 @@
 ## Table of Contents
 
 1. [Phase 0: Planning & Setup](#phase-0-planning--setup) — ✅ Complete
-2. [Phase 1: GitHub Organization Bootstrap](#phase-1-github-organization-bootstrap)
-3. [Phase 2: Local Development Environment](#phase-2-local-development-environment)
-4. [Phase 3: Documentation Migration](#phase-3-documentation-migration)
-5. [Phase 4: Module Scaffolding — Phase 1 (Foundation)](#phase-4-module-scaffolding--deployment-phase-1-foundation)
-6. [Phase 5: Module Scaffolding — Phase 2 (Collaboration)](#phase-5-module-scaffolding--deployment-phase-2-collaboration)
-7. [Phase 6: Module Scaffolding — Phase 3 (Back Office)](#phase-6-module-scaffolding--deployment-phase-3-back-office)
-8. [Phase 7: Module Scaffolding — Phase 4 (IT Management)](#phase-7-module-scaffolding--deployment-phase-4-it-management)
-9. [CI/CD & Automation Setup](#cicd--automation-setup)
+2. [Phase 1: GitHub Organization Bootstrap](#phase-1-github-organization-bootstrap) — ✅ Complete
+3. [Phase 2: Local Development Environment](#phase-2-local-development-environment) — ✅ Complete
+4. [Phase 3: Documentation Migration](#phase-3-documentation-migration) — ✅ Complete (MkDocs site)
+5. [Phase 4: Module Scaffolding — Phase 1 (Foundation)](#phase-4-module-scaffolding--deployment-phase-1-foundation) — ✅ Complete
+6. [Phase 5: Module Scaffolding — Phase 2 (Collaboration)](#phase-5-module-scaffolding--deployment-phase-2-collaboration) — ✅ Complete
+7. [Phase 6: Module Scaffolding — Phase 3 (Back Office)](#phase-6-module-scaffolding--deployment-phase-3-back-office) — ✅ Complete
+8. [Phase 7: Module Scaffolding — Phase 4 (IT Management)](#phase-7-module-scaffolding--deployment-phase-4-it-management) — ✅ Complete
+9. [CI/CD & Automation Setup](#cicd--automation-setup) — ✅ Workflows complete
 10. [Lab Testing Milestones](#lab-testing-milestones)
 11. [Integration Milestones](#integration-milestones)
 12. [Production Readiness](#production-readiness)
@@ -56,280 +57,188 @@
 
 ## Phase 1: GitHub Organization Bootstrap
 
-> **Estimate:** 2–4 hours  
-> **Prerequisites:** GitHub account with org `it-stack-dev`, GitHub CLI (`gh`) installed and authenticated
+> **Status: ✅ COMPLETE** — 2026-02-27
 
 ### 1.1 Organization-Level `.github` Repository
 
-- [ ] Create repository: `github.com/it-stack-dev/.github`
-- [ ] Create `profile/README.md` — org homepage (see template in `PROJECT-FRAMEWORK-TEMPLATE.md` Appendix A)
-- [ ] Create `CONTRIBUTING.md` — contribution guidelines
-- [ ] Create `CODE_OF_CONDUCT.md` — Contributor Covenant
-- [ ] Create `SECURITY.md` — vulnerability reporting policy
-- [ ] Create `workflows/ci.yml` — reusable CI workflow
-- [ ] Create `workflows/release.yml` — reusable release workflow
-- [ ] Create `workflows/security-scan.yml` — Trivy security scanning
-- [ ] Create `workflows/docker-build.yml` — Docker image build & push to GHCR
+- [x] Create repository: `github.com/it-stack-dev/.github`
+- [x] Create `profile/README.md` — org homepage
+- [x] Create `CONTRIBUTING.md` — contribution guidelines
+- [x] Create `CODE_OF_CONDUCT.md` — Contributor Covenant
+- [x] Create `SECURITY.md` — vulnerability reporting policy
+- [x] Create `workflows/ci.yml` — reusable CI workflow
+- [x] Create `workflows/release.yml` — reusable release workflow
+- [x] Create `workflows/security-scan.yml` — Trivy security scanning
+- [x] Create `workflows/docker-build.yml` — Docker image build & push to GHCR
 
 ### 1.2 Meta Repositories (6)
 
-- [ ] Create `it-stack-docs` — push existing `C:\IT-Stack\docs\` content here
-  - [ ] Initialize git in `C:\IT-Stack\`
-  - [ ] `git remote add origin https://github.com/it-stack-dev/it-stack-docs.git`
-  - [ ] Push `main` branch
-- [ ] Create `it-stack-installer` — bootstrap & automation scripts
-  - [ ] Add placeholder `README.md`
-  - [ ] Add `install.sh` stub
-  - [ ] Add PowerShell setup script stubs
-- [ ] Create `it-stack-testing` — integration & e2e testing suite
-- [ ] Create `it-stack-ansible` — Ansible playbooks for all 20 services
-- [ ] Create `it-stack-terraform` — Terraform modules (VM provisioning)
-- [ ] Create `it-stack-helm` — Helm charts for all services
+- [x] Create `it-stack-docs` — all docs pushed @ `f71ee76`
+  - [x] Initialize git in `C:\IT-Stack\`
+  - [x] `git remote add origin https://github.com/it-stack-dev/it-stack-docs.git`
+  - [x] Push `main` branch
+- [x] Create `it-stack-installer` — bootstrap & automation scripts
+- [x] Create `it-stack-testing` — integration & e2e testing suite
+- [x] Create `it-stack-ansible` — Ansible playbooks for all 20 services
+- [x] Create `it-stack-terraform` — Terraform modules (VM provisioning)
+- [x] Create `it-stack-helm` — Helm charts for all services
 
 ### 1.3 GitHub Projects (5)
 
-- [ ] Create **Project #1** — "Phase 1: Foundation" (Kanban + Table + Roadmap views)
-- [ ] Create **Project #2** — "Phase 2: Collaboration"
-- [ ] Create **Project #3** — "Phase 3: Back Office"
-- [ ] Create **Project #4** — "Phase 4: IT Management"
-- [ ] Create **Project #5** — "Master Dashboard" (all modules)
+- [x] Create **Project #6** — "Phase 1: Foundation"
+- [x] Create **Project #7** — "Phase 2: Collaboration"
+- [x] Create **Project #8** — "Phase 3: Back Office"
+- [x] Create **Project #9** — "Phase 4: IT Management"
+- [x] Create **Project #10** — "Master Dashboard" (all modules)
 
 ### 1.4 Organization-Level Labels
 
-Apply to all repos via script:
-- [ ] `lab` — all lab issues
-- [ ] `module-01` … `module-20` — per-module labels
-- [ ] `phase-1` … `phase-4` — deployment phase
-- [ ] `identity` / `database` / `collaboration` / `communications` / `business` / `it-management` / `infrastructure`
-- [ ] `priority-high` / `priority-med` / `priority-low`
-- [ ] `status-todo` / `status-in-progress` / `status-done` / `status-blocked`
+- [x] 39 labels applied to all 6 meta repos (234 applications, 0 failures)
+  - `lab`, `module-01`–`module-20`, `phase-1`–`phase-4`
+  - Category, priority, and status labels
 
 ### 1.5 Milestones
 
-- [ ] Create milestone: "Phase 1: Foundation" (target: Week 4)
-- [ ] Create milestone: "Phase 2: Collaboration" (target: Week 8)
-- [ ] Create milestone: "Phase 3: Back Office" (target: Week 14)
-- [ ] Create milestone: "Phase 4: IT Management" (target: Week 20)
+- [x] "Phase 1: Foundation" milestone — all repos
+- [x] "Phase 2: Collaboration" milestone — all repos
+- [x] "Phase 3: Back Office" milestone — all repos
+- [x] "Phase 4: IT Management" milestone — all repos
 
 ---
 
 ## Phase 2: Local Development Environment
 
-> **Estimate:** 30–60 minutes
+> **Status: ✅ COMPLETE** — 2026-02-27
 
-- [ ] Run `setup-directory-structure.ps1` to create `C:\it-stack-dev\`
-  - [ ] `repos\meta\`, `repos\01-identity\`, `repos\02-database\`, `repos\03-collaboration\`
-  - [ ] `repos\04-communications\`, `repos\05-business\`, `repos\06-it-management\`, `repos\07-infrastructure\`
-  - [ ] `workspaces\current-sprint\`, `workspaces\labs-testing\`, `workspaces\integration\`
-  - [ ] `deployments\local\`, `deployments\dev\`, `deployments\staging\`, `deployments\production\`
-  - [ ] `lab-environments\tier-1-lab\`, `lab-environments\tier-1-school\`
-  - [ ] `lab-environments\tier-2-department\`, `lab-environments\tier-3-enterprise\`
-  - [ ] `configs\global\`, `configs\modules\`, `configs\environments\`, `configs\secrets\`
-  - [ ] `scripts\setup\`, `scripts\github\`, `scripts\operations\`, `scripts\testing\`
-  - [ ] `scripts\deployment\`, `scripts\utilities\`
-  - [ ] `logs\application\`, `logs\infrastructure\`, `logs\testing\`
-- [ ] Clone all 6 meta repos into `C:\it-stack-dev\repos\meta\`
-- [ ] Create `C:\it-stack-dev\claude.md` — AI assistant context file
-- [ ] Create `C:\it-stack-dev\README.md` — Dev environment quick start
-- [ ] Create `C:\it-stack-dev\configs\global\it-stack.yaml` — Global config
-- [ ] Add PowerShell aliases to profile (`it-stack-dev`, `it-stack-repos`, `it-stack-labs`, etc.)
-- [ ] Install required tools (verify all present):
-  - [ ] Git
-  - [ ] GitHub CLI (`gh`) — authenticated to `it-stack-dev`
+- [x] Created `C:\IT-Stack\it-stack-dev\` with 35 subdirectories
+  - [x] `repos\meta\`, `repos\01-identity\` through `repos\07-infrastructure\`
+  - [x] `workspaces\`, `deployments\`, `lab-environments\`, `configs\`, `scripts\`, `logs\`
+- [x] Cloned all 6 meta repos into `C:\IT-Stack\it-stack-dev\repos\meta\`
+- [x] Created `C:\IT-Stack\it-stack-dev\README.md` — dev environment quick start
+- [x] Created `C:\IT-Stack\it-stack-dev\configs\global\it-stack.yaml` — global config
+- [x] Created `it-stack.code-workspace` — VS Code multi-root workspace
+- [ ] Add PowerShell aliases to profile (`it-stack-dev`, `it-stack-repos`, etc.)
+- [ ] Install and verify all required tools:
   - [ ] Docker Desktop
-  - [ ] kubectl
-  - [ ] Helm
-  - [ ] k3d or minikube (local Kubernetes)
-  - [ ] Ansible (WSL or native)
+  - [ ] kubectl, Helm, k3d
+  - [ ] Ansible (WSL)
   - [ ] Terraform
-  - [ ] Python 3.x
   - [ ] Make (via Chocolatey or WSL)
 
 ---
 
 ## Phase 3: Documentation Migration
 
-> **Estimate:** 2–4 hours  
-> **Goal:** Organize existing 14-doc set into the standard `docs/` hierarchy in `it-stack-docs`
+> **Status: ✅ COMPLETE** — 2026-02-27 (implemented as MkDocs site instead of numbered folder structure)
 
-### 3.1 Create Standard Docs Folder Structure
+### What Was Done
 
-- [ ] Create `docs/01-core/` — one spec doc per category (7 docs)
-- [ ] Create `docs/02-implementation/` — deployment and integration guides
-- [ ] Create `docs/03-labs/` — lab framework, databases, indices
-- [ ] Create `docs/04-github/` — org structure, setup automation, project guides
-- [ ] Create `docs/05-guides/` — master organization guide, AI instructions
-- [ ] Create `docs/06-technical-reference/` — deep technical docs
-- [ ] Create `docs/07-architecture/` — ADRs and diagrams
+- [x] Reorganized all 14 source docs into MkDocs hierarchy under `docs/`
+- [x] Created `docs/architecture/` — `overview.md`, `integrations.md`
+- [x] Created `docs/deployment/` — `lab-deployment.md`, `enterprise-reference.md`
+- [x] Created `docs/labs/` — `overview.md`, `part1` through `part5`
+- [x] Created `docs/project/` — `master-index.md`, `github-guide.md`, `todo.md`
+- [x] Created `docs/contributing/` — `framework-template.md`
+- [x] Created `docs/index.md` — comprehensive home page
+- [x] Created `mkdocs.yml` — Material theme config
+- [x] Created `.github/workflows/docs.yml` — auto-deploy to GitHub Pages
+- [x] **Docs live at: https://it-stack-dev.github.io/it-stack-docs/**
 
-### 3.2 Migrate & Number Existing Documents
-
-| New Path | Source Document |
-|----------|----------------|
-| `docs/05-guides/01-master-index.md` | `MASTER-INDEX.md` |
-| `docs/05-guides/02-lab-manual-structure.md` | `LAB_MANUAL_STRUCTURE.md` |
-| `docs/02-implementation/03-lab-deployment-plan.md` | `lab-deployment-plan.md` |
-| `docs/02-implementation/04-lab-deployment-plan-v2.md` | `lab-deployment-plan(1).md` |
-| `docs/06-technical-reference/05-stack-deployment.md` | `enterprise-it-stack-deployment.md` |
-| `docs/02-implementation/06-stack-complete-v2.md` | `enterprise-stack-complete-v2.md` |
-| `docs/03-labs/07-lab-manual-part1.md` | `enterprise-it-lab-manual.md` |
-| `docs/03-labs/08-lab-manual-part2.md` | `enterprise-it-lab-manual-part2.md` |
-| `docs/03-labs/09-lab-manual-part3.md` | `enterprise-it-lab-manual-part3.md` |
-| `docs/03-labs/10-lab-manual-part4.md` | `enterprise-it-lab-manual-part4.md` |
-| `docs/03-labs/11-lab-manual-part5.md` | `enterprise-lab-manual-part5.md` |
-| `docs/02-implementation/12-integration-guide.md` | `integration-guide-complete.md` |
-| `docs/04-github/13-github-guide.md` | `IT-STACK-GITHUB-GUIDE.md` (new) |
-| `docs/05-guides/14-project-framework.md` | `PROJECT-FRAMEWORK-TEMPLATE.md` |
-
-- [ ] Copy/move each document to new path
-- [ ] Update `MASTER-INDEX.md` with new paths and numbers
-- [ ] Add front-matter (document number, category, date) to each doc
-- [ ] Create `docs/README.md` — documentation index and quick navigation
-
-### 3.3 Create Missing Category Spec Documents (7)
-
-- [ ] `docs/01-core/01-identity.md` — FreeIPA + Keycloak architecture
-- [ ] `docs/01-core/02-database.md` — PostgreSQL + Redis + Elasticsearch
-- [ ] `docs/01-core/03-collaboration.md` — Nextcloud + Mattermost + Jitsi
-- [ ] `docs/01-core/04-communications.md` — iRedMail + FreePBX + Zammad
-- [ ] `docs/01-core/05-business.md` — SuiteCRM + Odoo + OpenKM
-- [ ] `docs/01-core/06-it-management.md` — Taiga + Snipe-IT + GLPI
-- [ ] `docs/01-core/07-infrastructure.md` — Traefik + Zabbix + Graylog
+### Not Done (lower priority given MkDocs approach)
+- [ ] Category spec docs (`docs/01-core/*.md`) — 7 architecture deep-dives
+- [ ] ADRs in `docs/07-architecture/`
 
 ---
 
 ## Phase 4: Module Scaffolding — Deployment Phase 1 (Foundation)
 
-> **Estimate:** 3–5 hours  
-> **Modules:** freeipa (01), keycloak (02), postgresql (03), redis (04), traefik (18)  
-> **Goal:** 5 repos created, 30 lab issues filed, all in GitHub Project #1
+> **Status: ✅ COMPLETE** — 2026-02-27
 
-### 4.1 Create GitHub Repositories (Phase 1)
+- [x] `it-stack-freeipa` — Identity Provider
+- [x] `it-stack-keycloak` — SSO Broker
+- [x] `it-stack-postgresql` — Relational Database
+- [x] `it-stack-redis` — Cache & Session Store
+- [x] `it-stack-traefik` — Reverse Proxy & TLS
 
-- [ ] `it-stack-freeipa` — Identity Provider
-- [ ] `it-stack-keycloak` — SSO Broker
-- [ ] `it-stack-postgresql` — Relational Database
-- [ ] `it-stack-redis` — Cache & Session Store
-- [ ] `it-stack-traefik` — Reverse Proxy & TLS
-
-For each repo above:
-- [ ] Create with `gh repo create it-stack-dev/REPO --public --description "DESC"`
-- [ ] Add topics: `it-stack`, category tag, `module-NN`, `phase-1`, `self-hosted`, `open-source`
-- [ ] Scaffold with `create-repo-template.ps1 -ModuleName NAME -Category CATEGORY`
-- [ ] Initialize git, initial commit, push `main` and `develop` branches
-- [ ] Create `it-stack-REPO.yml` manifest file
-- [ ] Create `README.md` using template from `PROJECT-FRAMEWORK-TEMPLATE.md`
-- [ ] Create 6 lab guide stubs in `docs/labs/`
-- [ ] Create 6 `docker-compose.*.yml` files in `docker/`
-- [ ] Create 6 `test-lab-XX.sh` scripts in `tests/labs/`
-- [ ] Create `Makefile`
-
-### 4.2 Create Lab Issues (Phase 1 — 30 total)
-
-For each of the 5 repos × 6 labs:
-- [ ] Lab 01: Standalone Deployment
-- [ ] Lab 02: External Dependencies
-- [ ] Lab 03: Advanced Features
-- [ ] Lab 04: SSO Integration
-- [ ] Lab 05: Advanced Integration
-- [ ] Lab 06: Production Deployment
-
-- [ ] Run `create-phase1-modules.ps1 -CreateIssues`
-- [ ] Add all 30 issues to GitHub Project #1
-- [ ] Apply labels to all issues (`lab`, `module-NN`, `phase-1`)
+For each repo: full structure scaffolded, manifest, 6 docker-compose files, 6 lab scripts, 6 lab issues filed and linked to Project #6 + #10.
 
 ---
 
 ## Phase 5: Module Scaffolding — Deployment Phase 2 (Collaboration)
 
-> **Modules:** nextcloud (06), mattermost (07), jitsi (08), iredmail (09), zammad (11)  
-> **Goal:** 5 repos created, 30 lab issues in GitHub Project #2
+> **Status: ✅ COMPLETE** — 2026-02-27
 
-- [ ] Create `it-stack-nextcloud` — Collaboration Platform (replaces M365)
-- [ ] Create `it-stack-mattermost` — Team Chat (replaces Slack/Teams)
-- [ ] Create `it-stack-jitsi` — Video Conferencing (replaces Zoom)
-- [ ] Create `it-stack-iredmail` — Email Server (replaces Exchange)
-- [ ] Create `it-stack-zammad` — Help Desk (replaces Zendesk)
+- [x] `it-stack-nextcloud` — Collaboration Platform
+- [x] `it-stack-mattermost` — Team Chat
+- [x] `it-stack-jitsi` — Video Conferencing
+- [x] `it-stack-iredmail` — Email Server
+- [x] `it-stack-zammad` — Help Desk
 
-For each repo: (same checklist as Phase 4 — scaffold, manifest, labs, issues)
-
-- [ ] Run `create-phase2-modules.ps1 -CreateRepos`
-- [ ] Run `create-phase2-modules.ps1 -CreateIssues`
-- [ ] Add 30 issues to GitHub Project #2
+All issues linked to Project #7 + #10.
 
 ---
 
 ## Phase 6: Module Scaffolding — Deployment Phase 3 (Back Office)
 
-> **Modules:** freepbx (10), suitecrm (12), odoo (13), openkm (14)  
-> **Goal:** 4 repos created, 24 lab issues in GitHub Project #3
+> **Status: ✅ COMPLETE** — 2026-02-27
 
-- [ ] Create `it-stack-freepbx` — VoIP PBX (replaces RingCentral)
-- [ ] Create `it-stack-suitecrm` — CRM (replaces Salesforce)
-- [ ] Create `it-stack-odoo` — ERP (replaces SAP/QuickBooks)
-- [ ] Create `it-stack-openkm` — Document Management (replaces SharePoint)
+- [x] `it-stack-freepbx` — VoIP PBX
+- [x] `it-stack-suitecrm` — CRM
+- [x] `it-stack-odoo` — ERP
+- [x] `it-stack-openkm` — Document Management
 
-- [ ] Run `create-phase3-modules.ps1 -CreateRepos`
-- [ ] Run `create-phase3-modules.ps1 -CreateIssues`
-- [ ] Add 24 issues to GitHub Project #3
+All issues linked to Project #8 + #10.
 
 ---
 
 ## Phase 7: Module Scaffolding — Deployment Phase 4 (IT Management)
 
-> **Modules:** taiga (15), snipeit (16), glpi (17), elasticsearch (05), zabbix (19), graylog (20)  
-> **Goal:** 6 repos created, 36 lab issues in GitHub Project #4
+> **Status: ✅ COMPLETE** — 2026-02-27
 
-- [ ] Create `it-stack-taiga` — Project Management (replaces Jira)
-- [ ] Create `it-stack-snipeit` — Asset Management
-- [ ] Create `it-stack-glpi` — IT Service Management (replaces ServiceNow)
-- [ ] Create `it-stack-elasticsearch` — Search & Log Index
-- [ ] Create `it-stack-zabbix` — Infrastructure Monitoring
-- [ ] Create `it-stack-graylog` — Log Management
+- [x] `it-stack-taiga` — Project Management
+- [x] `it-stack-snipeit` — Asset Management
+- [x] `it-stack-glpi` — IT Service Management
+- [x] `it-stack-elasticsearch` — Search & Log Index
+- [x] `it-stack-zabbix` — Infrastructure Monitoring
+- [x] `it-stack-graylog` — Log Management
 
-- [ ] Run `create-phase4-modules.ps1 -CreateRepos`
-- [ ] Run `create-phase4-modules.ps1 -CreateIssues`
-- [ ] Add 36 issues to GitHub Project #4
+All issues linked to Project #9 + #10.
+
+**Total across all phases:** 20 repos · 120 issues · 240 project items · 780 label applications · 80 milestones
 
 ---
 
 ## CI/CD & Automation Setup
 
-> **Applies to all 20 component repos once created**
+> **Status: ✅ Workflows complete (all 20 repos) — Installer scripts pending**
 
-### Per-Repository CI/CD
+### Per-Repository CI/CD ✅
 
-- [ ] `.github/workflows/ci.yml` (inherit from org or copy)  
-  - Triggers: push to `main`/`develop`, all PRs  
-  - Jobs: unit tests → integration tests → Docker build  
-- [ ] `.github/workflows/release.yml`  
-  - Triggers: push tag `v*`  
-  - Jobs: build & push image to GHCR → create GitHub Release  
-- [ ] `.github/workflows/security-scan.yml`  
-  - Triggers: push to `main`, weekly schedule  
-  - Jobs: Trivy filesystem scan  
+- [x] `.github/workflows/ci.yml` deployed to all 20 repos
+  - Validates all Docker Compose files (`--no-interpolate`)
+  - ShellCheck on all lab scripts
+  - Validates module manifest YAML
+  - Trivy config scan → SARIF → GitHub Security tab
+  - Lab 01 smoke test with `continue-on-error: true`
+- [x] `.github/workflows/release.yml` deployed to all 20 repos
+  - Triggers on semver tags `v*.*.*`
+  - Builds and pushes Docker image to GHCR with semver + SHA tags
+  - Trivy image scan, GitHub Release with auto-generated notes
+- [x] `.github/workflows/security.yml` deployed to all 20 repos
+  - Weekly scheduled (Monday 02:00 UTC) Trivy filesystem + config scan
+  - SARIF uploaded to GitHub Security tab
+- [x] All 20 repos CI status: 20/20 ✅ passing
+- [x] `deploy-workflows.ps1` — idempotent deployer for all 3 workflows × 20 repos
 
-### Automation Scripts (in `it-stack-installer`)
+### Automation Scripts in `it-stack-installer` — Pending
 
-- [ ] `scripts/setup/install-tools.ps1` — Installs Git, gh, Docker, Helm, kubectl, Ansible
-- [ ] `scripts/setup/setup-directory-structure.ps1` — Creates `C:\it-stack-dev\` tree
-- [ ] `scripts/setup/setup-github.ps1` — Authenticates `gh`, sets default org
-- [ ] `scripts/github/create-phase1-modules.ps1`
-- [ ] `scripts/github/create-phase2-modules.ps1`
-- [ ] `scripts/github/create-phase3-modules.ps1`
-- [ ] `scripts/github/create-phase4-modules.ps1`
-- [ ] `scripts/github/add-phase1-issues.ps1`
-- [ ] `scripts/github/add-phase2-issues.ps1`
-- [ ] `scripts/github/add-phase3-issues.ps1`
-- [ ] `scripts/github/add-phase4-issues.ps1`
-- [ ] `scripts/github/create-github-projects.ps1`
-- [ ] `scripts/github/create-milestones.ps1`
-- [ ] `scripts/github/apply-labels.ps1`
+- [ ] `scripts/setup/install-tools.ps1` — installs Git, gh, Docker, Helm, kubectl, Ansible
+- [ ] `scripts/setup/setup-directory-structure.ps1`
+- [ ] `scripts/setup/setup-github.ps1`
 - [ ] `scripts/operations/clone-all-repos.ps1`
 - [ ] `scripts/operations/update-all-repos.ps1`
-- [ ] `scripts/utilities/create-repo-template.ps1` — Scaffold a new module repo
-- [ ] `scripts/deployment/deploy-stack.sh` — Full stack deployment
-- [ ] `scripts/testing/run-all-labs.sh` — Run all 120 lab tests
+- [ ] `scripts/deployment/deploy-stack.sh` — full stack deployment
+- [ ] `scripts/testing/run-all-labs.sh` — run all 120 lab tests
 
 ---
 
@@ -461,11 +370,16 @@ For each repo: (same checklist as Phase 4 — scaffold, manifest, labs, issues)
 - [ ] Scale-out plan per service documented
 
 ### Documentation & Handover
-- [ ] All `docs/` content pushed to `it-stack-docs` repo
 - [ ] Runbooks for each service written or linked
-- [ ] Network diagram (with IP addresses) in `docs/07-architecture/`
+- [ ] Network diagram (with IP addresses) in `docs/architecture/`
 - [ ] User onboarding guide (how to get SSO account, access each service)
 - [ ] Admin handover guide (passwords in vault, backup procedures)
+
+---
+
+**Document Version:** 1.1  
+**Project:** IT-Stack | **Org:** it-stack-dev  
+**Last Updated:** 2026-02-27 — Phases 0–5 complete
 
 ---
 

@@ -8,28 +8,128 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Phase 1: Foundation
-- Scaffold `it-stack-freeipa` repository with full 6-lab structure
-- Scaffold `it-stack-keycloak` repository with full 6-lab structure
-- Scaffold `it-stack-postgresql` repository with full 6-lab structure
-- Scaffold `it-stack-redis` repository with full 6-lab structure
-- Scaffold `it-stack-traefik` repository with full 6-lab structure
-- Create GitHub Projects (#1–#5) for all four phases plus master dashboard
-- Apply organization-wide labels to all repos
-- Create phase milestones with target dates
-- GitHub Actions CI/CD workflows (ci.yml, release.yml) for all repos
+### Planned — Next Up
+- Ansible playbooks for Phase 1 modules (FreeIPA, Keycloak, PostgreSQL, Redis, Traefik)
+- Real Lab 01 Docker Compose content replacing scaffold stubs
+- `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
 
-### Planned — Phase 2: Collaboration
-- Scaffold `it-stack-nextcloud`, `it-stack-mattermost`, `it-stack-jitsi`
-- Scaffold `it-stack-iredmail`, `it-stack-zammad`
-- Lab 04 SSO integration tests for all Phase 2 modules
+---
 
-### Planned — Phase 3: Back Office
-- Scaffold `it-stack-freepbx`, `it-stack-suitecrm`, `it-stack-odoo`, `it-stack-openkm`
+## [0.6.0] — 2026-02-27
 
-### Planned — Phase 4: IT Management
-- Scaffold `it-stack-taiga`, `it-stack-snipeit`, `it-stack-glpi`
-- Scaffold `it-stack-elasticsearch`, `it-stack-zabbix`, `it-stack-graylog`
+### Added — Phase 5: CI/CD Workflows
+
+#### GitHub Actions (3 workflows × 20 repos = 60 files)
+- `ci.yml` — validates all Docker Compose files (`--no-interpolate`), ShellCheck on lab scripts, manifest validation, Trivy config scan (SARIF → GitHub Security tab), Lab 01 smoke test with `continue-on-error`
+- `release.yml` — Docker image build and push to GHCR on semver tags (`v*.*.*`), Trivy image scan, GitHub Release with auto-generated release notes
+- `security.yml` — weekly scheduled (Monday 02:00 UTC) Trivy filesystem + config scan with SARIF upload to GitHub Security
+- All 20 repos: CI status 20/20 ✅ passing
+
+#### Scripts
+- `deploy-workflows.ps1` — redeploys all 3 workflows to all 20 component repos atomically
+
+#### Bug Fixes
+- Fixed `docker-compose.sso.yml` duplicate YAML key `keycloak` in `it-stack-keycloak` repo (renamed conflicting service to `keycloak-sso`)
+- Fixed all 20 `ci.yml` stubs where `$f` shell variable was consumed by PowerShell during scaffold generation, producing broken `\` literals
+- Fixed `docker compose config` invocation to use `--no-interpolate` (compose files use placeholder vars not available in CI)
+
+---
+
+## [0.5.0] — 2026-02-27
+
+### Added — All 20 Module Repos Scaffolded
+
+#### GitHub Repositories (20 component repos)
+- All 20 component repos created on GitHub, each with 21 scaffolded items
+- Full directory structure per repo: `src/`, `tests/labs/`, `docker/`, `kubernetes/`, `helm/`, `ansible/`, `docs/labs/`
+- 6 Docker Compose files per repo: `standalone`, `lan`, `advanced`, `sso`, `integration`, `production`
+- 6 lab test scripts per repo: `test-lab-01.sh` through `test-lab-06.sh`
+- Module manifest YAML (`it-stack-{module}.yml`) with full metadata
+- `Makefile`, `Dockerfile`, `.env.example`, `.gitattributes`, standard community files
+
+#### GitHub Issues (120 total)
+- 6 lab issues per module × 20 modules = 120 issues
+- All labeled: `lab`, `module-NN`, `phase-N`, category tag, `priority-high`
+- All milestoned to correct phase
+- All linked to GitHub Projects: phase-specific project + Master Dashboard (#10) = 240 project items
+
+#### Labels & Milestones
+- 39 labels × 20 repos = 780 label applications (0 failures)
+- 4 milestones × 20 repos = 80 milestone applications (0 failures)
+
+#### Scripts
+- `scaffold-module.ps1` — full scaffold for all 20 module repos (1177 lines)
+- `create-component-repos.ps1`, `apply-labels-components.ps1`, `apply-milestones-components.ps1`
+- `create-lab-issues.ps1` — 120 issues, `link-issues-to-projects.ps1` — 240 project items
+- `add-gitattributes.ps1` — consistent LF line endings across all repos
+
+---
+
+## [0.4.0] — 2026-02-27
+
+### Added — Documentation Site (MkDocs + GitHub Pages)
+
+#### MkDocs Material Site
+- `mkdocs.yml` — Material theme with dark/light mode, tabs, search, code copy, sticky navigation
+- `docs/index.md` — Comprehensive home page with module table, 7-layer architecture, phase tabs, server layout
+- `requirements-docs.txt` — `mkdocs-material>=9.5`, `mkdocs-minify-plugin>=0.8`
+- **Docs live at: https://it-stack-dev.github.io/it-stack-docs/**
+
+#### Documentation Reorganized into MkDocs Hierarchy
+- `docs/architecture/` — `overview.md` (arch + server layout), `integrations.md` (all 15 integrations)
+- `docs/deployment/` — `lab-deployment.md`, `enterprise-reference.md`
+- `docs/labs/` — `overview.md`, `part1-network-os.md` through `part5-business-management.md`
+- `docs/project/` — `master-index.md`, `github-guide.md`, `todo.md`
+- `docs/contributing/` — `framework-template.md`
+
+#### GitHub Actions
+- `.github/workflows/docs.yml` — auto-deploys to GitHub Pages on push to `docs/**` or `mkdocs.yml`
+
+#### Scripts
+- `reorganize-docs.ps1`, `enable-pages.ps1`
+
+---
+
+## [0.3.0] — 2026-02-27
+
+### Added — Local Development Environment
+
+#### Dev Workspace (`C:\IT-Stack\it-stack-dev\`)
+- 35 subdirectories: `repos/meta/`, 7 category dirs (`01-identity/` – `07-infrastructure/`), `workspaces/`, `deployments/`, `lab-environments/`, `configs/`, `scripts/`, `logs/`
+- All 6 meta repos cloned into `repos/meta/`
+- `configs/global/it-stack.yaml` — global config (all 8 servers, subdomains, all 20 service ports, versions)
+- `README.md` — dev environment quick start guide
+- `it-stack.code-workspace` — VS Code multi-root workspace (at `C:\IT-Stack\` root)
+
+#### Scripts
+- `setup-dev-workspace.ps1`, `clone-meta-repos.ps1`
+
+---
+
+## [0.2.0] — 2026-02-27
+
+### Added — GitHub Organization Bootstrap
+
+#### Organization `.github` Repository
+- `profile/README.md` — org homepage with module table and architecture overview
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` — org-level community files
+- `workflows/ci.yml`, `release.yml`, `security-scan.yml`, `docker-build.yml` — reusable workflow templates
+
+#### Meta Repositories (6 created and initialized)
+- `it-stack-docs`, `it-stack-installer`, `it-stack-testing`
+- `it-stack-ansible`, `it-stack-terraform`, `it-stack-helm`
+
+#### GitHub Projects (5)
+- Project #6: Phase 1 Foundation · Project #7: Phase 2 Collaboration
+- Project #8: Phase 3 Back Office · Project #9: Phase 4 IT Management
+- Project #10: Master Dashboard (all 20 modules)
+
+#### Labels and Milestones
+- 39 labels applied to all 6 meta repos (234 applications)
+- 4 phase milestones applied to all 6 meta repos (24 milestones)
+
+#### Scripts
+- `apply-labels.ps1`, `create-milestones.ps1`, `fix-milestones.ps1`, `push-phase1-repos.ps1`
 
 ---
 

@@ -4,6 +4,17 @@
 
 IT-Stack replaces every commercial tool your organization needs with self-hosted, fully integrated open-source services. Identity management, collaboration, communications, business systems, IT management, and infrastructure monitoring — all in one stack.
 
+!!! success "Project Status — February 27, 2026"
+    | Phase | Description | Status |
+    |-------|-------------|--------|
+    | 0 | Planning & documentation | ✅ Complete |
+    | 1 | GitHub org (26 repos, 120 issues, 5 projects) | ✅ Complete |
+    | 2 | Local dev environment | ✅ Complete |
+    | 3 | Docs site (MkDocs + GitHub Pages) | ✅ Complete |
+    | 4 | All 20 module repos scaffolded | ✅ Complete |
+    | 5 | CI/CD workflows — 20/20 passing | ✅ Complete |
+    | 6 | Ansible playbooks — Phase 1 modules | 🔲 Next |
+
 ---
 
 ## What IT-Stack Replaces

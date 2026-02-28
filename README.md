@@ -3,9 +3,11 @@
 > **Complete enterprise IT platform built entirely from open-source software — $0 in software licensing.**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Phase](https://img.shields.io/badge/Phase-1%20Foundation-orange.svg)](docs/IT-STACK-TODO.md)
-[![Modules](https://img.shields.io/badge/Modules-20-green.svg)](docs/MASTER-INDEX.md)
-[![Labs](https://img.shields.io/badge/Labs-120-brightgreen.svg)](docs/LAB_MANUAL_STRUCTURE.md)
+[![Status](https://img.shields.io/badge/Status-CI%2FCD%20Complete-brightgreen.svg)](docs/project/todo.md)
+[![Modules](https://img.shields.io/badge/Modules-20%20scaffolded-green.svg)](https://github.com/orgs/it-stack-dev/repositories)
+[![Labs](https://img.shields.io/badge/Labs-120%20planned-blue.svg)](docs/labs/overview.md)
+[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational.svg)](https://it-stack-dev.github.io/it-stack-docs/)
+[![CI](https://img.shields.io/badge/CI-20%2F20%20passing-success.svg)](https://github.com/orgs/it-stack-dev/repositories)
 
 ---
 
@@ -75,25 +77,35 @@ Layer 1: Identity & Security — FreeIPA · Keycloak
 
 ## Repository Structure
 
-This repository (`it-stack-docs`) contains all IT-Stack documentation.
+This repository (`it-stack-docs`) is the documentation and bootstrap hub for the IT-Stack organization.
 
 ```
 it-stack-docs/
-├── docs/                          # All project documentation (~600 pages)
-│   ├── MASTER-INDEX.md            # Documentation navigation guide
-│   ├── PROJECT-FRAMEWORK-TEMPLATE.md  # Canonical project blueprint
-│   ├── IT-STACK-TODO.md           # Living task checklist
-│   ├── IT-STACK-GITHUB-GUIDE.md   # GitHub org setup guide + scripts
-│   ├── LAB_MANUAL_STRUCTURE.md    # Lab manual overview
-│   ├── lab-deployment-plan.md     # Test deployment strategy
-│   ├── enterprise-it-stack-deployment.md  # Full technical reference
-│   ├── enterprise-stack-complete-v2.md   # 8-server architecture
-│   ├── enterprise-it-lab-manual.md       # Lab Part 1: Network & OS
-│   ├── enterprise-it-lab-manual-part2.md # Lab Part 2: Identity/DB/SSO
-│   ├── enterprise-it-lab-manual-part3.md # Lab Part 3: Collaboration
-│   ├── enterprise-it-lab-manual-part4.md # Lab Part 4: Communications
-│   ├── enterprise-lab-manual-part5.md    # Lab Part 5: Back Office
-│   └── integration-guide-complete.md    # Cross-service integration
+├── docs/                          # MkDocs source — live at it-stack-dev.github.io/it-stack-docs
+│   ├── index.md                   # Home page
+│   ├── architecture/
+│   │   ├── overview.md            # 8-server layout, 7-layer stack
+│   │   └── integrations.md        # All 15 cross-service integrations
+│   ├── deployment/
+│   │   ├── lab-deployment.md      # Lab/test deployment (3–5 servers)
+│   │   └── enterprise-reference.md # Full technical reference (112 KB)
+│   ├── labs/
+│   │   ├── overview.md            # 6-lab methodology
+│   │   ├── part1-network-os.md    # Part 1: Network & OS
+│   │   ├── part2-identity-database.md
+│   │   ├── part3-collaboration.md
+│   │   ├── part4-communications.md
+│   │   └── part5-business-management.md
+│   ├── project/
+│   │   ├── master-index.md        # Documentation navigation
+│   │   ├── github-guide.md        # GitHub org setup guide + scripts
+│   │   └── todo.md                # Living task checklist
+│   └── contributing/
+│       └── framework-template.md  # Canonical project blueprint
+├── mkdocs.yml                     # MkDocs Material config
+├── requirements-docs.txt          # MkDocs dependencies
+├── .github/workflows/docs.yml     # Auto-deploy to GitHub Pages
+├── deploy-workflows.ps1           # CI/CD deployer (all 20 repos)
 ├── README.md                      # This file
 ├── CHANGELOG.md                   # Version history
 ├── CONTRIBUTING.md                # Contribution guidelines
@@ -108,15 +120,17 @@ it-stack-docs/
 
 ## Documentation Map
 
+**Docs site:** https://it-stack-dev.github.io/it-stack-docs/
+
 | Document | Purpose | Start Here If… |
 |----------|---------|----------------|
-| [MASTER-INDEX.md](docs/MASTER-INDEX.md) | Full navigation guide | You want to understand the full scope |
-| [PROJECT-FRAMEWORK-TEMPLATE.md](docs/PROJECT-FRAMEWORK-TEMPLATE.md) | Conventions, patterns, automation | You're building or scaffolding a module |
-| [IT-STACK-TODO.md](docs/IT-STACK-TODO.md) | Task tracking checklist | You want to see what's done/in progress |
-| [IT-STACK-GITHUB-GUIDE.md](docs/IT-STACK-GITHUB-GUIDE.md) | GitHub org setup scripts | You're bootstrapping the GitHub org |
-| [enterprise-stack-complete-v2.md](docs/enterprise-stack-complete-v2.md) | 8-server architecture | You need server specs and IP layout |
-| [LAB_MANUAL_STRUCTURE.md](docs/LAB_MANUAL_STRUCTURE.md) | Lab methodology overview | You want to understand the 6-lab system |
-| [integration-guide-complete.md](docs/integration-guide-complete.md) | Cross-service integration | You're configuring service-to-service links |
+| [docs/project/master-index.md](docs/project/master-index.md) | Full navigation guide | You want to understand the full scope |
+| [docs/contributing/framework-template.md](docs/contributing/framework-template.md) | Conventions, patterns, automation | You're building or scaffolding a module |
+| [docs/project/todo.md](docs/project/todo.md) | Task tracking checklist | You want to see what's done/in progress |
+| [docs/project/github-guide.md](docs/project/github-guide.md) | GitHub org setup scripts | You're bootstrapping the GitHub org |
+| [docs/architecture/overview.md](docs/architecture/overview.md) | 8-server architecture | You need server specs and IP layout |
+| [docs/labs/overview.md](docs/labs/overview.md) | Lab methodology overview | You want to understand the 6-lab system |
+| [docs/architecture/integrations.md](docs/architecture/integrations.md) | Cross-service integration | You're configuring service-to-service links |
 
 ---
 
@@ -179,12 +193,27 @@ See the full list of [26 repositories](https://github.com/orgs/it-stack-dev/repo
 
 ---
 
+## Project Status
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 0 | Planning & documentation | ✅ Complete |
+| 1 | GitHub org bootstrap (26 repos, 120 issues, 5 projects) | ✅ Complete |
+| 2 | Local dev environment (`C:\IT-Stack\it-stack-dev\`) | ✅ Complete |
+| 3 | Docs site (MkDocs Material, GitHub Pages) | ✅ Complete |
+| 4 | All 20 module repos scaffolded | ✅ Complete |
+| 5 | CI/CD workflows (20/20 passing) | ✅ Complete |
+| 6 | Ansible playbooks — Phase 1 modules | 🔲 Next |
+| 7 | Real Lab 01 Docker Compose + test scripts | 🔲 Planned |
+
+---
+
 ## Getting Started
 
-1. **Read** [MASTER-INDEX.md](docs/MASTER-INDEX.md) for the full documentation map
-2. **Follow** [IT-STACK-GITHUB-GUIDE.md](docs/IT-STACK-GITHUB-GUIDE.md) to bootstrap the GitHub organization
-3. **Track progress** in [IT-STACK-TODO.md](docs/IT-STACK-TODO.md)
-4. **Deploy Phase 1** using [enterprise-it-lab-manual-part2.md](docs/enterprise-it-lab-manual-part2.md)
+1. **Browse** the docs at https://it-stack-dev.github.io/it-stack-docs/
+2. **Read** [docs/project/master-index.md](docs/project/master-index.md) for the full documentation map
+3. **Track progress** in [docs/project/todo.md](docs/project/todo.md)
+4. **Deploy Phase 1** using [docs/labs/part2-identity-database.md](docs/labs/part2-identity-database.md)
 
 ---
 
