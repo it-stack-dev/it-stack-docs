@@ -8,10 +8,49 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 1 Lab 03 Sprint)
-- `docker-compose.advanced.yml` + `test-lab-XX-03.sh` for all 5 Phase 1 modules (production features, performance, scaling)
-- `docker-compose.sso.yml` + `test-lab-XX-04.sh` for all 5 Phase 1 modules (Keycloak OIDC/SAML integration)
+### Planned — Next Up (Phase 1 Lab 04 Sprint)
+- `docker-compose.sso.yml` + `test-lab-XX-04.sh` for all 5 Phase 1 modules (Keycloak OIDC/SAML authentication)
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [0.9.0] — 2026-02-28
+
+### Added — Phase 1 Lab 03: Advanced Features
+
+All 5 Phase 1 modules have real Lab 03 Docker Compose stacks and test suites.
+Lab progress: 10/120 → 15/120 (8% → 12.5%).
+
+| Module | Compose | What's New | Test Lines |
+|--------|---------|------------|------------|
+| FreeIPA (01) | `docker-compose.advanced.yml` | FreeIPA + `policy-client` (one-shot: sudo rules, HBAC, password policy, automount maps) | 121 lines |
+| Keycloak (02) | `docker-compose.advanced.yml` | 2-node cluster (ispn cache) + `keycloak-db` (internal) + MailHog SMTP sink | 161 lines |
+| PostgreSQL (03) | `docker-compose.advanced.yml` | Primary + Replica + PgBouncer (transaction pool, port 5434) + pg-exporter (Prometheus :9187) + pgAdmin | 116 lines |
+| Redis (04) | `docker-compose.advanced.yml` | 6-node cluster (3 primary + 3 replica, ports 7001–7006) + cluster-init one-shot container | 118 lines |
+| Traefik (18) | `docker-compose.advanced.yml` | Prometheus metrics (:8082) + 5 middleware chains + TCP echo router + JSON access logs | 117 lines |
+
+#### New supporting files
+
+- `it-stack-postgresql/docker/advanced/pgbouncer-init.sh` — creates `pgbouncer_auth` role, enables `pg_stat_statements` extension, grants read access
+- `it-stack-traefik/docker/advanced/traefik-dynamic.yml` — middleware definitions: `security-headers` (HSTS/CSP/nosniff), `compress`, `rate-limit` (avg 20, burst 50), `retry` (3×100ms), `circuit-breaker` (>25% 5xx), `basic-auth`
+
+#### Test coverage highlights
+
+- **PostgreSQL:** `pg_stat_statements` extension present, PgBouncer port 5434 ready, query routing via PgBouncer, `SHOW POOLS`, stat capture, `log_min_duration_statement=100ms`, `archive_mode=on`, replica streaming, `pg_dump`+`pg_restore` roundtrip, Prometheus `pg_up=1` + `pg_stat_*` metrics
+- **Redis:** `cluster_state:ok`, `cluster_slots_assigned=16384`, `cluster_slots_fail=0`, 6 nodes (3 primary + 3 replica), PING all 6, cross-shard SET/GET via `-c`, hash-tag co-location, AOF enabled on primaries, `cluster_known_nodes=6`
+- **Traefik:** `/ping=OK`, `api/version` JSON, Prometheus metrics reachable, `traefik_` namespace present, router/service/entrypoint metrics, JSON access log file, 4+ middleware names registered, security-headers + circuit-breaker + retry + rate-limit present, HTTP→HTTPS redirect, all 3 HTTPS backends (200), TCP echo port 9000, router count ≥3
+- **Keycloak:** Both nodes `/health/ready=200`, admin token from both nodes, realm created on node 1 visible on node 2 (shared DB confirms clustering), MailHog `:8025` accessible, realm SMTP config via API, brute-force enabled + confirmed, token lifetime 300s, custom scope `it-stack:read` created and visible, OIDC discovery on both nodes
+- **FreeIPA:** Container running, `policy-client` exit=0, sudo rule `allow-docker-devops` exists with docker command group, HBAC rule `allow-devops-ssh` exists with devops group, group + user created, user in devops, password `min_len≥12`, automount location + map + key exist, LDAP anonymous search works, `kinit admin` succeeds
+
+#### CI workflow updates (all 5 repos)
+
+- `validate` step: `docker-compose.advanced.yml` now strictly validated with `config -q` individually (not in scaffold loop)
+- New `lab-03-smoke` job added to all 5 CI workflows (needs: validate, continue-on-error: true):
+  - PostgreSQL: waits for primary (5432, 120s), replica (5433, 180s), PgBouncer (5434, 60s) — runs `ADMIN_PASS=Lab03Password! bash test-lab-03-03.sh`
+  - Redis: waits for all 6 nodes PONG then 20s cluster-init settle — runs `REDIS_PASS=Lab03Password! bash test-lab-04-03.sh`
+  - Traefik: waits for `/ping` (90s) + metrics (30s) — runs `bash test-lab-18-03.sh`
+  - Keycloak: waits for node 1 + node 2 `/health/ready` (200s each) — runs `KC_PASS=Lab03Password! bash test-lab-02-03.sh`
+  - FreeIPA: pull images + `config -q` + `bash -n` syntax check + ShellCheck (privileged containers cannot run in GitHub Actions)
 
 ---
 

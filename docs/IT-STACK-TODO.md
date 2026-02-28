@@ -172,20 +172,20 @@
 
 ## Phase 4: Module Scaffolding — Deployment Phase 1 (Foundation)
 
-> **Status: ✅ COMPLETE** — 5 repos scaffolded · 30 issues filed · CI passing · Labs 01–02 real content done (10/120 labs)
+> **Status: ✅ COMPLETE** — 5 repos scaffolded · 30 issues filed · CI passing · Labs 01–03 real content done (15/120 labs)
 
-- [x] `it-stack-freeipa` — full scaffold + `docker-compose.standalone.yml` + `test-lab-01-01.sh` + **`docker-compose.lan.yml` + `test-lab-01-02.sh`** + CI ✅
-- [x] `it-stack-keycloak` — full scaffold + `docker-compose.standalone.yml` + `test-lab-02-01.sh` + **`docker-compose.lan.yml` + `test-lab-02-02.sh`** + CI ✅
-- [x] `it-stack-postgresql` — full scaffold + `docker-compose.standalone.yml` + `test-lab-03-01.sh` + **`docker-compose.lan.yml` + `test-lab-03-02.sh`** + CI ✅
-- [x] `it-stack-redis` — full scaffold + `docker-compose.standalone.yml` + `test-lab-04-01.sh` + **`docker-compose.lan.yml` + `test-lab-04-02.sh`** + CI ✅
-- [x] `it-stack-traefik` — full scaffold + `docker-compose.standalone.yml` + `test-lab-18-01.sh` + **`docker-compose.lan.yml` + `test-lab-18-02.sh`** + CI ✅
+- [x] `it-stack-freeipa` — full scaffold + Lab 01 + Lab 02 + **`docker-compose.advanced.yml` + `test-lab-01-03.sh`** + CI ✅
+- [x] `it-stack-keycloak` — full scaffold + Lab 01 + Lab 02 + **`docker-compose.advanced.yml` + `test-lab-02-03.sh`** + CI ✅
+- [x] `it-stack-postgresql` — full scaffold + Lab 01 + Lab 02 + **`docker-compose.advanced.yml` + `test-lab-03-03.sh`** + CI ✅
+- [x] `it-stack-redis` — full scaffold + Lab 01 + Lab 02 + **`docker-compose.advanced.yml` + `test-lab-04-03.sh`** + CI ✅
+- [x] `it-stack-traefik` — full scaffold + Lab 01 + Lab 02 + **`docker-compose.advanced.yml` + `test-lab-18-03.sh`** + CI ✅
 
 All 5 repos have:
 - [x] Full directory structure, manifest YAML, Makefile, Dockerfile
-- [x] 6 Docker Compose files (standalone + lan real · others scaffold)
-- [x] 6 lab test scripts (Labs 01–02 real · others scaffold)
+- [x] 6 Docker Compose files (standalone + lan + advanced real · others scaffold)
+- [x] 6 lab test scripts (Labs 01–03 real · others scaffold)
 - [x] 3 GitHub Actions workflows: `ci.yml`, `release.yml`, `security.yml`
-- [x] `lab-01-smoke` + `lab-02-smoke` CI jobs (all 5 green)
+- [x] `lab-01-smoke` + `lab-02-smoke` + `lab-03-smoke` CI jobs (all 5 green)
 - [x] CI/ShellCheck passing (all 5 green)
 
 ### 4.2 Lab Issues (30 total)
@@ -291,15 +291,15 @@ All 5 repos have:
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 01 · FreeIPA | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 02 · Keycloak | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 01 · FreeIPA | [x] | [x] | [x] | [ ] | [ ] | [ ] |
+| 02 · Keycloak | [x] | [x] | [x] | [ ] | [ ] | [ ] |
 
 ### Category 02: Database & Cache
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 03 · PostgreSQL | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 04 · Redis | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 03 · PostgreSQL | [x] | [x] | [x] | [ ] | [ ] | [ ] |
+| 04 · Redis | [x] | [x] | [x] | [ ] | [ ] | [ ] |
 | 05 · Elasticsearch | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 03: Collaboration
@@ -338,11 +338,11 @@ All 5 repos have:
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 18 · Traefik | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 18 · Traefik | [x] | [x] | [x] | [ ] | [ ] | [ ] |
 | 19 · Zabbix | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 20 · Graylog | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
-**Lab Progress:** 10/120 (8%) — Phase 1 Labs 01–02 complete for all 5 Phase 1 modules
+**Lab Progress:** 15/120 (12.5%) — Phase 1 Labs 01–03 complete for all 5 Phase 1 modules
 
 ---
 
@@ -462,8 +462,9 @@ All 5 repos have:
 | Sprint | Goal | Labs |
 |--------|------|------|
 | ~~Sprint 2~~ | ~~Phase 1 Lab 02 (external deps)~~ | ~~freeipa·keycloak·postgresql·redis·traefik Lab 02~~ ✅ |
-| Next session | Phase 1 Lab 03 (advanced features) | freeipa·keycloak·postgresql·redis·traefik Lab 03 |
-| Sprint 4 | Phase 1 Lab 04 (SSO) | All 5 Lab 04 — proves full SSO chain |
+| ~~Sprint 3~~ | ~~Phase 1 Lab 03 (advanced features)~~ | ~~freeipa·keycloak·postgresql·redis·traefik Lab 03~~ ✅ |
+| Next session | Phase 1 Lab 04 (SSO integration) | All 5 Lab 04 — proves full SSO chain |
+| Sprint 5 | Phase 1 Lab 05 (integrations) | All 5 Lab 05 |
 | Sprint 5 | Phase 1 Lab 05 (integrations) | All 5 Lab 05 |
 | Sprint 6 | Phase 1 Lab 06 (production) | All 5 Lab 06 → Phase 1 complete |
 | Sprint 7+ | Phase 2 Lab 01 | nextcloud·mattermost·jitsi·iredmail·zammad |
@@ -472,4 +473,4 @@ All 5 repos have:
 
 **Document Version:** 1.1  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-02-28 — Phase 1 Lab 02 complete (10/120 labs, 8%)
+**Last Updated:** 2026-02-28 — Phase 1 Lab 03 complete (15/120 labs, 12.5%)
