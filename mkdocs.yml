@@ -1,0 +1,99 @@
+site_name: IT-Stack Documentation
+site_description: Open-source enterprise IT platform — $0 software licensing, 20 integrated services
+site_author: IT-Stack Contributors
+site_url: https://it-stack-dev.github.io/it-stack-docs/
+repo_url: https://github.com/it-stack-dev/it-stack-docs
+repo_name: it-stack-dev/it-stack-docs
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2026 IT-Stack Contributors — Apache 2.0 License
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.share
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/server-network
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/it-stack-dev
+  analytics:
+    provider: google
+    property: !ENV [GOOGLE_ANALYTICS_ID, ""]
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Architecture:
+    - Overview: architecture/overview.md
+    - Integrations: architecture/integrations.md
+  - Deployment:
+    - Lab Deployment: deployment/lab-deployment.md
+    - Enterprise Reference: deployment/enterprise-reference.md
+  - Lab Manuals:
+    - Overview: labs/overview.md
+    - Part 1 — Network & OS: labs/part1-network-os.md
+    - Part 2 — Identity & Database: labs/part2-identity-database.md
+    - Part 3 — Collaboration: labs/part3-collaboration.md
+    - Part 4 — Communications: labs/part4-communications.md
+    - Part 5 — Business & Management: labs/part5-business-management.md
+  - Project:
+    - Master Index: project/master-index.md
+    - GitHub Guide: project/github-guide.md
+    - TODO & Roadmap: project/todo.md
+  - Contributing:
+    - Framework Template: contributing/framework-template.md

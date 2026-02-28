@@ -556,7 +556,7 @@ foreach ($lab in $labDefs) {
     $labId = "$num-$($lab.id)"
     Write-ModFile "tests/labs/test-lab-$labId.sh" @"
 #!/usr/bin/env bash
-# test-lab-$labId.sh — Lab $labId: $($lab.name)
+# test-lab-$labId.sh — Lab ${labId}: $($lab.name)
 # Module $($num): $($m.short)
 # $($lab.desc)
 set -euo pipefail
