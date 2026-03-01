@@ -8,9 +8,42 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 2 Lab 05 Sprint)
-- Phase 2 Lab 05 (Advanced Integration) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
+### Planned — Next Up (Phase 2 Lab 06 Sprint)
+- Phase 2 Lab 06 (Production Deployment) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.7.0] — 2026-03-01
+
+### Added — Phase 2 Lab 05: Advanced Integration (all 5 Phase 2 modules)
+
+Lab progress: 50/120 → 55/120 (41.7% → 45.8%). Phase 2 Lab 05 (Advanced Integration) complete for all 5 Phase 2 modules.
+
+| Module | LDAP Container | Key Integration | Additional Service |
+|--------|---------------|----------------|-------------------|
+| Nextcloud (06) | `nc-int-ldap` :3890 | Keycloak LDAP federation + OIDC | Redis sessions, cron worker |
+| Mattermost (07) | `mm-int-ldap` :3891 | LDAP sync + OIDC | MinIO S3 file storage |
+| Jitsi (08) | — | Traefik reverse proxy + Keycloak JWT | Coturn TURN :3478 |
+| iRedMail (09) | `iredmail-int-ldap` :3892 | LDAP primary auth + Keycloak LDAP fed | Mailhog SMTP relay |
+| Zammad (11) | `zammad-int-ldap` :3893 | LDAP user import + OIDC channel | Elasticsearch + mailhog |
+
+#### Architecture Notes (Lab 05)
+
+```
+Theme:       Full ecosystem integration — OpenLDAP (FreeIPA sim) + Keycloak + module-specific services
+LDAP image:  osixia/openldap:1.5.0, domain=lab.local, admin=LdapAdmin05!, readonly=ReadOnly05!
+Keycloak:    LDAP user federation registered via /admin/realms/it-stack/components API
+Nextcloud:   6-container stack; LDAP_PROVIDER_* env + NC_oidc_* env; cron worker
+Mattermost:  6-container stack; MM_LDAPSETTINGS_* + MM_OPENIDSETTINGS_* + MinIO S3
+Jitsi:       7-container stack; Traefik labels (Host meet.localhost) + JWT_ASAP_KEYSERVER + coturn
+iRedMail:    4-container stack; Keycloak on mail-int-app-net + mail-int-dir-net (LDAP federation)
+Zammad:      11-container stack; LDAP config API + OIDC channel API + ES indices + mailhog
+```
+
+#### CI Workflow Updates
+
+All 5 Phase 2 CI workflows updated — `lab-05-smoke` job appended (after `lab-04-smoke`), 5 smoke jobs per repo. Jitsi waits for Traefik dashboard; others wait for OpenLDAP bind. All `continue-on-error: true`.
 
 ---
 
