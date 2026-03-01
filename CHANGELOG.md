@@ -8,9 +8,38 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 3 Lab 02 Sprint)
-- Phase 3 Lab 02 (External Dependencies) for: FreePBX, SuiteCRM, Odoo, OpenKM
+### Planned — Next Up (Phase 3 Lab 03 Sprint)
+- Phase 3 Lab 03 (Advanced Features) for: FreePBX, SuiteCRM, Odoo, OpenKM
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.10.0] — 2026-03-01
+
+### Added — Phase 3 Lab 02: External Dependencies (all 4 Phase 3 modules) — Sprint 14 complete
+
+Lab progress: 64/120 → 68/120 (53.3% → 56.7%). Phase 3 Lab 02 (External Dependencies) complete for all Back Office / Communications modules. Each module now ships a `docker-compose.lan.yml` with an external DB container + Mailhog SMTP relay (simulates the `lab-db1` / external mail server topology).
+
+| Module | External DB | SMTP Relay | Web Port | Mailhog UI | New vs Lab 01 |
+|--------|-------------|-----------|----------|-----------|----------------|
+| FreePBX (10) | MariaDB 10.11 | Mailhog | 8310 | :8610 | External DB + SMTP relay |
+| SuiteCRM (12) | MariaDB 10.11 | Mailhog | 8311 | :8611 | External DB + SMTP relay |
+| Odoo (13) | PostgreSQL 15 | Mailhog | 8312 | :8612 | External DB + Redis cache + SMTP |
+| OpenKM (14) | MySQL 8.0 | Mailhog | 8313 | :8613 | External DB + SMTP relay |
+
+Container naming scheme: `{module}-l02-{service}` (l02 = LAN lab 02).
+
+#### New Lab 02 Tests (vs Lab 01)
+- External DB connectivity verified from app container (`mysql`/`psql` cross-container)
+- Mailhog web API `GET /api/v2/messages` returns valid JSON
+- Redis `PING → PONG` check (Odoo only)
+- SMTP env var points to Mailhog container name
+
+#### Commits
+- `a6099ed` — `it-stack-freepbx`: feat(lab-02): FreePBX External Dependencies
+- `3b593ba` — `it-stack-suitecrm`: feat(lab-02): SuiteCRM External Dependencies
+- `a3e0e26` — `it-stack-odoo`: feat(lab-02): Odoo External Dependencies
+- `7991d83` — `it-stack-openkm`: feat(lab-02): OpenKM External Dependencies
 
 ---
 

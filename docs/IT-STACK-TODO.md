@@ -223,10 +223,10 @@ All 5 repos have:
 
 > **Status: 🟡 IN PROGRESS** — Lab 01 complete for all 4 modules · Lab 02–06 pending
 
-- [x] `it-stack-freepbx` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
-- [x] `it-stack-suitecrm` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
-- [x] `it-stack-odoo` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
-- [x] `it-stack-openkm` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
+- [x] `it-stack-freepbx` — Lab 01 ✅ · Lab 02 ✅ (compose + test + CI) · Lab 03–06 pending
+- [x] `it-stack-suitecrm` — Lab 01 ✅ · Lab 02 ✅ (compose + test + CI) · Lab 03–06 pending
+- [x] `it-stack-odoo` — Lab 01 ✅ · Lab 02 ✅ (compose + test + CI) · Lab 03–06 pending
+- [x] `it-stack-openkm` — Lab 01 ✅ · Lab 02 ✅ (compose + test + CI) · Lab 03–06 pending
 - [x] 24 issues filed, added to Project #8 + #10
 - [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 13 complete)
 
@@ -315,16 +315,16 @@ All 5 repos have:
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
 | 09 · iRedMail | [x] | [x] | [x] | [x] | [x] | [x] |
-| 10 · FreePBX | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 10 · FreePBX | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
 | 11 · Zammad | [x] | [x] | [x] | [x] | [x] | [x] |
 
 ### Category 05: Business Systems
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 12 · SuiteCRM | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 13 · Odoo | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 14 · OpenKM | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 12 · SuiteCRM | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 13 · Odoo | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 14 · OpenKM | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 06: IT & Project Management
 
@@ -342,7 +342,7 @@ All 5 repos have:
 | 19 · Zabbix | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 20 · Graylog | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
-**Lab Progress:** 64/120 (53.3%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 Lab 01 complete (4/120) ✅ · All 4 Phase 3 modules (FreePBX, SuiteCRM, Odoo, OpenKM) standalone done
+**Lab Progress:** 68/120 (56.7%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 Lab 01+02 complete (8/120) ✅ · All 4 Phase 3 modules have Labs 01 & 02 done
 
 ---
 
@@ -473,10 +473,11 @@ All 5 repos have:
 | ~~Sprint 11~~ | ~~Phase 2 Lab 05 (integrations)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 05~~ ✅ |
 | ~~Sprint 12~~ | ~~Phase 2 Lab 06 (production deployment)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 06~~ ✅ · Phase 2 COMPLETE 🎉 |
 | Sprint 13 ✅ | Phase 3 Lab 01 (standalone) | freepbx·suitecrm·odoo·openkm Lab 01 done |
-| Next session | Phase 3 Lab 02 (external deps) | freepbx·suitecrm·odoo·openkm Lab 02 |
+| Next session | Phase 3 Lab 03 (advanced features) | freepbx·suitecrm·odoo·openkm Lab 03 |
+| Sprint 14 ✅ | Phase 3 Lab 02 (external deps) | freepbx·suitecrm·odoo·openkm Lab 02 done |
 
 ---
 
-**Document Version:** 1.8  
+**Document Version:** 1.9  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-01 — Phase 3 Lab 01 COMPLETE (64/120 labs, 53.3%) — Sprint 13 done ✅
+**Last Updated:** 2026-03-01 — Phase 3 Lab 02 COMPLETE (68/120 labs, 56.7%) — Sprint 14 done ✅
