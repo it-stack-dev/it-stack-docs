@@ -8,9 +8,53 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 2 Lab 06 Sprint)
-- Phase 2 Lab 06 (Production Deployment) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
+### Planned — Next Up (Phase 3 Lab 01 Sprint)
+- Phase 3 Lab 01 (Standalone) for: FreePBX, SuiteCRM, Odoo, OpenKM
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.8.0] — 2026-03-01
+
+### Added — Phase 2 Lab 06: Production Deployment (all 5 Phase 2 modules) — 🎉 Phase 2 COMPLETE!
+
+Lab progress: 55/120 → 60/120 (45.8% → 50.0%). **Phase 2 entirely complete.** All 6 labs done for Nextcloud, Mattermost, Jitsi, iRedMail, and Zammad.
+
+| Module | KC Port | App Port | LDAP Port | Key Production Feature |
+|--------|---------|----------|-----------|------------------------|
+| Nextcloud (06) | 8204 | 8200 | 3895 | PHP tuning (1G/512M/3600s), Redis persistence, KC metrics |
+| Mattermost (07) | 8206 | 8205 | 3896 | MM metrics :8067, MinIO S3 (9110/9111), mm-prod-config vol |
+| Jitsi (08) | 8207 | 8250 | — | Traefik (8280/8209), JVB UDP 10002, coturn 3479 |
+| iRedMail (09) | 8208 | 9280/9380 | 3897 | ClamAV, Mailhog relay 9026, vmail+backup volumes |
+| Zammad (11) | 8210 | 3002 | 3898 | Elasticsearch 2G, zammad-init pattern, Redis persist |
+
+#### Architecture Notes (Lab 06)
+
+```
+Theme:        Production Deployment — restart=always, resource limits, named volumes, log rotation, metrics
+Log driver:   json-file, max-size=10m, max-file=5 (x-logging anchor on all services)
+Restart:      restart: always (all services)
+Limits:       deploy.resources.limits on EVERY container (memory + cpus)
+LDAP vols:    dual named volumes (ldap-data + ldap-config) for LDAP data persistence
+KC metrics:   KC_METRICS_ENABLED=true + /metrics endpoint checked in all test scripts
+MM metrics:   MM_METRICSSETTINGS_ENABLE=true, Prometheus on :8067
+MinIO:        MINIO_PROMETHEUS_AUTH_TYPE=public
+Redis:        --save 900 1 --save 300 10 persistence flags
+```
+
+#### Commit Hashes
+
+| Repo | Hash |
+|------|------|
+| it-stack-nextcloud | `e38a004` |
+| it-stack-mattermost | `377a515` |
+| it-stack-jitsi | `cdb187c` |
+| it-stack-iredmail | `e356ad6` |
+| it-stack-zammad | `72840a3` |
+
+#### CI Workflow Updates
+
+All 5 Phase 2 CI workflows updated — `lab-06-smoke` job appended (6 smoke jobs per repo). Each waits for Keycloak, LDAP (where applicable), and the main service before running the production test script with `--no-cleanup`. All `continue-on-error: true`.
 
 ---
 
