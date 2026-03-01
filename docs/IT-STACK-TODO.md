@@ -207,15 +207,15 @@ All 5 repos have:
 
 ## Phase 5: Module Scaffolding — Deployment Phase 2 (Collaboration)
 
-> **Status: 🔶 SCAFFOLD COMPLETE** — repos created, scaffolded, 30 issues filed · Lab 01 content not yet written
+> **Status: ✅ LAB 01 COMPLETE** — repos scaffolded · 30 issues filed · Lab 01 (Standalone) fully implemented for all 5 modules
 
-- [x] `it-stack-nextcloud` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-mattermost` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-jitsi` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-iredmail` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-zammad` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
+- [x] `it-stack-nextcloud` — Lab 01 done · SQLite standalone · occ/WebDAV/OCS tests · CI updated ✅
+- [x] `it-stack-mattermost` — Lab 01 done · PG sidecar · API/team/channel/post tests · CI updated ✅
+- [x] `it-stack-jitsi` — Lab 01 done · 4-container stack · TLS/BOSH/config.js tests · CI updated ✅
+- [x] `it-stack-iredmail` — Lab 01 done · SMTP/IMAP/webmail · Postfix/Dovecot/MariaDB tests · CI updated ✅
+- [x] `it-stack-zammad` — Lab 01 done · PG+ES+memcached · API/railsserver/scheduler tests · CI updated ✅
 - [x] 30 issues filed, added to Project #7 + #10
-- [ ] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` (after Phase 1 Lab 06 complete)
+- [x] Real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` written and pushed to main
 
 ---
 
@@ -306,17 +306,17 @@ All 5 repos have:
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 06 · Nextcloud | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 07 · Mattermost | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 08 · Jitsi | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 06 · Nextcloud | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 07 · Mattermost | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 08 · Jitsi | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 04: Communications
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 09 · iRedMail | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 09 · iRedMail | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 10 · FreePBX | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 11 · Zammad | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 11 · Zammad | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 05: Business Systems
 
@@ -342,7 +342,7 @@ All 5 repos have:
 | 19 · Zabbix | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 20 · Graylog | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
-**Lab Progress:** 30/120 (25.0%) — Phase 1 Labs 01–06 complete for all 5 Phase 1 modules ✅ Phase 1 DONE
+**Lab Progress:** 35/120 (29.2%) — Phase 1 complete (30/120) ✅ · Phase 2 Lab 01 complete for Nextcloud, Mattermost, Jitsi, iRedMail, Zammad ✅
 
 ---
 
@@ -466,11 +466,12 @@ All 5 repos have:
 | ~~Sprint 4~~ | ~~Phase 1 Lab 04 (SSO integration)~~ | ~~freeipa·keycloak·postgresql·redis·traefik Lab 04~~ ✅ |
 | ~~Sprint 5~~ | ~~Phase 1 Lab 05 (integrations)~~ | ~~All 5 Lab 05~~ ✅ |
 | ~~Sprint 6~~ | ~~Phase 1 Lab 06 (production)~~ | ~~All 5 Lab 06 → Phase 1 complete~~ ✅ |
-| Next session | Phase 2 Lab 01 (standalone) | nextcloud·mattermost·jitsi·iredmail·zammad Lab 01 |
-| Sprint 7+ | Phase 2 Labs 02–06 | Phase 2 full lab progression |
+| ~~Sprint 7~~ | ~~Phase 2 Lab 01 (standalone)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 01~~ ✅ |
+| Next session | Phase 2 Lab 02 (external deps) | nextcloud·mattermost·jitsi·iredmail·zammad Lab 02 |
+| Sprint 8+ | Phase 2 Labs 03–06 | Phase 2 full lab progression |
 
 ---
 
-**Document Version:** 1.2  
+**Document Version:** 1.3  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-02-28 — Phase 1 Lab 06 complete (30/120 labs, 25.0%) — Phase 1 COMPLETE ✅
+**Last Updated:** 2026-02-28 — Phase 2 Lab 01 complete (35/120 labs, 29.2%) — Phase 2 underway 🚀

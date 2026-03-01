@@ -8,9 +8,39 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 2 Sprint)
-- Phase 2 Lab 01 (Standalone) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
+### Planned — Next Up (Phase 2 Lab 02 Sprint)
+- Phase 2 Lab 02 (External Dependencies) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.3.0] — 2026-02-28
+
+### Added — Phase 2 Lab 01: Standalone (all 5 Phase 2 modules)
+
+Lab progress: 30/120 → 35/120 (25.0% → 29.2%). Phase 2 Lab 01 (Standalone) complete for all 5 Phase 2 modules.
+
+| Module | Compose | Sidecar Services | Key Tests |
+|--------|---------|------------------|-----------|
+| Nextcloud (06) | `nextcloud:29-apache` :8080, SQLite auto | — | `status.php installed:true`, `occ status/user:list`, WebDAV PROPFIND, OCS Capabilities |
+| Mattermost (07) | `mattermost-team-edition:9.3` :8065 | postgres:16-alpine | API `/system/ping`, create team/channel, post message |
+| Jitsi (08) | web+prosody+jicofo+jvb `:stable-9753` | 4-container stack | HTTPS :8443, config.js, external_api.js, BOSH :5280, JVB logs |
+| iRedMail (09) | `iredmail/iredmail:stable` all-in-one | — | SMTP :9025, IMAP :9143, Submission :9587, Roundcube :9080/mail, Postfix/Dovecot/MariaDB |
+| Zammad (11) | `ghcr.io/zammad/zammad:6.3.0` × 5 | postgres:15, ES:8, memcached | PG/ES health, web :3000, API `/signshow`, create admin, railsserver |
+
+#### Architecture Notes (Lab 01)
+
+```
+Nextcloud:   SQLite (no external DB) — correct for standalone lab validation
+Mattermost:  Internal PG sidecar — no Keycloak, no FreeIPA at this stage
+Jitsi:       4 containers with xmpp.meet.jitsi network alias for XMPP DNS resolution
+iRedMail:    All-in-one container (Postfix+Dovecot+MariaDB+Nginx+Roundcube)
+Zammad:      YAML anchor x-zammad-env shared across 5 service containers; ES security disabled for lab
+```
+
+#### CI Workflow Updates
+
+All 5 CI workflows updated — `lab-01-smoke` job now uses correct module-specific test script names and real health-wait conditions (no more scaffold `sleep 30` or `test-lab-01.sh` references).
 
 ---
 
