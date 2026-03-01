@@ -221,20 +221,20 @@ All 5 repos have:
 
 ## Phase 6: Module Scaffolding — Deployment Phase 3 (Back Office)
 
-> **Status: 🔶 SCAFFOLD COMPLETE** — repos created, scaffolded, 24 issues filed · Lab 01 content not yet written
+> **Status: 🟡 IN PROGRESS** — Lab 01 complete for all 4 modules · Lab 02–06 pending
 
-- [x] `it-stack-freepbx` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-suitecrm` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-odoo` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-openkm` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
+- [x] `it-stack-freepbx` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
+- [x] `it-stack-suitecrm` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
+- [x] `it-stack-odoo` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
+- [x] `it-stack-openkm` — Lab 01 ✅ (compose + test + CI) · Lab 02–06 pending
 - [x] 24 issues filed, added to Project #8 + #10
-- [ ] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` (after Phase 1 Lab 06 complete)
+- [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 13 complete)
 
 ---
 
 ## Phase 7: Module Scaffolding — Deployment Phase 4 (IT Management)
 
-> **Status: 🔶 SCAFFOLD COMPLETE** — repos created, scaffolded, 36 issues filed · Lab 01 content not yet written
+> **Status: 🟡 IN PROGRESS** — Lab 01 complete for all 4 modules · Lab 02–06 pending
 
 - [x] `it-stack-taiga` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
 - [x] `it-stack-snipeit` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
@@ -243,7 +243,7 @@ All 5 repos have:
 - [x] `it-stack-zabbix` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
 - [x] `it-stack-graylog` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
 - [x] 36 issues filed, added to Project #9 + #10
-- [ ] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` (after Phase 1 Lab 06 complete)
+- [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 13 complete)
 
 ---
 
@@ -315,16 +315,16 @@ All 5 repos have:
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
 | 09 · iRedMail | [x] | [x] | [x] | [x] | [x] | [x] |
-| 10 · FreePBX | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 10 · FreePBX | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 11 · Zammad | [x] | [x] | [x] | [x] | [x] | [x] |
 
 ### Category 05: Business Systems
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 12 · SuiteCRM | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 13 · Odoo | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 14 · OpenKM | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 12 · SuiteCRM | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 13 · Odoo | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 14 · OpenKM | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 06: IT & Project Management
 
@@ -342,7 +342,7 @@ All 5 repos have:
 | 19 · Zabbix | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 20 · Graylog | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
-**Lab Progress:** 60/120 (50.0%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · All 6 labs for Nextcloud, Mattermost, Jitsi, iRedMail, Zammad done ✅ · 🎉 halfway milestone!
+**Lab Progress:** 64/120 (53.3%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 Lab 01 complete (4/120) ✅ · All 4 Phase 3 modules (FreePBX, SuiteCRM, Odoo, OpenKM) standalone done
 
 ---
 
@@ -472,11 +472,11 @@ All 5 repos have:
 | ~~Sprint 10~~ | ~~Phase 2 Lab 04 (SSO integration)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 04~~ ✅ |
 | ~~Sprint 11~~ | ~~Phase 2 Lab 05 (integrations)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 05~~ ✅ |
 | ~~Sprint 12~~ | ~~Phase 2 Lab 06 (production deployment)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 06~~ ✅ · Phase 2 COMPLETE 🎉 |
-| Next session | Phase 3 Lab 01 (standalone) | freepbx·suitecrm·odoo·openkm Lab 01 |
-| Sprint 13+ | Phase 3 remaining | freepbx·suitecrm·odoo·openkm Lab 02–06 |
+| Sprint 13 ✅ | Phase 3 Lab 01 (standalone) | freepbx·suitecrm·odoo·openkm Lab 01 done |
+| Next session | Phase 3 Lab 02 (external deps) | freepbx·suitecrm·odoo·openkm Lab 02 |
 
 ---
 
-**Document Version:** 1.7  
+**Document Version:** 1.8  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-01 — Phase 2 COMPLETE (60/120 labs, 50.0%) — Sprint 12 done 🚀 🎉 Halfway milestone!
+**Last Updated:** 2026-03-01 — Phase 3 Lab 01 COMPLETE (64/120 labs, 53.3%) — Sprint 13 done ✅

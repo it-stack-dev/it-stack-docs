@@ -8,9 +8,34 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 3 Lab 01 Sprint)
-- Phase 3 Lab 01 (Standalone) for: FreePBX, SuiteCRM, Odoo, OpenKM
+### Planned — Next Up (Phase 3 Lab 02 Sprint)
+- Phase 3 Lab 02 (External Dependencies) for: FreePBX, SuiteCRM, Odoo, OpenKM
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.9.0] — 2026-03-01
+
+### Added — Phase 3 Lab 01: Standalone (all 4 Phase 3 modules) — Sprint 13 complete
+
+Lab progress: 60/120 → 64/120 (50.0% → 53.3%). Phase 3 Lab 01 (Standalone) complete for all Back Office / Communications modules. Each module ships a `docker-compose.standalone.yml`, `test-lab-XX-01.sh`, and a corrected CI `lab-01-smoke` job.
+
+| Module | DB | App Image | Web Port | Key Feature |
+|--------|----|-----------|----------|-------------|
+| FreePBX (10) | MariaDB 10.11 | tiredofit/freepbx:16 | 8301 | SIP UDP/TCP :5160, RTP 18000–18100, admin web UI |
+| SuiteCRM (12) | MariaDB 10.11 | bitnami/suitecrm:8 | 8302 | REST API auth check, session/role DB tables |
+| Odoo (13) | PostgreSQL 15 | odoo:17 | 8303 | `/web/health` endpoint + JSON-RPC database list |
+| OpenKM (14) | MySQL 8.0 | openkm/openkmdce:7.2.0 | 8304 | REST `/repository/info` auth, utf8mb4 charset |
+
+#### Commits
+- `475829c` — `it-stack-freepbx`: feat(lab-01): FreePBX Standalone
+- `0a7e386` — `it-stack-suitecrm`: feat(lab-01): SuiteCRM Standalone
+- `17faca3` — `it-stack-odoo`: feat(lab-01): Odoo Standalone
+- `6e8edb3` — `it-stack-openkm`: feat(lab-01): OpenKM Standalone
+
+#### CI Fixes (all 4 repos)
+- Replaced broken stub `lab-01-smoke` jobs (wrong script name `test-lab-01.sh`, invalid `$firstPort` placeholder)
+- Real jobs: correct DB readiness wait, correct app port probe, correct module-specific test script
 
 ---
 
