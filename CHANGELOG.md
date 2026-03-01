@@ -8,9 +8,38 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 3 Lab 03 Sprint)
-- Phase 3 Lab 03 (Advanced Features) for: FreePBX, SuiteCRM, Odoo, OpenKM
+### Planned — Next Up (Phase 3 Lab 04 Sprint)
+- Phase 3 Lab 04 (SSO Integration) for: FreePBX, SuiteCRM, Odoo, OpenKM
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.11.0] — 2026-03-01
+
+### Added — Phase 3 Lab 03: Advanced Features (all 4 Phase 3 modules) — Sprint 15 complete 🎉 60% milestone!
+
+Lab progress: 68/120 → 72/120 (56.7% → 60.0%). Phase 3 Lab 03 (Advanced Features) complete. Key theme: production-grade configuration — resource limits on all containers, advanced service topology, and module-specific advanced capabilities.
+
+| Module | New Services | Web Port | LP Port | Key Advanced Features |
+|--------|-----------|---------|---------|-----------------------|
+| FreePBX (10) | — | 8320 | — | AMI :5038, recordings/MOH/voicemail volumes, CPU/mem limits |
+| SuiteCRM (12) | Redis + Cron | 8321 | — | Redis session cache, dedicated cron container, CPU/mem limits |
+| Odoo (13) | Redis | 8330 | 8331 | `--workers=2`, gevent longpolling :8331, CPU/mem limits |
+| OpenKM (14) | Elasticsearch 8.x | 8332 | — | Full-text indexing on :9201, ES health checks, CPU/mem limits |
+
+Container naming: `{module}-a03-{service}` (a03 = advanced lab 03).
+
+#### Lab 03 Tests vs Lab 02
+- **FreePBX**: AMI port `nc -z :5038`, `asterisk -rx "dialplan show"`, memory limit assertion, 6 volumes
+- **SuiteCRM**: Redis PING from app, `SESSION_SAVE_HANDLER=redis` env, cron container DB access
+- **Odoo**: gevent port :8331 reachable, `pgrep` worker count ≥2, CPU limit assertion
+- **OpenKM**: ES `/_cluster/health` green/yellow, `/_cat/indices`, REST `/folder/getChildren`
+
+#### Commits
+- `cac64ce` — `it-stack-freepbx`: feat(lab-03): FreePBX Advanced Features
+- `a282a42` — `it-stack-suitecrm`: feat(lab-03): SuiteCRM Advanced Features
+- `994ce43` — `it-stack-odoo`: feat(lab-03): Odoo Advanced Features
+- `6910fd9` — `it-stack-openkm`: feat(lab-03): OpenKM Advanced Features
 
 ---
 
