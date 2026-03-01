@@ -8,9 +8,41 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 2 Lab 02 Sprint)
-- Phase 2 Lab 02 (External Dependencies) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
+### Planned — Next Up (Phase 2 Lab 03 Sprint)
+- Phase 2 Lab 03 (Advanced Features) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.4.0] — 2026-02-28
+
+### Added — Phase 2 Lab 02: External Dependencies (all 5 Phase 2 modules)
+
+Lab progress: 35/120 → 40/120 (29.2% → 33.3%). Phase 2 Lab 02 (External Dependencies) complete for all 5 Phase 2 modules.
+
+| Module | Key External Deps | Key Lab 02 Tests |
+|--------|-------------------|------------------|
+| Nextcloud (06) | postgres:16-alpine, redis:7-alpine (2 networks) | DB type = pgsql via `occ config:system:get dbtype`, Redis in config.php |
+| Mattermost (07) | postgres:16-alpine, redis:7-alpine, mailhog SMTP relay | SMTP relay: `SMTPServer` = `smtp` verified via config API |
+| Jitsi (08) | coturn:4.6 TURN/STUN (2 networks: jitsi-net + turn-net) | TURN TCP :3478 reachable, config.js TURN config present |
+| iRedMail (09) | osixia/openldap:1.5.0, mailhog SMTP relay (2 networks) | LDAP search dc=lab,dc=local, readonly bind, SMTP/IMAP/SUBM banners |
+| Zammad (11) | postgres:15, elasticsearch:8, redis:7 (replaces memcached), mailhog (3 networks) | REDIS_URL=redis:// in container env (not memcached), Mailhog :8025 new |
+
+#### Architecture Notes (Lab 02)
+
+```
+Theme:       Each module connects to externally-managed services on separate Docker networks
+             simulating real LAN topology (app ↔ db on dedicated subnets)
+Nextcloud:   nc-app-net (app+redis) + nc-db-net (app+db); REDIS_HOST_PASSWORD=Lab02Redis!
+Mattermost:  mm-app-net + mm-data-net; MM_EMAILSETTINGS_SMTPSERVER=smtp (mailhog)
+Jitsi:       jitsi-net (all Jitsi components) + turn-net (coturn); coturn --user=jitsi:TurnPass1!
+iRedMail:    mail-app-net + mail-dir-net; LDAP_BIND_DN=cn=readonly,dc=lab,dc=local
+Zammad:      zammad-app-net + zammad-data-net + zammad-mail-net; REDIS_URL replaces MEMCACHE_SERVERS
+```
+
+#### CI Workflow Updates
+
+All 5 Phase 2 CI workflows updated — `lab-02-smoke` job appended to each, including real wait conditions for PG/Redis/ES/LDAP/TURN/API readiness before running lab scripts.
 
 ---
 
