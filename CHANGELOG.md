@@ -8,9 +8,41 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 3 Lab 04 Sprint)
-- Phase 3 Lab 04 (SSO Integration) for: FreePBX, SuiteCRM, Odoo, OpenKM
+### Planned — Next Up (Phase 3 Lab 05 Sprint)
+- Phase 3 Lab 05 (Advanced Integration) for: FreePBX, SuiteCRM, Odoo, OpenKM
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.12.0] — 2026-03-01
+
+### Added — Phase 3 Lab 04: SSO Integration (all 4 Phase 3 modules) — Sprint 16 complete
+
+Lab progress: 72/120 → 76/120 (60.0% → 63.3%). Phase 3 Lab 04 (SSO Integration) complete. Each module adds OpenLDAP directory, Keycloak 24 IdP, and module-specific SSO wiring (OIDC or SAML).
+
+| Module | LDAP Port | KC Port | SSO Protocol | Key Integration |
+|--------|-----------|---------|--------------|-----------------|
+| FreePBX (10) | 3890 | 8440 | OIDC (admin UI) | LDAP_ENABLED + KC OIDC client + freepbx realm |
+| SuiteCRM (12) | 3891 | 8441 | SAML | KC SAML metadata + EntityDescriptor test |
+| Odoo (13) | 3893 | 8450 | OIDC | KC OIDC discovery + LDAP_HOST env + gevent :8351 |
+| OpenKM (14) | 3892 | 8452 | SAML + LDAP | JAVA_OPTS ldap props + ES :9202 + KC SAML metadata |
+
+Container naming: `{module}-s04-{service}` (s04 = sso lab 04).
+
+#### Test Coverage Added
+- Keycloak admin API: obtain token → create `it-stack` realm → create module-specific OIDC/SAML client
+- OIDC discovery endpoint assertion: `/.well-known/openid-configuration` returns `issuer`
+- SAML descriptor assertion: `/protocol/saml/descriptor` returns `EntityDescriptor`
+- LDAP bind test from within LDAP container
+- Module container → Keycloak connectivity test
+- LDAP env vars verified in module containers
+- All 5-6 containers health-checked individually
+
+#### Commits
+- `9e3b371` — `it-stack-freepbx`: feat(lab-04): FreePBX SSO Integration
+- `4c77e6c` — `it-stack-suitecrm`: feat(lab-04): SuiteCRM SSO Integration
+- `ec859e0` — `it-stack-odoo`: feat(lab-04): Odoo SSO Integration
+- `40d80e9` — `it-stack-openkm`: feat(lab-04): OpenKM SSO Integration
 
 ---
 
