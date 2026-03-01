@@ -8,9 +8,34 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 3 Lab 05 Sprint)
-- Phase 3 Lab 05 (Advanced Integration) for: FreePBX, SuiteCRM, Odoo, OpenKM
+### Planned — Next Up (Phase 3 Lab 06 Sprint)
+- Phase 3 Lab 06 (Production Deployment) for: FreePBX, SuiteCRM, Odoo, OpenKM
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.13.0] — 2026-03-01
+
+### Added — Phase 3 Lab 05: Advanced Integration (all 4 Phase 3 modules) — Sprint 17 complete
+Lab progress: 76/120 → 80/120 (63.3% → 66.7%). Phase 3 Lab 05 (Advanced Integration) complete. Each module adds WireMock 3.3.1 as a lightweight API mock simulating partner service APIs (SuiteCRM CTI, Odoo JSONRPC, Snipe-IT REST, Nextcloud CalDAV, document consumers).
+
+| Module | Web Port | WireMock Port | KC Port | Integration Pairs |
+|--------|----------|---------------|---------|-------------------|
+| FreePBX (10) | 8360 | 8361 | 8460 | SuiteCRM CTI + Zammad webhook |
+| SuiteCRM (12) | 8362 | 8363 | 8461 | Odoo JSONRPC + Nextcloud CalDAV |
+| Odoo (13) | 8370 | 8372 | 8470 | Snipe-IT REST + SuiteCRM customer sync |
+| OpenKM (14) | 8373 | 8374 | 8471 | SuiteCRM/Odoo document consumers + ES :9203 |
+
+Container naming: `{module}-i05-{service}` (i05 = integration lab 05).
+
+#### Test Coverage Added
+- WireMock admin health: `/__admin/health` endpoint
+- WireMock stub registration via `/__admin/mappings` POST (201 assert)
+- Integration endpoint simulation: CTI calls, JSONRPC, REST hardware/users, CalDAV PROPFIND
+- Integration env vars verified in module containers (SUITECRM_URL, ODOO_URL, SNIPEIT_URL, etc.)
+- App container → WireMock connectivity test (docker exec curl)
+- All 6-8 containers health-checked individually
+- CI `lab-05-smoke` job added to all 4 module CI workflows
 
 ---
 
