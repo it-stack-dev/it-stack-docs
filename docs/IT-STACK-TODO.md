@@ -306,17 +306,17 @@ All 5 repos have:
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 06 · Nextcloud | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 07 · Mattermost | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 08 · Jitsi | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 06 · Nextcloud | [x] | [x] | [x] | [x] | [ ] | [ ] |
+| 07 · Mattermost | [x] | [x] | [x] | [x] | [ ] | [ ] |
+| 08 · Jitsi | [x] | [x] | [x] | [x] | [ ] | [ ] |
 
 ### Category 04: Communications
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 09 · iRedMail | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 09 · iRedMail | [x] | [x] | [x] | [x] | [ ] | [ ] |
 | 10 · FreePBX | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 11 · Zammad | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 11 · Zammad | [x] | [x] | [x] | [x] | [ ] | [ ] |
 
 ### Category 05: Business Systems
 
@@ -342,7 +342,7 @@ All 5 repos have:
 | 19 · Zabbix | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | 20 · Graylog | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
-**Lab Progress:** 40/120 (33.3%) — Phase 1 complete (30/120) ✅ · Phase 2 Lab 01 complete ✅ · Phase 2 Lab 02 complete for Nextcloud, Mattermost, Jitsi, iRedMail, Zammad ✅
+**Lab Progress:** 50/120 (41.7%) — Phase 1 complete (30/120) ✅ · Phase 2 Labs 01–04 complete ✅ · Phase 2 Lab 04 (SSO Integration) complete for Nextcloud, Mattermost, Jitsi, iRedMail, Zammad ✅
 
 ---
 
@@ -468,11 +468,13 @@ All 5 repos have:
 | ~~Sprint 6~~ | ~~Phase 1 Lab 06 (production)~~ | ~~All 5 Lab 06 → Phase 1 complete~~ ✅ |
 | ~~Sprint 7~~ | ~~Phase 2 Lab 01 (standalone)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 01~~ ✅ |
 | ~~Sprint 8~~ | ~~Phase 2 Lab 02 (external deps)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 02~~ ✅ |
-| Next session | Phase 2 Lab 03 (advanced features) | nextcloud·mattermost·jitsi·iredmail·zammad Lab 03 |
-| Sprint 9+ | Phase 2 Labs 04–06 | Phase 2 full lab progression |
+| ~~Sprint 9~~ | ~~Phase 2 Lab 03 (advanced features)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 03~~ ✅ |
+| ~~Sprint 10~~ | ~~Phase 2 Lab 04 (SSO integration)~~ | ~~nextcloud·mattermost·jitsi·iredmail·zammad Lab 04~~ ✅ |
+| Next session | Phase 2 Lab 05 (integrations) | nextcloud·mattermost·jitsi·iredmail·zammad Lab 05 |
+| Sprint 11+ | Phase 2 Labs 06 + Phase 3 | Phase 2 full lab progression |
 
 ---
 
-**Document Version:** 1.3  
+**Document Version:** 1.5  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-02-28 — Phase 2 Lab 02 complete (40/120 labs, 33.3%) — Sprint 8 done 🚀
+**Last Updated:** 2026-03-01 — Phase 2 Lab 04 complete (50/120 labs, 41.7%) — Sprint 10 done 🚀

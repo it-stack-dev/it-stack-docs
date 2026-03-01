@@ -8,9 +8,74 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 2 Lab 03 Sprint)
-- Phase 2 Lab 03 (Advanced Features) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
+### Planned — Next Up (Phase 2 Lab 05 Sprint)
+- Phase 2 Lab 05 (Advanced Integration) for: Nextcloud, Mattermost, Jitsi, iRedMail, Zammad
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.6.0] — 2026-03-01
+
+### Added — Phase 2 Lab 04: SSO Integration (all 5 Phase 2 modules)
+
+Lab progress: 45/120 → 50/120 (37.5% → 41.7%). Phase 2 Lab 04 (SSO Integration) complete for all 5 Phase 2 modules.
+
+| Module | Keycloak Port | SSO Protocol | Key OIDC / JWT Config |
+|--------|--------------|--------------|----------------------|
+| Nextcloud (06) | 8084 | OIDC (user_oidc) | `NC_oidc_login_provider_url`, client `nextcloud`, secret `nextcloud-secret-04` |
+| Mattermost (07) | 8085 | OIDC | `MM_OPENIDSETTINGS_ENABLE=true`, `MM_OPENIDSETTINGS_ID=mattermost-client` |
+| Jitsi (08) | 8086 | JWT / JWKS | `JWT_ASAP_KEYSERVER` → Keycloak JWKS, `TOKEN_AUTH_URL` → Keycloak auth endpoint |
+| iRedMail (09) | 8087 | LDAP Federation | Keycloak LDAP user-federation provider registered via components API |
+| Zammad (11) | 8088 | OIDC | Zammad OIDC channel created via `/api/v1/channels`, client `zammad` |
+
+#### Architecture Notes (Lab 04)
+
+```
+Theme:       Embedded Keycloak container per module (quay.io/keycloak/keycloak:24.0, start-dev)
+Realm:       it-stack (created per test script via Keycloak admin API)
+Credentials: admin / Lab04Admin!  |  DB: Lab04Password!  |  Redis: Lab04Redis!
+Nextcloud:   5-container stack; user_oidc env vars; OIDC discovery endpoint verified
+Mattermost:  4-container stack; MM_OPENIDSETTINGS_* env; API config verified
+Jitsi:       6-container stack; JWT_ASAP_KEYSERVER → Keycloak JWKS certs endpoint
+iRedMail:    4-container stack; Keycloak on mail-app-net + mail-dir-net; LDAP federation
+Zammad:      10-container stack; Zammad OIDC channel configured via Rails API
+```
+
+#### CI Workflow Updates
+
+All 5 Phase 2 CI workflows updated — `lab-04-smoke` job appended to each (after `lab-03-smoke`), with Keycloak health wait (`/health/ready`) and module-specific service wait conditions. `continue-on-error: true` on all smoke jobs.
+
+---
+
+## [1.5.0] — 2026-03-01
+
+### Added — Phase 2 Lab 03: Advanced Features (all 5 Phase 2 modules)
+
+Lab progress: 40/120 → 45/120 (33.3% → 37.5%). Phase 2 Lab 03 (Advanced Features) complete for all 5 Phase 2 modules.
+
+| Module | Key Advanced Features | Key Lab 03 Tests |
+|--------|----------------------|------------------|
+| Nextcloud (06) | cron worker container, PHP tuning (512M), Redis `allkeys-lru`, trusted proxies | `backgroundjobs_mode=cron` via occ, `PHP_MEMORY_LIMIT=512M` in env, memory limit 1G |
+| Mattermost (07) | MinIO S3 storage, `MaxFileSize=524288000` (500MB), read/write timeout 300s, login retry limit | `MM_FILESETTINGS_MAXFILESIZE` in env + API, `DriverName=amazons3` in config |
+| Jitsi (08) | JWT authentication (`APP_SECRET=JitsiJWT03!`), coturn TURN server, guest access | `ENABLE_AUTH=1`, `AUTH_TYPE=jwt`, `APP_ID=jitsi` in web+prosody env, TURN :3478 |
+| iRedMail (09) | DKIM signing (`ENABLE_DKIM=1`, selector=lab), LDAP readonly bind, SMTP STARTTLS | DKIM keys in `/opt/dkim/`, STARTTLS in EHLO response, resource limit 1G |
+| Zammad (11) | `RAILS_MAX_THREADS=5`, `WEB_CONCURRENCY=2`, ES indices, Redis `allkeys-lru` | `RAILS_MAX_THREADS=5` in railsserver env, `zammad_*` indices in ES, resource limit 2G |
+
+#### Architecture Notes (Lab 03)
+
+```
+Theme:       Resource limits on all containers + module-specific advanced production features
+Nextcloud:   4-container stack: db+redis+app+cron; cron replaces ajax background jobs
+Mattermost:  5-container stack adds MinIO S3; MM_FILESETTINGS_DRIVERNAME=amazons3
+Jitsi:       5-container stack adds JWT auth layer; ENABLE_GUESTS=1 allows anonymous after auth
+iRedMail:    3-container stack; DKIM keys generated at /opt/dkim/; POSTFIX relays via mailhog
+Zammad:      7-container stack (init+railsserver+scheduler+websocket+nginx+pg+es+redis+smtp)
+             RAILS_MAX_THREADS=5, WEB_CONCURRENCY=2 tune Ruby concurrency
+```
+
+#### CI Workflow Updates
+
+All 5 Phase 2 CI workflows updated — `lab-03-smoke` job appended to each (after `lab-02-smoke`), with compose-specific wait conditions and `continue-on-error: true`.
 
 ---
 
