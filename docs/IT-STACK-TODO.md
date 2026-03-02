@@ -122,7 +122,7 @@
 
 ## Phase 3: Documentation Migration
 
-> **Status: ✅ COMPLETE** — 14 docs migrated · MkDocs site live · numbered structure committed
+> **Status: ✅ COMPLETE** — 21 docs total · 14 migrated · 7 category specs written · MkDocs site live · numbered structure committed
 
 ### 3.1 Create Standard Docs Folder Structure
 
@@ -160,13 +160,13 @@
 
 ### 3.3 Create Missing Category Spec Documents (7)
 
-- [ ] `docs/01-core/01-identity.md` — FreeIPA + Keycloak architecture
-- [ ] `docs/01-core/02-database.md` — PostgreSQL + Redis + Elasticsearch
-- [ ] `docs/01-core/03-collaboration.md` — Nextcloud + Mattermost + Jitsi
-- [ ] `docs/01-core/04-communications.md` — iRedMail + FreePBX + Zammad
-- [ ] `docs/01-core/05-business.md` — SuiteCRM + Odoo + OpenKM
-- [ ] `docs/01-core/06-it-management.md` — Taiga + Snipe-IT + GLPI
-- [ ] `docs/01-core/07-infrastructure.md` — Traefik + Zabbix + Graylog
+- [x] `docs/01-core/01-identity.md` — FreeIPA + Keycloak architecture
+- [x] `docs/01-core/02-database.md` — PostgreSQL + Redis + Elasticsearch
+- [x] `docs/01-core/03-collaboration.md` — Nextcloud + Mattermost + Jitsi
+- [x] `docs/01-core/04-communications.md` — iRedMail + FreePBX + Zammad
+- [x] `docs/01-core/05-business.md` — SuiteCRM + Odoo + OpenKM
+- [x] `docs/01-core/06-it-management.md` — Taiga + Snipe-IT + GLPI
+- [x] `docs/01-core/07-infrastructure.md` — Traefik + Zabbix + Graylog
 
 ---
 
@@ -207,28 +207,38 @@ All 5 repos have:
 
 ## Phase 5: Module Scaffolding — Deployment Phase 2 (Collaboration)
 
-> **Status: ✅ LAB 01 COMPLETE** — repos scaffolded · 30 issues filed · Lab 01 (Standalone) fully implemented for all 5 modules
+> **Status: ✅ COMPLETE** — All 6 labs done · 5 modules · 30 labs · Phase 2 COMPLETE 🎉
 
-- [x] `it-stack-nextcloud` — Lab 01 done · SQLite standalone · occ/WebDAV/OCS tests · CI updated ✅
-- [x] `it-stack-mattermost` — Lab 01 done · PG sidecar · API/team/channel/post tests · CI updated ✅
-- [x] `it-stack-jitsi` — Lab 01 done · 4-container stack · TLS/BOSH/config.js tests · CI updated ✅
-- [x] `it-stack-iredmail` — Lab 01 done · SMTP/IMAP/webmail · Postfix/Dovecot/MariaDB tests · CI updated ✅
-- [x] `it-stack-zammad` — Lab 01 done · PG+ES+memcached · API/railsserver/scheduler tests · CI updated ✅
+- [x] `it-stack-nextcloud` — scaffolded · Lab 01 ✅ (SQLite standalone, occ/WebDAV/OCS tests) · Lab 02 ✅ (PostgreSQL + Redis external) · Lab 03 ✅ (PHP tuning, cron worker, resource limits) · Lab 04 ✅ (Keycloak OIDC, user_oidc) · Lab 05 ✅ (LDAP federation + OIDC, Redis sessions, cron worker) · Lab 06 ✅ (production: PHP 1G/512M, Redis persist, KC metrics)
+- [x] `it-stack-mattermost` — scaffolded · Lab 01 ✅ (PG sidecar, API/team/channel/post tests) · Lab 02 ✅ (PostgreSQL + Redis external) · Lab 03 ✅ (advanced config, resource limits) · Lab 04 ✅ (Keycloak OIDC) · Lab 05 ✅ (LDAP sync + OIDC, MinIO S3) · Lab 06 ✅ (production: MM metrics :8067, MinIO S3 9110/9111, mm-prod-config vol)
+- [x] `it-stack-jitsi` — scaffolded · Lab 01 ✅ (4-container stack, TLS/BOSH/config.js tests) · Lab 02 ✅ (external dependencies) · Lab 03 ✅ (advanced features, resource limits) · Lab 04 ✅ (JWT/JWKS via Keycloak) · Lab 05 ✅ (Traefik reverse proxy + Keycloak JWT, coturn TURN :3478) · Lab 06 ✅ (production: Traefik 8280/8209, JVB UDP 10002, coturn 3479)
+- [x] `it-stack-iredmail` — scaffolded · Lab 01 ✅ (SMTP/IMAP/webmail, Postfix/Dovecot/MariaDB tests) · Lab 02 ✅ (external dependencies) · Lab 03 ✅ (advanced features, resource limits) · Lab 04 ✅ (Keycloak LDAP Federation) · Lab 05 ✅ (LDAP primary auth + Keycloak LDAP fed, Mailhog SMTP relay) · Lab 06 ✅ (production: ClamAV, Mailhog relay 9026, vmail+backup volumes)
+- [x] `it-stack-zammad` — scaffolded · Lab 01 ✅ (PG+ES+memcached, API/railsserver/scheduler tests) · Lab 02 ✅ (external dependencies) · Lab 03 ✅ (advanced features, resource limits) · Lab 04 ✅ (Keycloak OIDC channel) · Lab 05 ✅ (LDAP user import + OIDC channel, Elasticsearch + Mailhog) · Lab 06 ✅ (production: Elasticsearch 2G, zammad-init pattern, Redis persist)
 - [x] 30 issues filed, added to Project #7 + #10
-- [x] Real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` written and pushed to main
+- [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 7 complete)
+- [x] Write real `docker-compose.lan.yml` + `test-lab-XX-02.sh` + `lab-02-smoke` CI ✅ (Sprint 8 complete)
+- [x] Write real `docker-compose.advanced.yml` + `test-lab-XX-03.sh` + `lab-03-smoke` CI ✅ (Sprint 9 complete)
+- [x] Write real `docker-compose.sso.yml` + `test-lab-XX-04.sh` + `lab-04-smoke` CI ✅ (Sprint 10 complete)
+- [x] Write real `docker-compose.integration.yml` + `test-lab-XX-05.sh` + `lab-05-smoke` CI ✅ (Sprint 11 complete)
+- [x] Write real `docker-compose.production.yml` + `test-lab-XX-06.sh` + `lab-06-smoke` CI ✅ (Sprint 12 complete)
 
 ---
 
 ## Phase 6: Module Scaffolding — Deployment Phase 3 (Back Office)
 
-> **Status: 🟡 IN PROGRESS** — Lab 01 complete for all 4 modules · Lab 02–06 pending
+> **Status: ✅ COMPLETE** — All 6 labs done · 4 modules · 24 labs · Phase 3 COMPLETE 🎉
 
-- [x] `it-stack-freepbx` — Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (AMI + recordings/MOH/voicemail + resource limits) · Lab 04–06 pending
-- [x] `it-stack-suitecrm` — Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (Redis session cache + cron container + resource limits) · Lab 04–06 pending
-- [x] `it-stack-odoo` — Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (multi-worker + gevent longpolling + resource limits) · Lab 04–06 pending
-- [x] `it-stack-openkm` — Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (Elasticsearch 8.x + resource limits) · Lab 04–06 pending
+- [x] `it-stack-freepbx` — scaffolded · Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (AMI + recordings/MOH/voicemail + resource limits) · Lab 04 ✅ (Keycloak OIDC) · Lab 05 ✅ (SuiteCRM CTI + Zammad webhook) · Lab 06 ✅ (production: restart policy, resource limits)
+- [x] `it-stack-suitecrm` — scaffolded · Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (Redis session cache + cron container + resource limits) · Lab 04 ✅ (Keycloak SAML) · Lab 05 ✅ (Odoo JSONRPC + Nextcloud CalDAV) · Lab 06 ✅ (production: restart policy, resource limits)
+- [x] `it-stack-odoo` — scaffolded · Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (multi-worker + gevent longpolling + resource limits) · Lab 04 ✅ (Keycloak OIDC) · Lab 05 ✅ (WireMock API mocks) · Lab 06 ✅ (production: restart policy, resource limits)
+- [x] `it-stack-openkm` — scaffolded · Lab 01 ✅ · Lab 02 ✅ · Lab 03 ✅ (Elasticsearch 8.x + resource limits) · Lab 04 ✅ (Keycloak SAML) · Lab 05 ✅ (WireMock API mocks) · Lab 06 ✅ (production: restart policy, resource limits)
 - [x] 24 issues filed, added to Project #8 + #10
 - [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 13 complete)
+- [x] Write real `docker-compose.lan.yml` + `test-lab-XX-02.sh` + `lab-02-smoke` CI ✅ (Sprint 14 complete)
+- [x] Write real `docker-compose.advanced.yml` + `test-lab-XX-03.sh` + `lab-03-smoke` CI ✅ (Sprint 15 complete)
+- [x] Write real `docker-compose.sso.yml` + `test-lab-XX-04.sh` + `lab-04-smoke` CI ✅ (Sprint 16 complete)
+- [x] Write real `docker-compose.integration.yml` + `test-lab-XX-05.sh` + `lab-05-smoke` CI ✅ (Sprint 17 complete)
+- [x] Write real `docker-compose.production.yml` + `test-lab-XX-06.sh` + `lab-06-smoke` CI ✅ (Sprint 18 complete)
 
 ---
 
@@ -305,7 +315,7 @@ All 5 repos have:
 |--------|--------|--------|--------|--------|--------|--------|
 | 03 · PostgreSQL | [x] | [x] | [x] | [x] | [x] | [x] |
 | 04 · Redis | [x] | [x] | [x] | [x] | [x] | [x] |
-| 05 · Elasticsearch | [x] | [x] | [x] | [x] | [x] | [ ] |
+| 05 · Elasticsearch | [x] | [x] | [x] | [x] | [x] | [x] |
 
 ### Category 03: Collaboration
 
@@ -494,4 +504,4 @@ All 5 repos have:
 
 **Document Version:** 2.0  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-04 — Phase 4 Lab 06 complete (120/120 labs, 100.0%) — Sprint 24 done ✅ — **ALL 120 LABS COMPLETE! 🎉**
+**Last Updated:** 2026-03-05 — Sprint 25: 7 category spec docs complete · Phase 5 + 6 status corrected · ES Lab 06 table fixed — Sprint 25 done ✅

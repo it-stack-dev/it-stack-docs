@@ -15,6 +15,34 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ---
 
+## [1.21.0] — 2026-03-05
+
+### Added — Sprint 25: Category Spec Documents + Tracking Corrections
+
+7 category architecture specification documents in `docs/01-core/` confirmed complete and marked done. All stale TODO tracker entries corrected.
+
+**Category Spec Documents (7) — `docs/01-core/`:**
+
+| File | Content | Lines |
+|------|---------|-------|
+| `01-identity.md` | FreeIPA + Keycloak architecture, LDAP schema, OIDC clients table, IPA federation config | 147 |
+| `02-database.md` | PostgreSQL service databases (11 DBs), pg_hba.conf, Redis config/usage, ES JVM config, backup cron | 127 |
+| `03-collaboration.md` | Nextcloud storage layout, Mattermost channels table, Jitsi architecture, integration tables, lab progression | 113 |
+| `04-communications.md` | iRedMail SMTP/IMAP/webmail, FreePBX dial plan, Zammad ticket workflow, integration details | 104 |
+| `05-business.md` | SuiteCRM workflows, Odoo module list, OpenKM document structure, cross-service integrations | 102 |
+| `06-it-management.md` | Taiga projects, Snipe-IT asset lifecycle, GLPI CMDB, integration tables | 95 |
+| `07-infrastructure.md` | Traefik routing, Zabbix monitoring topology, Graylog pipeline, alerting flows | 123 |
+
+**Tracking Corrections:**
+- Phase 3 (Documentation Migration) status updated: `21 docs total · 14 migrated · 7 category specs written`
+- Phase 5 (Collaboration) status corrected: `🟡 LAB 01 COMPLETE` → `✅ COMPLETE` · all 5 module entries expanded to show Labs 01–06 with sprint references (Sprints 7–12)
+- Phase 6 (Back Office) status corrected: `🟡 IN PROGRESS` → `✅ COMPLETE` · all 4 module entries show Labs 01–06 · sprint checkboxes added (Sprints 13–18)
+- Elasticsearch Lab 06 table entry corrected: `[ ]` → `[x]`
+
+Lab progress: 120/120 (unchanged — tracking correction only). **ALL 120 LABS REMAIN COMPLETE.**
+
+---
+
 ## [1.20.0] — 2026-03-04
 
 ### Added — Phase 4 Lab 06: Production Deployment (all 6 Phase 4 modules) — Sprint 24 complete — **ALL 120 LABS DONE** 🎉
