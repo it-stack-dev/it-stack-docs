@@ -8,9 +8,38 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 4 Lab 05 Sprint)
-- Phase 4 Lab 05 (Advanced Integration) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
+### Planned — Next Up (Phase 4 Lab 06 Sprint)
+- Phase 4 Lab 06 (Production Deployment) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.19.0] — 2026-03-04
+
+### Added — Phase 4 Lab 05: Advanced Integration (all 6 Phase 4 modules) — Sprint 23 complete
+
+Lab progress: 108/120 → 114/120 (90.0% → 95.0%). Phase 4 Lab 05 (Advanced Integration) complete. All 6 Phase 4 modules now have fully implemented `docker-compose.integration.yml` files with WireMock ecosystem API mocks, functional test scripts with WireMock stub registration and `--no-cleanup`, and `lab-05-smoke` CI jobs appended to all 6 CI pipelines.
+
+| Module | App Port | WireMock Port | KC Port | LDAP Port | WireMock Simulates |
+|--------|----------|---------------|---------|-----------|-------------------|
+| Elasticsearch (05) | Kibana 5640 | 8760 | 8505 | 3884 | Graylog REST API |
+| Taiga (15) | 8440 (UI), 8041 (API) | 8761 | 8540 | 3885 | Mattermost incoming webhook |
+| Snipe-IT (16) | 8441 | 8762 | 8541 | 3886 | Odoo REST API (asset procurement) |
+| GLPI (17) | 8442 | 8763 | 8542 | 3887 | Zammad REST API (ticket escalation) |
+| Zabbix (19) | 8443 (web) | 8764 | 8543 | 3888 | Mattermost incoming webhook |
+| Graylog (20) | 9040 | 8765 | 8544 | 3889 | Zabbix HTTP API + syslog 1518/udp, GELF 12205/udp |
+
+**Key patterns applied:**
+- Container naming: `{module}-i05-{service}` (e.g., `elastic-i05-mock`, `taiga-i05-back`)
+- Project name: `it-stack-{module}-lab05`
+- **Single-network architecture**: `{module}-i05-net`
+- Password pattern: `*Lab05!` (e.g., `RootLab05!`, `ZabbixLab05!`, `LdapLab05!`, `Admin05!`)
+- **WireMock 3.3.1**: `wiremock/wiremock:3.3.1` — `--port=8080 --verbose --global-response-templating`
+- WireMock healthcheck: `curl -sf http://localhost:8080/__admin/health || exit 1`, interval 10s, retries 10
+- Stub registration: `POST /__admin/mappings` → HTTP 201; test validates status before proceeding
+- Integration env vars injected into app containers: `GRAYLOG_API_URL`, `MATTERMOST_URL`, `ODOO_URL`, `ZAMMAD_URL`, `MATTERMOST_WEBHOOK_URL`, `ZABBIX_URL`
+- Test script Phase 3: register WireMock stubs → verify mock endpoint response → assert env vars in app container → app→WireMock connectivity check → functional integration call → volume assertions
+- `lab-05-smoke` job appended after `lab-04-smoke` in all 6 CI files
 
 ---
 
