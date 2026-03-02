@@ -234,16 +234,17 @@ All 5 repos have:
 
 ## Phase 7: Module Scaffolding — Deployment Phase 4 (IT Management)
 
-> **Status: 🟡 IN PROGRESS** — Lab 01 complete for all 4 modules · Lab 02–06 pending
+> **Status: 🟡 IN PROGRESS** — Lab 01 + Lab 02 complete for all 6 modules · Lab 03–06 pending
 
-- [x] `it-stack-taiga` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-snipeit` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-glpi` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-elasticsearch` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-zabbix` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
-- [x] `it-stack-graylog` — scaffolded · 6 compose stubs · 6 lab script stubs · CI ✅
+- [x] `it-stack-taiga` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (PostgreSQL + Redis + Mailhog) · Lab 03–06 pending
+- [x] `it-stack-snipeit` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MariaDB + Mailhog) · Lab 03–06 pending
+- [x] `it-stack-glpi` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MariaDB + Mailhog) · Lab 03–06 pending
+- [x] `it-stack-elasticsearch` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (ES + Kibana LAN tier) · Lab 03–06 pending
+- [x] `it-stack-zabbix` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MySQL + Mailhog) · Lab 03–06 pending
+- [x] `it-stack-graylog` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MongoDB + Elasticsearch) · Lab 03–06 pending
 - [x] 36 issues filed, added to Project #9 + #10
-- [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 13 complete)
+- [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 19 complete)
+- [x] Write real `docker-compose.lan.yml` + `test-lab-XX-02.sh` + `lab-02-smoke` CI ✅ (Sprint 20 complete)
 
 ---
 
@@ -300,7 +301,7 @@ All 5 repos have:
 |--------|--------|--------|--------|--------|--------|--------|
 | 03 · PostgreSQL | [x] | [x] | [x] | [x] | [x] | [x] |
 | 04 · Redis | [x] | [x] | [x] | [x] | [x] | [x] |
-| 05 · Elasticsearch | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 05 · Elasticsearch | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 03: Collaboration
 
@@ -330,19 +331,19 @@ All 5 repos have:
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 15 · Taiga | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 16 · Snipe-IT | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 17 · GLPI | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 15 · Taiga | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 16 · Snipe-IT | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 17 · GLPI | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
 
 ### Category 07: Infrastructure
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
 | 18 · Traefik | [x] | [x] | [x] | [x] | [x] | [x] |
-| 19 · Zabbix | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| 20 · Graylog | [x] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| 19 · Zabbix | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 20 · Graylog | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
 
-**Lab Progress:** 90/120 (75.0%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 COMPLETE (24/120) ✅🎉 · **Phase 4: 6/36 (Lab 01 done)**
+**Lab Progress:** 96/120 (80.0%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 COMPLETE (24/120) ✅🎉 · **Phase 4: 12/36 (Labs 01–02 done)**
 
 ---
 
@@ -478,11 +479,12 @@ All 5 repos have:
 | Sprint 17 ✅ | Phase 3 Lab 05 (advanced integration) | freepbx·suitecrm·odoo·openkm Lab 05 done |
 | Sprint 18 ✅ | Phase 3 Lab 06 (production deployment) | freepbx·suitecrm·odoo·openkm Lab 06 done — **Phase 3 COMPLETE 🎉** |
 | Sprint 19 ✅ | Phase 4 Lab 01 (standalone) | taiga·snipeit·glpi·elasticsearch·zabbix·graylog Lab 01 done |
-| Next session | Phase 4 Lab 02 (external deps) | taiga·snipeit·glpi·elasticsearch·zabbix·graylog Lab 02 |
+| Sprint 20 ✅ | Phase 4 Lab 02 (external deps) | taiga·snipeit·glpi·elasticsearch·zabbix·graylog Lab 02 done |
+| Next session | Phase 4 Lab 03 (advanced features) | taiga·snipeit·glpi·elasticsearch·zabbix·graylog Lab 03 |
 | Sprint 14 ✅ | Phase 3 Lab 02 (external deps) | freepbx·suitecrm·odoo·openkm Lab 02 done |
 
 ---
 
 **Document Version:** 2.0  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-02 — Phase 4 Lab 01 complete (90/120 labs, 75.0%) — Sprint 19 done ✅
+**Last Updated:** 2026-03-03 — Phase 4 Lab 02 complete (96/120 labs, 80.0%) — Sprint 20 done ✅

@@ -8,9 +8,34 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 4 Lab 02 Sprint)
-- Phase 4 Lab 02 (External Dependencies) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
+### Planned — Next Up (Phase 4 Lab 03 Sprint)
+- Phase 4 Lab 03 (Advanced Features) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.16.0] — 2026-03-03
+
+### Added — Phase 4 Lab 02: External Dependencies (all 6 Phase 4 modules) — Sprint 20 complete
+
+Lab progress: 90/120 → 96/120 (75.0% → 80.0%). Phase 4 Lab 02 (External Dependencies) complete. All 6 Phase 4 modules now have fully implemented `docker-compose.lan.yml` files with real external service stacks, functional test scripts with polling wait loops and `--no-cleanup` flag, and `lab-02-smoke` CI jobs appended to all 6 CI pipelines.
+
+| Module | Web Port | External Services | DB Used |
+|--------|----------|-------------------|---------|
+| Elasticsearch (05) | 9210 + Kibana 5610 | es-l02-node + es-l02-kibana | N/A — ES is the data tier |
+| Taiga (15) | 8410 (UI), 8011 (API) / Mailhog 8710 | postgres:15 + redis:7 + mailhog | PostgreSQL |
+| Snipe-IT (16) | 8411 / Mailhog 8711 | mariadb:10.11 + mailhog | MariaDB |
+| GLPI (17) | 8412 / Mailhog 8712 | mariadb:10.11 + mailhog | MariaDB |
+| Zabbix (19) | 8413 (web), 10051 (server) / Mailhog 8713 | mysql:8.0 + zabbix-server/web-mysql ubuntu-7.0 + mailhog | MySQL |
+| Graylog (20) | 9010 / syslog 1515/udp, GELF 12202/udp | mongo:6.0 + elasticsearch:7.17.12 | MongoDB + ES |
+
+**Key patterns applied:**
+- Container naming: `{module}-l02-{service}` (e.g., `es-l02-node`, `taiga-l02-db`)
+- Project name: `it-stack-{module}-lab02`
+- Dual-network architecture: data-net (DB tier) + app-net (app tier) per module
+- `--no-cleanup` arg + `trap cleanup EXIT` pattern in all test scripts
+- Polling wait loops (`for i in $(seq 1 N)`) replacing static `sleep 30`
+- `lab-02-smoke` job appended (not replaced) in all 6 CI files
 
 ---
 
