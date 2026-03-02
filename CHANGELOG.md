@@ -8,9 +8,39 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 3 Lab 06 Sprint)
-- Phase 3 Lab 06 (Production Deployment) for: FreePBX, SuiteCRM, Odoo, OpenKM
+### Planned — Next Up (Phase 4 Lab 01 Sprint)
+- Phase 4 Lab 01 (Standalone) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.14.0] — 2026-03-01
+
+### Added — Phase 3 Lab 06: Production Deployment (all 4 Phase 3 modules) — Sprint 18 complete 🎉 Phase 3 COMPLETE!
+Lab progress: 80/120 → 84/120 (66.7% → 70.0%). **Phase 3 (Back Office) is now fully complete.** Production-grade stacks with `restart: unless-stopped`, resource limits (`deploy.resources.limits`), production credentials, dependency health checks, and operational validation tests.
+
+| Module | Web Port | KC Port | LDAP Port | MH Port | Key Production Feature |
+|--------|----------|---------|-----------|---------|------------------------|
+| FreePBX (10) | 8380 | 8480 | 3898 | 8680 | AMI :5042, SIP :5167/udp, mysqldump backup |
+| SuiteCRM (12) | 8382 | 8481 | 3899 | 8681 | Redis sessions, cron container, mysqldump backup |
+| Odoo (13) | 8390 | 8490 | 3900 | 8690 | workers=2, longpolling :8391, pg_dump backup |
+| OpenKM (14) | 8393 | 8491 | 3901 | 8693 | ES :9204, index test, mysqldump backup |
+
+Container naming: `{module}-p06-{service}` (p06 = production lab 06).
+
+#### Test Coverage Added
+- Compose file syntax validation (`config -q`)
+- Memory and CPU limits via `docker inspect .HostConfig.Memory / .NanoCpus`
+- `restart: unless-stopped` policy assertion
+- `IT_STACK_ENV=production` and `IT_STACK_LAB=06` env var checks
+- Database backup: `mysqldump` (MariaDB/MySQL) and `pg_dump` (PostgreSQL) to `/dev/null`
+- Keycloak admin token + realm list via admin API
+- Service restart resilience: `docker restart {db}` → re-check health
+- Redis session read/write (SuiteCRM)
+- Odoo workers mode in command line (`docker inspect .Config.Cmd`)
+- Elasticsearch index create/document/delete cycle (OpenKM)
+- OpenKM REST API `/folder/getChildren` (authenticated)
+- CI `lab-06-smoke` job added to all 4 module CI workflows
 
 ---
 
