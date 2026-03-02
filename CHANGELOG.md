@@ -8,9 +8,48 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 4 Lab 06 Sprint)
-- Phase 4 Lab 06 (Production Deployment) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
+### Planned — Next Up
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+- Integration milestone implementations (SSO federations, cross-service APIs)
+- `it-stack-ansible` playbooks for all 20 services
+
+---
+
+## [1.20.0] — 2026-03-04
+
+### Added — Phase 4 Lab 06: Production Deployment (all 6 Phase 4 modules) — Sprint 24 complete — **ALL 120 LABS DONE** 🎉
+
+Lab progress: 114/120 → 120/120 (95.0% → 100.0%). **Phase 4 COMPLETE.** All 6 Phase 4 modules now have production-grade `docker-compose.production.yml` files, functional test scripts with 9-phase production checks (3a–3i), and `lab-06-smoke` CI jobs. **ALL 120 IT-Stack labs are now implemented across all 20 modules.**
+
+| Module | App Port | KC Port | LDAP Port | MH Port | Production Feature |
+|--------|----------|---------|-----------|---------|-------------------|
+| Elasticsearch (05) | Kibana 5650 | 8550 | 3870 | — | ILM env vars, write+retrieve test doc |
+| Taiga (15) | Front 8460 / Back 8061 | 8560 | 3871 | 8750 | Celery events worker, Redis session persistence |
+| Snipe-IT (16) | 8461 | 8561 | 3872 | 8751 | `php artisan queue:work` queue worker |
+| GLPI (17) | 8462 | 8562 | 3873 | 8752 | cron.php every 60s, LDAP bind test |
+| Zabbix (19) | Web 8463 | 8563 | 3874 | 8753 | server + web both running, DB restart resilience |
+| Graylog (20) | 9050 | 8564 | 3875 | — | Syslog 1519/udp, GELF 12206/udp, mongodump backup |
+
+**Key production patterns applied (all modules):**
+- `restart: unless-stopped` on **every** container
+- Resource `limits` AND `reservations` on every service
+- `IT_STACK_ENV: production` · `IT_STACK_MODULE: {module}` · `IT_STACK_LAB: "06"` env vars
+- Password pattern: `*Prod06!` (e.g., `RootProd06!`, `LdapProd06!`, `Admin06!`, `SnipeProd06!`)
+- Container naming: `{module}-p06-{service}` (p = production, 06 = lab 06)
+- Project name: `it-stack-{module}-lab06`
+
+**Test script 9-phase production checklist (3a–3i):**
+- 3a: `docker compose config -q` validation
+- 3b: HostConfig.Memory > 0 (resource limits applied)
+- 3c: HostConfig.RestartPolicy.Name = "unless-stopped"
+- 3d: `IT_STACK_ENV=production` + module-specific env vars
+- 3e: Database backup (pg_dump / mysqldump / mongodump)
+- 3f: Redis session SET/GET or LDAP bind (module-specific)
+- 3g: Keycloak admin API token via `/realms/master/protocol/openid-connect/token`
+- 3h: Background worker/cron container confirmed running
+- 3i: Container restart resilience (Redis or DB restart + recovery check)
+
+**Graylog SHA256:** `GRAYLOG_ROOT_PASSWORD_SHA2` = sha256 of `GraylogProd06!` = `0db7a747c6ff62219430654b88e1fe9d474241a65b028a697ecbe2251d01ff18`
 
 ---
 
