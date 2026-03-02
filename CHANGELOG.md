@@ -8,9 +8,65 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 4 Lab 03 Sprint)
-- Phase 4 Lab 03 (Advanced Features) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
+### Planned — Next Up (Phase 4 Lab 05 Sprint)
+- Phase 4 Lab 05 (Advanced Integration) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.18.0] — 2026-03-06
+
+### Added — Phase 4 Lab 04: SSO Integration (all 6 Phase 4 modules) — Sprint 22 complete
+
+Lab progress: 102/120 → 108/120 (85.0% → 90.0%). Phase 4 Lab 04 (SSO Integration) complete. All 6 Phase 4 modules now have fully implemented `docker-compose.sso.yml` files with OpenLDAP + Keycloak stacks, functional test scripts with Keycloak API realm/client creation and `--no-cleanup`, and `lab-04-smoke` CI jobs appended to all 6 CI pipelines.
+
+| Module | Web Port | KC Port | LDAP Port | MH Port | SSO Protocol |
+|--------|----------|---------|-----------|---------|-------------|
+| Elasticsearch (05) | Kibana 5630 | 8504 | 3894 | N/A | OIDC (Kibana→KC) |
+| Taiga (15) | 8430 (UI), 8031 (API) | 8530 | 3895 | 8730 | OIDC (Taiga back→KC) |
+| Snipe-IT (16) | 8431 | 8531 | 3896 | 8731 | SAML (SP→KC) |
+| GLPI (17) | 8432 | 8532 | 3897 | 8732 | SAML (SP→KC) |
+| Zabbix (19) | 8433 (web) | 8533 | 3898 | 8733 | SAML (Zabbix web→KC) |
+| Graylog (20) | 9030 | 8534 | 3899 | N/A | OIDC (Graylog→KC) + syslog 1517/udp, GELF 12204/udp |
+
+**Key patterns applied:**
+- Container naming: `{module}-s04-{service}` (e.g., `elastic-s04-kc`, `taiga-s04-ldap`)
+- Project name: `it-stack-{module}-lab04`
+- **Single-network architecture**: `{module}-s04-net`
+- Password pattern: `*Lab04!` (e.g., `RootLab04!`, `ZabbixLab04!`, `LdapLab04!`, `Admin04!`)
+- Standard sidecar stack: `osixia/openldap:1.5.0` + `quay.io/keycloak/keycloak:24.0.3` (`start-dev`, `KC_DB: dev-file`)
+- Keycloak healthcheck: `curl -sf http://localhost:8080/realms/master`, interval 15s, retries 20, start_period 30s
+- Resource limits: KC=1G/1.0cpu, LDAP=256M/0.25cpu, DB=512M/0.5cpu, App=512M–1G/0.5–1.0cpu
+- Test script Phase 3: KC admin token → create `it-stack` realm → create module OIDC/SAML client → OIDC discovery + SAML metadata → LDAP base DC entries → KC reachable from app container → env var assertions → DB check → volume assertions
+- `lab-04-smoke` job appended after `lab-03-smoke` in all 6 CI files
+
+---
+
+## [1.17.0] — 2026-03-04
+
+### Added — Phase 4 Lab 03: Advanced Features (all 6 Phase 4 modules) — Sprint 21 complete
+
+Lab progress: 96/120 → 102/120 (80.0% → 85.0%). Phase 4 Lab 03 (Advanced Features) complete. All 6 Phase 4 modules now have fully implemented `docker-compose.advanced.yml` files, functional test scripts with resource-limit validation and `--no-cleanup`, and `lab-03-smoke` CI jobs in all 6 CI pipelines.
+
+| Module | Web Port | Mailhog | Lab 03 Advanced Feature |
+|--------|----------|---------|-------------------------|
+| Elasticsearch (05) | 9220 + Kibana 5620 | N/A | ES 8.13.0 + Kibana 8.13.0 + Logstash 8.13.0 pipeline (beats→ES) |
+| Taiga (15) | 8420 (UI), 8021 (API) | 8720 | `taiga-a03-async` events worker + Redis persistence (`save 60 1`) |
+| Snipe-IT (16) | 8421 | 8721 | `SESSION_DRIVER=redis` + `CACHE_DRIVER=redis` + `snipeit-a03-queue` worker |
+| GLPI (17) | 8422 | 8722 | `glpi-a03-cron` dedicated scheduler container (PHP cron loop) |
+| Zabbix (19) | 8423 (web), 10051 (server) | 8723 | `zabbix-a03-agent` (Agent2) self-monitoring container |
+| Graylog (20) | 9020 | N/A | Tuned heap (`JAVA_OPTS`/`ES_JAVA_OPTS`) + UDP syslog :1516 + GELF :12203 |
+
+**Key patterns applied:**
+- Container naming: `{module}-a03-{service}` (e.g., `es-a03-node`, `taiga-a03-async`)
+- Project name: `it-stack-{module}-lab03`
+- **Single-network architecture**: `{module}-a03-net` (unlike Lab 02's dual-network)
+- Password pattern: `*Lab03!` (e.g., `RootLab03!`, `ZabbixLab03!`)
+- `deploy.resources.limits.cpus` + `deploy.resources.limits.memory` on **all** containers
+- `section()` function added to all test scripts (visual phase separators)
+- Resource limit verification via `docker inspect --format '{{.HostConfig.Memory}}'`
+- Advanced feature tests: env var checks (`SESSION_DRIVER`, `CACHE_DRIVER`, `ZBX_SERVER_HOST`), ILM endpoints, Redis CLI, agent state
+- `lab-03-smoke` job appended after `lab-02-smoke` in all 6 CI files
 
 ---
 

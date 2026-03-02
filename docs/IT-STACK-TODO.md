@@ -234,17 +234,19 @@ All 5 repos have:
 
 ## Phase 7: Module Scaffolding — Deployment Phase 4 (IT Management)
 
-> **Status: 🟡 IN PROGRESS** — Lab 01 + Lab 02 complete for all 6 modules · Lab 03–06 pending
+> **Status: 🟡 IN PROGRESS** — Lab 01 + Lab 02 + Lab 03 + Lab 04 ✅ complete for all 6 modules · Lab 05–06 pending
 
-- [x] `it-stack-taiga` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (PostgreSQL + Redis + Mailhog) · Lab 03–06 pending
-- [x] `it-stack-snipeit` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MariaDB + Mailhog) · Lab 03–06 pending
-- [x] `it-stack-glpi` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MariaDB + Mailhog) · Lab 03–06 pending
-- [x] `it-stack-elasticsearch` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (ES + Kibana LAN tier) · Lab 03–06 pending
-- [x] `it-stack-zabbix` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MySQL + Mailhog) · Lab 03–06 pending
-- [x] `it-stack-graylog` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MongoDB + Elasticsearch) · Lab 03–06 pending
+- [x] `it-stack-taiga` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (PostgreSQL + Redis + Mailhog) · Lab 03 ✅ (async events worker + Redis persistence) · Lab 04 ✅ (Keycloak OIDC + OpenLDAP) · Lab 05–06 pending
+- [x] `it-stack-snipeit` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MariaDB + Mailhog) · Lab 03 ✅ (SESSION/CACHE_DRIVER=redis + queue worker) · Lab 04 ✅ (Keycloak SAML + OpenLDAP) · Lab 05–06 pending
+- [x] `it-stack-glpi` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MariaDB + Mailhog) · Lab 03 ✅ (dedicated cron scheduler container) · Lab 04 ✅ (Keycloak SAML + OpenLDAP) · Lab 05–06 pending
+- [x] `it-stack-elasticsearch` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (ES + Kibana LAN tier) · Lab 03 ✅ (ES+Kibana+Logstash pipeline + resource limits) · Lab 04 ✅ (Kibana OIDC + OpenLDAP) · Lab 05–06 pending
+- [x] `it-stack-zabbix` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MySQL + Mailhog) · Lab 03 ✅ (Zabbix Agent2 self-monitoring) · Lab 04 ✅ (Keycloak SAML + OpenLDAP) · Lab 05–06 pending
+- [x] `it-stack-graylog` — scaffolded · Lab 01 ✅ · Lab 02 ✅ (MongoDB + Elasticsearch) · Lab 03 ✅ (tuned heap + UDP syslog/GELF inputs + resource limits) · Lab 04 ✅ (Keycloak OIDC + OpenLDAP) · Lab 05–06 pending
 - [x] 36 issues filed, added to Project #9 + #10
 - [x] Write real `docker-compose.standalone.yml` + `test-lab-XX-01.sh` ✅ (Sprint 19 complete)
 - [x] Write real `docker-compose.lan.yml` + `test-lab-XX-02.sh` + `lab-02-smoke` CI ✅ (Sprint 20 complete)
+- [x] Write real `docker-compose.advanced.yml` + `test-lab-XX-03.sh` + `lab-03-smoke` CI ✅ (Sprint 21 complete)
+- [x] Write real `docker-compose.sso.yml` + `test-lab-XX-04.sh` + `lab-04-smoke` CI ✅ (Sprint 22 complete)
 
 ---
 
@@ -301,7 +303,7 @@ All 5 repos have:
 |--------|--------|--------|--------|--------|--------|--------|
 | 03 · PostgreSQL | [x] | [x] | [x] | [x] | [x] | [x] |
 | 04 · Redis | [x] | [x] | [x] | [x] | [x] | [x] |
-| 05 · Elasticsearch | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 05 · Elasticsearch | [x] | [x] | [x] | [x] | [ ] | [ ] |
 
 ### Category 03: Collaboration
 
@@ -331,19 +333,19 @@ All 5 repos have:
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
-| 15 · Taiga | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 16 · Snipe-IT | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 17 · GLPI | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 15 · Taiga | [x] | [x] | [x] | [x] | [ ] | [ ] |
+| 16 · Snipe-IT | [x] | [x] | [x] | [x] | [ ] | [ ] |
+| 17 · GLPI | [x] | [x] | [x] | [x] | [ ] | [ ] |
 
 ### Category 07: Infrastructure
 
 | Module | Lab 01 | Lab 02 | Lab 03 | Lab 04 | Lab 05 | Lab 06 |
 |--------|--------|--------|--------|--------|--------|--------|
 | 18 · Traefik | [x] | [x] | [x] | [x] | [x] | [x] |
-| 19 · Zabbix | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
-| 20 · Graylog | [x] | [x] | [ ] | [ ] | [ ] | [ ] |
+| 19 · Zabbix | [x] | [x] | [x] | [x] | [ ] | [ ] |
+| 20 · Graylog | [x] | [x] | [x] | [x] | [ ] | [ ] |
 
-**Lab Progress:** 96/120 (80.0%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 COMPLETE (24/120) ✅🎉 · **Phase 4: 12/36 (Labs 01–02 done)**
+**Lab Progress:** 108/120 (90.0%) — Phase 1 complete (30/120) ✅ · Phase 2 complete (30/120) ✅ · Phase 3 COMPLETE (24/120) ✅🎉 · **Phase 4: 24/36 (Labs 01–04 done)**
 
 ---
 
