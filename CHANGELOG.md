@@ -8,9 +8,34 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up (Phase 4 Lab 01 Sprint)
-- Phase 4 Lab 01 (Standalone) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
+### Planned — Next Up (Phase 4 Lab 02 Sprint)
+- Phase 4 Lab 02 (External Dependencies) for: Taiga, Snipe-IT, GLPI, Elasticsearch, Zabbix, Graylog
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+
+---
+
+## [1.15.0] — 2026-03-02
+
+### Added — Phase 4 Lab 01: Standalone (all 6 Phase 4 modules) — Sprint 19 complete
+Lab progress: 84/120 → 90/120 (70.0% → 75.0%). Phase 4 Lab 01 (Standalone) complete. All 6 Phase 4 modules now have fully implemented `docker-compose.standalone.yml` files replacing broken `$firstPort` stubs, plus functional test scripts with real endpoint validation and `cleanup()` trap pattern.
+
+| Module | Port(s) | Stack | Key Lab 01 Test |
+|--------|---------|-------|-----------------|
+| Elasticsearch (05) | 9200 | single-node ES 8.13.0 | index create → document CRUD → search |
+| Taiga (15) | 8400 (UI), 8001 (API) | postgres:15 + redis:7 + taiga-back + taiga-front | API root + auth endpoint + UI HTTP 200 |
+| Snipe-IT (16) | 8401 | mariadb:10.11 + snipe/snipe-it | web UI accessible + content check |
+| GLPI (17) | 8402 | mariadb:10.11 + diouxx/glpi | web UI accessible + GLPI content check |
+| Zabbix (19) | 8403 (web), 10051 (server) | mysql:8.0 + zabbix-server-mysql + zabbix-web-nginx-mysql ubuntu-7.0 | web UI + JSON-RPC API + server port |
+| Graylog (20) | 9000 | mongo:6.0 + elasticsearch:7.17.12 + graylog:5.2 | web UI + REST API + system info |
+
+#### Patterns Established (all 6 modules)
+- Container naming: `{module}-s01-{service}` (s01 = standalone lab 01)
+- Dependency health checks via `condition: service_healthy` on all upstream services
+- `ulimits.memlock` on Elasticsearch containers
+- `cleanup()` function + `trap cleanup EXIT` for reliable test teardown
+- `NO_CLEANUP=1` env var support for local debugging
+- `section()` helper for structured test output
+- CI `lab-01-smoke` test script reference fixed to module-numbered filenames (e.g. `test-lab-05-01.sh`)
 
 ---
 
