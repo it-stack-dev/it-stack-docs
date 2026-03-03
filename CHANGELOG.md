@@ -9,8 +9,29 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- INT-04 SuiteCRM ↔ Keycloak SAML 2.0
-- Remaining SSO integrations (INT-05 through INT-08b)
+- INT-05 Odoo ↔ Keycloak OIDC
+- Remaining SSO integrations (INT-06 through INT-08b)
+
+---
+
+## [1.29.0] — 2026-03-03
+
+### Added — Sprint 33: INT-04 SuiteCRM ↔ Keycloak SAML 2.0
+
+**Ansible (`it-stack-ansible`):**
+- `roles/keycloak/tasks/saml-clients.yml` — idempotent SAML client provisioner: fetch existing clients, create missing, verify post-provision; iterates `keycloak_saml_clients` list
+- `roles/keycloak/templates/saml-client.json.j2` — SAML client template with `protocol: saml`, ACS URL, SLO URL, RSA_SHA256 signature, 5 protocol mappers (uid, mail, givenName, sn, groups)
+- `roles/keycloak/defaults/main.yml` — added `keycloak_saml_clients` list with suitecrm, glpi, snipeit entries (ACS/SLO URLs, redirect_uris)
+- `roles/keycloak/tasks/main.yml` — added `saml-clients.yml` import guarded by `keycloak_provision_saml_clients`
+- `roles/suitecrm/tasks/keycloak-saml.yml` — INT-04 Ansible task: verify Keycloak IdP descriptor reachable, extract X.509 cert via regex, template `saml_settings.php.j2`, enable SAML in `config.php` via `lineinfile`, trigger extension rebuild, assert SP metadata endpoint returns EntityDescriptor + AssertionConsumerService
+- `roles/suitecrm/templates/saml_settings.php.j2` — full `$saml_settings` PHP array (IdP entity, SSO/SLO URLs, X.509 cert, SP entity, ACS/SLO, security settings, attribute map, auto-create users)
+- `roles/suitecrm/tasks/main.yml` — added `keycloak-saml.yml` import guarded by `suitecrm_enable_keycloak_saml`
+
+**Integration test (`it-stack-suitecrm`):**
+- `docker/suitecrm-ldap-seed.ldif` — FreeIPA-compatible LDAP seed: 3 users (`crmadmin`, `crmuser1`, `crmuser2`), 2 groups (`cn=admins`, `cn=crm-users`)
+- `docker/docker-compose.integration.yml` — added `suitecrm-i05-ldap-seed` init service; `suitecrm-i05-kc` depends on seed completed successfully; `SUITECRM_LDAP_BASE_DN` updated to `cn=users,cn=accounts,dc=lab,dc=local`; LDAP bind switched to readonly account
+- `tests/labs/test-lab-12-05.sh` — extended: seed exit code check, Phase 3a (KC admin token, realm, SAML client creation + verification, LDAP federation + full sync + user count assert, IdP descriptor assertions), Phase 3b (LDAP seed: ≥3 users, ≥2 groups, readonly bind), 3c–3g renamed from 3a–3e, new Phase 3h (SAML env vars, KC SAML descriptor reachable from container, FreeIPA LDAP BaseDN check); removed 80-line dead code stub
+- `.github/workflows/ci.yml` — `lab-05-smoke` renamed INT-04, `python3` added, wait order: MariaDB → OpenLDAP → seed exit → Keycloak(300s) → WireMock → Mailhog → SuiteCRM
 
 ---
 
