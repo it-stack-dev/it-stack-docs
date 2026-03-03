@@ -9,9 +9,28 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- INT-02 Nextcloud ↔ Keycloak OIDC
 - INT-03 Mattermost ↔ Keycloak OIDC
-- Remaining SSO integrations (INT-04 through INT-08b)
+- INT-04 SuiteCRM ↔ Keycloak SAML 2.0
+- Remaining SSO integrations (INT-05 through INT-08b)
+
+---
+
+## [1.27.0] — 2026-03-02
+
+### Added — Sprint 31: INT-02 Nextcloud ↔ Keycloak OIDC
+
+**Ansible (`it-stack-ansible`):**
+- `roles/keycloak/tasks/oidc-clients.yml` — idempotent OIDC client provisioning for all services in `keycloak_oidc_clients`: check existing, create missing, retrieve client UUID, retrieve/assert client secret into `keycloak_client_secrets` dict
+- `roles/keycloak/templates/oidc-client.json.j2` — full OIDC client template with 4 protocol mappers (email, given_name, family_name, groups), backchannel logout, post-logout redirect
+- `roles/nextcloud/tasks/keycloak-oidc.yml` — configure `user_oidc` app via `occ`: install/enable app, delete stale provider, register Keycloak discovery URI + client credentials, `allow_multiple_user_backends`, button text, assert discovery URL reachable
+- `roles/keycloak/tasks/main.yml` — added `oidc-clients.yml` import guarded by `keycloak_provision_oidc_clients`
+- `roles/nextcloud/tasks/main.yml` — added `keycloak-oidc.yml` import guarded by `nextcloud_enable_keycloak_oidc`
+
+**Integration test (`it-stack-nextcloud`):**
+- `docker/nextcloud-ldap-seed.ldif` — FreeIPA-compatible LDAP seed: `cn=accounts` tree, 3 users (`ncadmin`, `ncuser1`, `ncuser2`) with `inetOrgPerson`, groups `cn=admins` + `cn=nc-users` with `groupOfNames`
+- `docker/docker-compose.integration.yml` — added `nc-int-ldap-seed` init service (applies LDIF to OpenLDAP); `nc-int-keycloak` now depends on `service_completed_successfully` (ldap-seed)
+- `tests/labs/test-lab-06-05.sh` — extended with 4 new sections: 3b LDAP seed verification (3 users, 2 groups), 8 LDAP full sync into Keycloak + user_oidc app enabled check, 9 OIDC provider registration (occ), 10 OIDC token endpoint + Nextcloud bearer API auth; renumbered Cron→11, WebDAV→12
+- `.github/workflows/ci.yml` — lab-05-smoke: updated job name, added `python3`, reordered waits (OpenLDAP first), 240s Keycloak timeout
 
 ---
 
