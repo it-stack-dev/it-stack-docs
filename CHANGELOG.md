@@ -9,9 +9,24 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- INT-03 Mattermost ↔ Keycloak OIDC
 - INT-04 SuiteCRM ↔ Keycloak SAML 2.0
 - Remaining SSO integrations (INT-05 through INT-08b)
+
+---
+
+## [1.28.0] — 2026-03-03
+
+### Added — Sprint 32: INT-03 Mattermost ↔ Keycloak OIDC
+
+**Ansible (`it-stack-ansible`):**
+- `roles/mattermost/tasks/keycloak-oidc.yml` — INT-03 Ansible task: waits for Mattermost API, obtains admin token, patches `OpenIdSettings` (Enable, DiscoveryEndpoint, Id, Secret) and `LdapSettings` (Enable, FreeIPA DN paths, uid/mail attributes) via `PUT /api/v4/config/patch`, triggers LDAP sync, asserts OIDC+LDAP settings applied and Keycloak discovery URL reachable
+- `roles/mattermost/tasks/main.yml` — added `keycloak-oidc.yml` import guarded by `mattermost_enable_keycloak_oidc`
+
+**Integration test (`it-stack-mattermost`):**
+- `docker/mattermost-ldap-seed.ldif` — FreeIPA-compatible LDAP seed: `cn=accounts` tree, 3 users (`mmadmin`, `mmuser1`, `mmuser2`) with `inetOrgPerson`, groups `cn=admins` + `cn=mm-users` with `groupOfNames`
+- `docker/docker-compose.integration.yml` — added `mm-int-ldap-seed` init service (depends on `mm-int-ldap` healthy, exits on completion); `mm-int-keycloak` now depends on `mm-int-ldap-seed` completed successfully; updated `MM_LDAPSETTINGS_BASEDN` to `cn=users,cn=accounts,dc=lab,dc=local` (FreeIPA-style)
+- `tests/labs/test-lab-07-05.sh` — extended with: section 3b LDAP seed verification (≥3 users, ≥2 groups, readonly bind), section 5 extended (Keycloak FreeIPA-style LDAP federation component + full sync + realm user count assert), section 8 upgraded to authenticated API config check (OpenIdSettings.Enable, DiscoveryEndpoint, LdapSettings.Enable), section 9 extended (3 OIDC discovery fields), new section 10 (Mattermost LDAP sync + ≥3 LDAP users verified), new section 11 (OIDC token issued for mmadmin, claim verification, Keycloak introspect)
+- `.github/workflows/ci.yml` — `lab-05-smoke` renamed to INT-03, added `python3`, reordered waits (OpenLDAP first, LDAP seed exit, then Keycloak 240s timeout)
 
 ---
 

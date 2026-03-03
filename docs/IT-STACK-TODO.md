@@ -388,7 +388,7 @@ All 5 repos have:
 ### SSO Integrations (via Keycloak)
 - [x] FreeIPA ↔ Keycloak LDAP Federation  ← **INT-01 DONE** (Sprint 30: Ansible tasks + integration test)
 - [x] Nextcloud ↔ Keycloak OIDC  ← **INT-02 DONE** (Sprint 31: Ansible tasks + integration test)
-- [ ] Mattermost ↔ Keycloak OIDC
+- [x] Mattermost ↔ Keycloak OIDC  ← **INT-03 DONE** (Sprint 32: Ansible tasks + integration test)
 - [ ] SuiteCRM ↔ Keycloak SAML
 - [ ] Odoo ↔ Keycloak OIDC
 - [ ] Zammad ↔ Keycloak OIDC
