@@ -78,7 +78,7 @@
   - [x] Push `main` branch + GitHub Pages enabled
 - [x] Create `it-stack-installer` — bootstrap & automation scripts
 - [x] Create `it-stack-testing` — integration & e2e testing suite
-- [x] Create `it-stack-ansible` — **Full Ansible roles: common, freeipa·keycloak·postgresql·redis·traefik** (76 files, 3,332 lines)
+- [x] Create `it-stack-ansible` — **Full Ansible roles: all 21 services, 20 playbooks, group_vars+host_vars, full site.yml** (161 files)
 - [x] Create `it-stack-terraform` — Terraform modules (VM provisioning)
 - [x] Create `it-stack-helm` — Helm charts for all services
 
@@ -201,7 +201,26 @@ All 5 repos have:
 - [x] `roles/redis` — install + auth + AOF persistence + maxmemory
 - [x] `roles/keycloak` — deploy + realm + LDAP federation
 - [x] `roles/traefik` — deploy + TLS + Let's Encrypt + dashboard
-- [x] `site.yml` + 5 targeted playbooks + `inventory/` (8 servers) + `vault.yml.template`
+- [x] `roles/nextcloud` — deploy + Nginx + PHP-FPM + occ integration
+- [x] `roles/mattermost` — deploy + systemd + PostgreSQL config
+- [x] `roles/jitsi` — deploy + Prosody XMPP + JWT auth
+- [x] `roles/iredmail` — deploy + Postfix + Dovecot + PostgreSQL lookups
+- [x] `roles/zammad` — deploy + apt + Elasticsearch integration
+- [x] `roles/elasticsearch` — deploy + cluster config + JVM heap
+- [x] `roles/freepbx` — deploy + Asterisk + PJSIP transports
+- [x] `roles/suitecrm` — deploy + Nginx + PHP-FPM + cron
+- [x] `roles/odoo` — deploy + systemd + workers + PostgreSQL
+- [x] `roles/openkm` — deploy + Tomcat/systemd + Java opts
+- [x] `roles/taiga` — deploy + Gunicorn + LDAP + events
+- [x] `roles/snipeit` — deploy + Laravel + PHP-FPM + env config
+- [x] `roles/glpi` — deploy + Nginx + PHP-FPM + cron
+- [x] `roles/zabbix` — deploy + server + frontend + agent config
+- [x] `roles/graylog` — deploy + MongoDB + Elasticsearch integration
+- [x] `site.yml` — full 20-service phased playbook (6 phases, 16 plays)
+- [x] 20 targeted playbooks (one per service)
+- [x] `inventory/` — 8 servers, group_vars (7 files), host_vars (5 files)
+- [x] `vault/secrets.yml.example` — all 40+ vault variable stubs
+- [x] `Makefile` — `deploy-phase2`, `deploy-phase3`, `deploy-phase4` group targets
 
 ---
 

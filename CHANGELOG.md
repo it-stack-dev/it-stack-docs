@@ -11,7 +11,55 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ### Planned — Next Up
 - `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
 - Integration milestone implementations (SSO federations, cross-service APIs)
-- `it-stack-ansible` playbooks for all 20 services
+
+---
+
+## [1.22.0] — 2026-03-05
+
+### Added — Sprint 26: Ansible Roles for All 15 Phase 2–4 Services
+
+Complete Ansible automation coverage for every IT-Stack service. The `it-stack-ansible` repo now contains roles for all 21 services (6 from Phase 1, 15 new in this sprint).
+
+**New Ansible Roles (15):**
+
+| Role | Service | Server | Key Template |
+|------|---------|--------|-------------|
+| `nextcloud` | Nextcloud file sharing | lab-app1 | `nextcloud-nginx.conf.j2` |
+| `mattermost` | Mattermost team chat | lab-app1 | `mattermost.service.j2` |
+| `jitsi` | Jitsi Meet video | lab-app1 | `prosody.cfg.lua.j2` |
+| `iredmail` | iRedMail email server | lab-comm1 | `postfix-main.cf.j2` |
+| `zammad` | Zammad help desk | lab-comm1 | _(apt-managed)_ |
+| `elasticsearch` | Elasticsearch search | lab-db1 | `elasticsearch.yml.j2` + `jvm.options.j2` |
+| `freepbx` | FreePBX VoIP PBX | lab-pbx1 | `pjsip.conf.j2` |
+| `suitecrm` | SuiteCRM CRM | lab-biz1 | `suitecrm-nginx.conf.j2` |
+| `odoo` | Odoo ERP | lab-biz1 | `odoo.conf.j2` |
+| `openkm` | OpenKM document mgmt | lab-biz1 | `openkm.service.j2` |
+| `taiga` | Taiga project mgmt | lab-mgmt1 | `taiga-backend.service.j2` |
+| `snipeit` | Snipe-IT assets | lab-mgmt1 | `snipeit-env.j2` |
+| `glpi` | GLPI ITSM | lab-mgmt1 | `glpi-nginx.conf.j2` |
+| `zabbix` | Zabbix monitoring | lab-comm1 | `zabbix_server.conf.j2` |
+| `graylog` | Graylog log mgmt | lab-proxy1 | `graylog-server.conf.j2` |
+
+**New Playbooks (15):** `deploy-{service}.yml` for each role above — with vault assertions, role execution, service verification, and deployment summary.
+
+**Updated `site.yml`:** Expanded from 6 plays (Phase 1 only) to 16 plays covering all 4 phases in dependency order.
+
+**New Inventory Variable Files (9):**
+- `inventory/group_vars/collaboration.yml` — Nextcloud, Mattermost, Jitsi vars
+- `inventory/group_vars/communications.yml` — iRedMail, FreePBX, Zammad, Zabbix vars
+- `inventory/group_vars/business.yml` — SuiteCRM, Odoo, OpenKM vars
+- `inventory/group_vars/it_management.yml` — Taiga, Snipe-IT, GLPI vars
+- `inventory/host_vars/lab-app1.yml` — PHP-FPM pool + UFW rules
+- `inventory/host_vars/lab-comm1.yml` — email/monitoring ports
+- `inventory/host_vars/lab-pbx1.yml` — SIP/RTP port rules
+- `inventory/host_vars/lab-biz1.yml` — Odoo/OpenKM ports
+- `inventory/host_vars/lab-mgmt1.yml` — IT management service ports
+
+**Updated `vault/secrets.yml.example`:** Added 25 new vault variable stubs for all new services.
+
+**Updated `Makefile`:** Added `deploy-phase2`, `deploy-phase3`, `deploy-phase4` group targets + 15 individual service targets.
+
+**Total repo size:** 161 role files across 21 roles.
 
 ---
 
