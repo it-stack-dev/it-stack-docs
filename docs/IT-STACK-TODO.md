@@ -294,25 +294,25 @@ All 5 repos have:
 
 ### Automation Scripts (in `it-stack-installer`)
 
-- [ ] `scripts/setup/install-tools.ps1` — Installs Git, gh, Docker, Helm, kubectl, Ansible
-- [ ] `scripts/setup/setup-directory-structure.ps1` — Creates `C:\it-stack-dev\` tree
-- [ ] `scripts/setup/setup-github.ps1` — Authenticates `gh`, sets default org
-- [ ] `scripts/github/create-phase1-modules.ps1`
-- [ ] `scripts/github/create-phase2-modules.ps1`
-- [ ] `scripts/github/create-phase3-modules.ps1`
-- [ ] `scripts/github/create-phase4-modules.ps1`
-- [ ] `scripts/github/add-phase1-issues.ps1`
-- [ ] `scripts/github/add-phase2-issues.ps1`
-- [ ] `scripts/github/add-phase3-issues.ps1`
-- [ ] `scripts/github/add-phase4-issues.ps1`
-- [ ] `scripts/github/create-github-projects.ps1`
-- [ ] `scripts/github/create-milestones.ps1`
-- [ ] `scripts/github/apply-labels.ps1`
-- [ ] `scripts/operations/clone-all-repos.ps1`
-- [ ] `scripts/operations/update-all-repos.ps1`
-- [ ] `scripts/utilities/create-repo-template.ps1` — Scaffold a new module repo
-- [ ] `scripts/deployment/deploy-stack.sh` — Full stack deployment
-- [ ] `scripts/testing/run-all-labs.sh` — Run all 120 lab tests
+- [x] `scripts/setup/install-tools.ps1` — Installs Git, gh, Docker, Helm, kubectl, Ansible
+- [x] `scripts/setup/setup-directory-structure.ps1` — Creates `C:\it-stack-dev\` tree
+- [x] `scripts/setup/setup-github.ps1` — Authenticates `gh`, sets default org
+- [x] `scripts/github/create-phase1-modules.ps1`
+- [x] `scripts/github/create-phase2-modules.ps1`
+- [x] `scripts/github/create-phase3-modules.ps1`
+- [x] `scripts/github/create-phase4-modules.ps1`
+- [x] `scripts/github/add-phase1-issues.ps1`
+- [x] `scripts/github/add-phase2-issues.ps1`
+- [x] `scripts/github/add-phase3-issues.ps1`
+- [x] `scripts/github/add-phase4-issues.ps1`
+- [x] `scripts/github/create-github-projects.ps1`
+- [x] `scripts/github/create-milestones.ps1`
+- [x] `scripts/github/apply-labels.ps1`
+- [x] `scripts/operations/clone-all-repos.ps1`
+- [x] `scripts/operations/update-all-repos.ps1`
+- [x] `scripts/utilities/create-repo-template.ps1` — Scaffold a new module repo
+- [x] `scripts/deployment/deploy-stack.sh` — Full stack deployment
+- [x] `scripts/testing/run-all-labs.sh` — Run all 120 lab tests
 
 ---
 

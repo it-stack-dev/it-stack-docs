@@ -9,8 +9,67 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- `it-stack-installer` operational scripts (`clone-all-repos.ps1`, `update-all-repos.ps1`, `install-tools.ps1`)
+- Architecture documentation (`docs/07-architecture/` per-service design docs)
 - Integration milestone implementations (SSO federations, cross-service APIs)
+
+---
+
+## [1.23.0] — 2026-03-06
+
+### Added — Sprint 27: it-stack-installer Automation Scripts (19 scripts)
+
+Complete automation toolset for bootstrapping the IT-Stack development environment and GitHub organization from scratch.
+
+**Setup Scripts (3) — `scripts/setup/`:**
+
+| Script | Purpose |
+|--------|---------|
+| `install-tools.ps1` | winget installs Git, GitHub CLI, Docker Desktop, kubectl, Helm, Terraform, Python 3.12, jq; Ansible via WSL |
+| `setup-directory-structure.ps1` | Creates the full `C:\IT-Stack\it-stack-dev\` workspace tree (35+ directories, .gitkeep placeholders) |
+| `setup-github.ps1` | `gh auth login`, org access verification, git user config from GitHub profile |
+
+**GitHub Bootstrap Scripts (11) — `scripts/github/`:**
+
+| Script | Issues/Repos |
+|--------|-------------|
+| `create-phase1-modules.ps1` | Creates 5 Phase 1 repos (freeipa, keycloak, postgresql, redis, traefik) |
+| `create-phase2-modules.ps1` | Creates 5 Phase 2 repos (nextcloud, mattermost, jitsi, iredmail, zammad) |
+| `create-phase3-modules.ps1` | Creates 4 Phase 3 repos (freepbx, suitecrm, odoo, openkm) |
+| `create-phase4-modules.ps1` | Creates 6 Phase 4 repos (taiga, snipeit, glpi, elasticsearch, zabbix, graylog) |
+| `apply-labels.ps1` | Creates all 39 labels across all 26 repos (idempotent with `--force`) |
+| `create-milestones.ps1` | Creates 4 phase milestones in all 20 module repos |
+| `create-github-projects.ps1` | Creates 5 GitHub Projects (v2 boards) in the org |
+| `add-phase1-issues.ps1` | Creates 30 lab issues for Phase 1 (6 labs x 5 modules) |
+| `add-phase2-issues.ps1` | Creates 30 lab issues for Phase 2 (6 labs x 5 modules) |
+| `add-phase3-issues.ps1` | Creates 24 lab issues for Phase 3 (6 labs x 4 modules) |
+| `add-phase4-issues.ps1` | Creates 36 lab issues for Phase 4 (6 labs x 6 modules) |
+
+**Operations Scripts (2) — `scripts/operations/`:**
+
+| Script | Purpose |
+|--------|---------|
+| `clone-all-repos.ps1` | Clones all 26 repos into category subdirectories; `-Phase` filter, skip-if-exists |
+| `update-all-repos.ps1` | `git pull --ff-only` across all repos; `-Status` mode, `-Branch` selection |
+
+**Utility Script (1) — `scripts/utilities/`:**
+
+| Script | Purpose |
+|--------|---------|
+| `create-repo-template.ps1` | Scaffolds full module repo structure: manifest, Dockerfile, Makefile, 6 Compose files, 6 lab scripts, CI workflows; `-CreateGitHubRepo` flag |
+
+**Deployment Script (1) — `scripts/deployment/`:**
+
+| Script | Purpose |
+|--------|---------|
+| `deploy-stack.sh` | Ansible wrapper: `--module`, `--phase 1-4`, `--check`, `--verbose`; validates vault and secrets before running |
+
+**Testing Script (1) — `scripts/testing/`:**
+
+| Script | Purpose |
+|--------|---------|
+| `run-all-labs.sh` | Runs all 120 lab tests with `--phase`, `--module`, `--lab` filters; reports PASS/FAIL/SKIP counts |
+
+**Total lab issues when all scripts are run:** 120 (30 + 30 + 24 + 36)
 
 ---
 
