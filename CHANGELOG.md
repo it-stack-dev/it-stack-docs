@@ -9,7 +9,30 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Integration milestone implementations (SSO federations, cross-service APIs) — issues created, work in GitHub
+- INT-02 Nextcloud ↔ Keycloak OIDC
+- INT-03 Mattermost ↔ Keycloak OIDC
+- Remaining SSO integrations (INT-04 through INT-08b)
+
+---
+
+## [1.26.0] — 2026-03-03
+
+### Added — Sprint 30: INT-01 FreeIPA ↔ Keycloak LDAP Federation
+
+**Ansible (`it-stack-ansible`):**
+- `roles/freeipa/tasks/keycloak-svc-account.yml` — creates `uid=keycloak-svc` read-only service account in FreeIPA: kinit, `ipa user-add`, vault password, `ldappasswd` reset, `ldapmodify` sysaccounts + ACI, bind verification
+- `roles/keycloak/tasks/ldap-federation.yml` — full idempotent federation pipeline: kcadm auth → realm check → create LDAP component (`vendor: rhds`, FreeIPA DN paths) → group mapper → 5 attribute mappers (email, firstName, lastName, phone, title) → map `admins` → `realm-admin` → full sync → assert `federationLink`
+- `roles/keycloak/templates/group-mapper.json.j2` — Jinja2 template for LDAP group mapper (`groupOfNames`, `READ_ONLY`, inherits from `federation_id` fact)
+- `roles/keycloak/templates/ldap-federation.json.j2` — fixed `uuidLDAPAttribute` from `uid` to `ipaUniqueID` (FreeIPA-correct)
+- `roles/keycloak/tasks/main.yml` — added `ldap-federation.yml` import with `keycloak_enable_ldap_federation` guard
+- `roles/freeipa/tasks/main.yml` — added `keycloak-svc-account.yml` import with `freeipa_create_keycloak_svc` guard
+- `roles/keycloak/tasks/realm.yml` — removed duplicate stub LDAP block; replaced with NOTE comment pointing to `ldap-federation.yml`
+
+**Integration test (`it-stack-keycloak`):**
+- `docker/openldap-seed.ldif` — FreeIPA-compatible LDAP seed: `cn=accounts`, `cn=users,cn=accounts`, `cn=groups,cn=accounts`, 3 test users (`testadmin`, `testuser1`, `testuser2`) with `inetOrgPerson`, groups `cn=admins` and `cn=ipausers` with `groupOfNames`
+- `docker/docker-compose.integration.yml` — added `ldap-seed` init service (seeds FreeIPA-like LDIF into OpenLDAP); updated Keycloak `depends_on` to `ldap-seed: service_completed_successfully`
+- `tests/labs/test-lab-02-05.sh` — full rewrite with 13 sections: OpenLDAP seed verification (3 users, 2 groups, readonly bind), FreeIPA-style LDAP federation creation, group mapper, full sync, `federationLink` assertion, `testadmin` sync check, `admins` group sync, OIDC clients, client credentials, OIDC discovery, SAML descriptor, MailHog, app services
+- `.github/workflows/ci.yml` — lab-05-smoke: updated job name, added `python3` to toolchain, reordered wait steps (OpenLDAP first → Keycloak), extended timeout to 240s
 
 ---
 

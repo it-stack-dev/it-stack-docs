@@ -386,7 +386,7 @@ All 5 repos have:
 > **GitHub Issues created** via `create-integration-issues.ps1` (Sprint 29) — checkboxes below track *implementation* status.
 
 ### SSO Integrations (via Keycloak)
-- [ ] FreeIPA ↔ Keycloak LDAP Federation
+- [x] FreeIPA ↔ Keycloak LDAP Federation  ← **INT-01 DONE** (Sprint 30: Ansible tasks + integration test)
 - [ ] Nextcloud ↔ Keycloak OIDC
 - [ ] Mattermost ↔ Keycloak OIDC
 - [ ] SuiteCRM ↔ Keycloak SAML
