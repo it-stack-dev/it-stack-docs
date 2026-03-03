@@ -9,8 +9,37 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Architecture documentation (`docs/07-architecture/` per-service design docs)
 - Integration milestone implementations (SSO federations, cross-service APIs)
+
+---
+
+## [1.24.0] — 2026-03-07
+
+### Added — Sprint 28: Architecture Documentation (`docs/07-architecture/`)
+
+8 Architecture Decision Records (ADRs) and 2 technical diagrams covering all major IT-Stack technical choices.
+
+**Architecture Decision Records:**
+
+| ADR | Decision | Status |
+|-----|----------|--------|
+| [ADR-001](docs/07-architecture/adr-001-identity-stack.md) | Use FreeIPA + Keycloak for identity | Accepted |
+| [ADR-002](docs/07-architecture/adr-002-postgresql-primary.md) | PostgreSQL as primary database for all services | Accepted |
+| [ADR-003](docs/07-architecture/adr-003-traefik-proxy.md) | Traefik as reverse proxy with automatic TLS | Accepted |
+| [ADR-004](docs/07-architecture/adr-004-lab-methodology.md) | 6-lab progressive testing methodology | Accepted |
+| [ADR-005](docs/07-architecture/adr-005-ubuntu-2404.md) | Ubuntu 24.04 LTS as base OS for all servers | Accepted |
+| [ADR-006](docs/07-architecture/adr-006-8server-layout.md) | 8-server production layout | Accepted |
+| [ADR-007](docs/07-architecture/adr-007-docker-compose-ansible.md) | Docker Compose for labs, Ansible for production | Accepted |
+| [ADR-008](docs/07-architecture/adr-008-apache2-license.md) | Apache 2.0 license for all repositories | Accepted |
+
+**Technical Diagrams:**
+
+| File | Description |
+|------|-------------|
+| [network-topology.md](docs/07-architecture/network-topology.md) | 8-server network layout, all IPs, DNS A+CNAME records, firewall rules, Mermaid diagram |
+| [service-integration-map.md](docs/07-architecture/service-integration-map.md) | All 22+ cross-service integrations, Mermaid graph, integration catalog, startup order |
+
+**`docs/07-architecture/` is now complete.**
 
 ---
 

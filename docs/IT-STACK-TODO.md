@@ -446,7 +446,7 @@ All 5 repos have:
 ### Documentation & Handover
 - [ ] All `docs/` content pushed to `it-stack-docs` repo
 - [ ] Runbooks for each service written or linked
-- [ ] Network diagram (with IP addresses) in `docs/07-architecture/`
+- [x] Network diagram (with IP addresses) in `docs/07-architecture/`
 - [ ] User onboarding guide (how to get SSO account, access each service)
 - [ ] Admin handover guide (passwords in vault, backup procedures)
 
