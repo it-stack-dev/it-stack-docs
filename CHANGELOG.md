@@ -9,7 +9,57 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Integration milestone implementations (SSO federations, cross-service APIs)
+- Integration milestone implementations (SSO federations, cross-service APIs) — issues created, work in GitHub
+
+---
+
+## [1.25.0] — 2026-03-02
+
+### Added — Sprint 29: Integration Milestone GitHub Issues (23 issues)
+
+New script `create-integration-issues.ps1` in `it-stack-installer` creates 23 GitHub
+Issues across module repos — one per cross-service integration milestone.
+
+**Script:** `scripts/github/create-integration-issues.ps1`
+- `-Category sso` — 9 SSO integration issues
+- `-Category business` — 15 business/observability integration issues
+- `-Id INT-XX` — single integration issue
+
+**`integration` label added to `apply-labels.ps1`** (purple #5319e7)
+
+**SSO Integration Issues (9):**
+
+| ID | Title | Repo |
+|----|-------|------|
+| INT-01 | FreeIPA <-> Keycloak LDAP Federation | `it-stack-keycloak` |
+| INT-02 | Nextcloud <-> Keycloak OIDC | `it-stack-nextcloud` |
+| INT-03 | Mattermost <-> Keycloak OIDC | `it-stack-mattermost` |
+| INT-04 | SuiteCRM <-> Keycloak SAML 2.0 | `it-stack-suitecrm` |
+| INT-05 | Odoo <-> Keycloak OIDC | `it-stack-odoo` |
+| INT-06 | Zammad <-> Keycloak OIDC | `it-stack-zammad` |
+| INT-07 | GLPI <-> Keycloak SAML 2.0 | `it-stack-glpi` |
+| INT-08 | Taiga <-> Keycloak OIDC | `it-stack-taiga` |
+| INT-08b | Snipe-IT <-> Keycloak SAML 2.0 | `it-stack-snipeit` |
+
+**Business Workflow Integration Issues (15):**
+
+| ID | Title | Protocol | Repo |
+|----|-------|----------|------|
+| INT-09 | FreePBX <-> SuiteCRM | CTI / REST API | `it-stack-freepbx` |
+| INT-10 | FreePBX <-> Zammad | AMI webhook | `it-stack-freepbx` |
+| INT-11 | FreePBX <-> FreeIPA | LDAP extension provisioning | `it-stack-freepbx` |
+| INT-12 | SuiteCRM <-> Odoo | Bidirectional REST API sync | `it-stack-suitecrm` |
+| INT-13 | SuiteCRM <-> Nextcloud | CalDAV calendar sync | `it-stack-suitecrm` |
+| INT-14 | SuiteCRM <-> OpenKM | REST API document linking | `it-stack-suitecrm` |
+| INT-15 | Odoo <-> FreeIPA | LDAP employee directory sync | `it-stack-odoo` |
+| INT-16 | Odoo <-> Taiga | Timesheet export | `it-stack-odoo` |
+| INT-17 | Odoo <-> Snipe-IT | Procurement -> asset creation | `it-stack-odoo` |
+| INT-18 | Taiga <-> Mattermost | Webhook project notifications | `it-stack-taiga` |
+| INT-19 | Snipe-IT <-> GLPI | Asset -> CMDB sync | `it-stack-snipeit` |
+| INT-20 | GLPI <-> Zammad | Ticket escalation bridge | `it-stack-glpi` |
+| INT-21 | OpenKM <-> Nextcloud | Document storage bridge | `it-stack-openkm` |
+| INT-22 | Zabbix <-> Mattermost | Infrastructure alert webhooks | `it-stack-zabbix` |
+| INT-23 | Graylog <-> Zabbix | Log-based alert triggers | `it-stack-graylog` |
 
 ---
 

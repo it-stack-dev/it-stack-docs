@@ -382,7 +382,8 @@ All 5 repos have:
 
 ## Integration Milestones
 
-> From `integration-guide-complete.md` — cross-service integrations
+> From `integration-guide-complete.md` — cross-service integrations  
+> **GitHub Issues created** via `create-integration-issues.ps1` (Sprint 29) — checkboxes below track *implementation* status.
 
 ### SSO Integrations (via Keycloak)
 - [ ] FreeIPA ↔ Keycloak LDAP Federation
