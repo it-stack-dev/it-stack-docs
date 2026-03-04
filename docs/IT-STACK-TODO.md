@@ -394,6 +394,7 @@ All 5 repos have:
 - [x] Zammad ↔ Keycloak OIDC  ← **INT-06 DONE** (Sprint 35: keycloak-oidc.yml + Zammad channels API + integration test)
 - [x] GLPI ↔ Keycloak SAML  ← **INT-07 DONE** (Sprint 36: keycloak-saml.yml + glpi-saml-config.php.j2 + SAML IdP metadata + integration test)
 - [x] Taiga ↔ Keycloak OIDC  ← **INT-08 DONE** (Sprint 37: keycloak-oidc.yml + taiga-contrib-oidc-auth + taiga-oidc-settings.py.j2 + integration test)
+- [x] Snipe-IT ↔ Keycloak SAML  ← **INT-08b DONE** (Sprint 38: keycloak-saml.yml + snipeit-saml-settings.env.j2 + LDAP seed + integration test)
 
 ### Business Workflow Integrations
 - [ ] FreePBX ↔ SuiteCRM (click-to-call, call logging)

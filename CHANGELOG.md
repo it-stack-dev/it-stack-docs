@@ -9,7 +9,24 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Remaining SSO integrations (INT-08b)
+- Business workflow integrations (FreePBX↔SuiteCRM, SuiteCRM↔Odoo, Zabbix↔Mattermost, etc.)
+
+---
+
+## [1.34.0] — 2026-03-04
+
+### Added — Sprint 38: INT-08b Snipe-IT ↔ Keycloak SAML 2.0
+
+**Ansible (`it-stack-ansible`):**
+- `roles/snipeit/tasks/keycloak-saml.yml` — INT-08b idempotent 8-step SAML 2.0 playbook: assert KC IdP metadata reachable, assert EntityDescriptor + X509Certificate, extract cert + build all SP/IdP URL facts, deploy `snipeit-saml-settings.env.j2` to `.env.saml`, blockinfile SAML2 vars into `.env`, run `php artisan saml2:create-tenant`, flush handlers, final assert
+- `roles/snipeit/templates/snipeit-saml-settings.env.j2` — SAML2 .env config template: `SAML2_ENABLED`, `SAML2_IDP_METADATA_URL`, SP entity ID + ACS + SLO URLs, IdP entityID + SSO/SLO endpoints, IdP X509 cert, attribute mapping (uid/email/givenName/sn), `KEYCLOAK_URL/REALM/CLIENT_ID`
+- `roles/snipeit/tasks/main.yml` — added `keycloak-saml.yml` import guarded by `snipeit_enable_keycloak_saml | default(true)`
+
+**Integration test (`it-stack-snipeit`):**
+- `docker/snipeit-ldap-seed.ldif` — FreeIPA-style LDAP seed (cn=accounts tree, users: snipeadmin/snipeuser1/snipeuser2, groups: admins/snipeit-users)
+- `docker/docker-compose.integration.yml` — added `snipeit-i05-ldap-seed` init service (ldapadd, depends on LDAP healthy, restart: "no"), KC `depends_on: service_completed_successfully`, KC healthcheck updated to `/health/ready`, injected `SAML2_ENABLED + SAML2_IDP_METADATA_URL + SAML2_SP_ENTITY_ID + SAML2_SP_ACS_URL + SAML2_AUTOLOAD_METADATA` into Snipe-IT app container
+- `tests/labs/test-lab-16-05.sh` — rewritten: 8-phase INT-08b test (container health + seed exit, MariaDB/WireMock/KC/Snipe-IT health, LDAP seed verify, KC realm + LDAP federation + SAML client registration + LDAP sync, SAML IdP metadata HTTP + EntityDescriptor + X509 cert + internal reach, env var assertions, WireMock Odoo stubs + Snipe-IT connectivity, volume + DB/LDAP/MAIL env assertions)
+- `.github/workflows/ci.yml` — lab-05-smoke updated (name, python3 tool, wait order: MariaDB → OpenLDAP → LDAP seed exit → KC 300 s health/ready → WireMock → Snipe-IT)
 
 ---
 
