@@ -397,7 +397,7 @@ All 5 repos have:
 - [x] Snipe-IT ↔ Keycloak SAML  ← **INT-08b DONE** (Sprint 38: keycloak-saml.yml + snipeit-saml-settings.env.j2 + LDAP seed + integration test)
 
 ### Business Workflow Integrations
-- [ ] FreePBX ↔ SuiteCRM (click-to-call, call logging)
+- [x] FreePBX ↔ SuiteCRM (click-to-call, call logging)  ← **INT-09 DONE** (Sprint 39: suitecrm-cti.yml + freepbx-cti.yml + AGI script + CTI WireMock stubs + integration test)
 - [ ] FreePBX ↔ Zammad (automatic phone tickets)
 - [ ] FreePBX ↔ FreeIPA (extension provisioning from directory)
 - [ ] SuiteCRM ↔ Odoo (customer data sync)

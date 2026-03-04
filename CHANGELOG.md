@@ -9,7 +9,33 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Business workflow integrations (FreePBX↔SuiteCRM, SuiteCRM↔Odoo, Zabbix↔Mattermost, etc.)
+- Business workflow integrations (FreePBX↔Zammad, SuiteCRM↔Odoo, Zabbix↔Mattermost, etc.)
+
+---
+
+## [1.35.0] — 2026-03-04
+
+### Added — Sprint 39: INT-09 FreePBX ↔ SuiteCRM CTI (click-to-call + call logging)
+
+**Ansible (`it-stack-ansible`):**
+- `roles/freepbx/tasks/suitecrm-cti.yml` — INT-09 idempotent 8-step CTI playbook: assert SuiteCRM calls/save + contacts endpoints, set fact vars, deploy `freepbx-suitecrm-cti.conf.j2` Asterisk dialplan, deploy `freepbx-suitecrm-agi.py.j2` AGI call-log script (mode 0750), flush handlers, final stat assert
+- `roles/freepbx/templates/freepbx-suitecrm-cti.conf.j2` — Asterisk config: `[suitecrm-cti-globals]`, `[macro-suitecrm-log-call]`, `[macro-suitecrm-contact-popup]`, `[suitecrm-cti-outbound]` click-to-call context
+- `roles/freepbx/templates/freepbx-suitecrm-agi.py.j2` — Python AGI script: `post_call_log()` POSTs call metadata to SuiteCRM `/index.php?module=Calls&action=Save`; `lookup_contact()` GETs contact by phone
+- `roles/freepbx/tasks/main.yml` — added `suitecrm-cti.yml` import guarded by `freepbx_enable_suitecrm_cti | default(true)`
+- `roles/suitecrm/tasks/freepbx-cti.yml` — INT-09 idempotent 8-step SuiteCRM-side playbook: assert FreePBX web + REST API, set fact vars, ensure custom Extension dir, deploy `suitecrm-freepbx-cti.php.j2` extension file, blockinfile `config_override.php` AMI settings (`asterisk_manager_host/port/username/password`, `enable_call_logging`), flush handlers, final grep assert
+- `roles/suitecrm/templates/suitecrm-freepbx-cti.php.j2` — PHP `$sugar_config` snippet: AMI connection, `asterisk_channel_prefix = 'SIP/'`, `asterisk_outbound_context = 'suitecrm-cti-outbound'`, FreePBX REST URL
+- `roles/suitecrm/tasks/main.yml` — added `freepbx-cti.yml` import guarded by `suitecrm_enable_freepbx_cti | default(true)`
+
+**FreePBX integration test (`it-stack-freepbx`):**
+- `docker/freepbx-ldap-seed.ldif` — FreeIPA-style LDAP seed (cn=accounts tree, users: pbxadmin exten:100, pbxuser1 exten:101, pbxuser2 exten:102; groups: pbx-admins, pbx-users)
+- `docker/docker-compose.integration.yml` — added `freepbx-i05-ldap-seed` init service, KC `depends_on: service_completed_successfully`, KC healthcheck updated to `/health/ready | grep -q UP`, header updated with INT-09 notes
+- `tests/labs/test-lab-10-05.sh` — full 8-phase rewrite: container health + seed exit, LDAP seed verify (≥3 users, ≥2 groups, pbxadmin, readonly bind), KC admin token + realm + LDAP federation (freepbx-lab-ldap vendor=rhds) + full sync + pbxadmin verify + OIDC client 'freepbx', FreePBX AMI/SIP port checks, SuiteCRM CTI WireMock stubs (calls/save + contacts/lookup), Zammad webhook stub, volume + env var assertions
+- `.github/workflows/ci.yml` — lab-05-smoke renamed to `Lab 10-05 -- FreePBX Advanced Integration (INT-09 FreePBX<->SuiteCRM CTI + LDAP)`, added python3 + ldap-utils, wait order: MariaDB → OpenLDAP → LDAP seed exit → KC health/ready → WireMock → FreePBX web
+
+**SuiteCRM integration test (`it-stack-suitecrm`):**
+- `docker/docker-compose.integration.yml` — added `FREEPBX_URL`, `FREEPBX_AMI_HOST`, `FREEPBX_AMI_PORT`, `FREEPBX_AMI_USER`, `FREEPBX_AMI_PASSWORD`, `FREEPBX_SIP_CHANNEL`, `FREEPBX_OUTBOUND_CONTEXT` env vars to `suitecrm-i05-app`
+- `tests/labs/test-lab-12-05.sh` — added Phase 3d: FreePBX REST API WireMock stubs (`/api/rest.php` + `/admin/config.php`), originate response verification, `FREEPBX_*` env var assertions, SuiteCRM → WireMock FreePBX mock reachability; updated header + results to INT-04 + INT-09
+- `.github/workflows/ci.yml` — lab-05-smoke renamed to include INT-09
 
 ---
 
