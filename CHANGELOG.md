@@ -9,7 +9,24 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Remaining SSO integrations (INT-07 through INT-08b)
+- Remaining SSO integrations (INT-08 through INT-08b)
+
+---
+
+## [1.32.0] — 2026-03-04
+
+### Added — Sprint 36: INT-07 GLPI ↔ Keycloak SAML 2.0
+
+**Ansible (`it-stack-ansible`):**
+- `roles/glpi/tasks/keycloak-saml.yml` — INT-07 idempotent SAML 2.0 integration: assert KC SAML IdP descriptor reachable (retries:6), assert EntityDescriptor + IDPSSODescriptor present, extract IdP X.509 certificate via regex, set SP/IdP helper vars (entity IDs, ACS/SLO URLs), deploy `glpi-saml-config.php.j2` template to `glpi/config/saml_config.php`, enable SAML in `config_db.php` (`$CFG_GLPI['use_saml']` + SP/IdP URL settings), insert LDAP directory source via mysql CLI into `glpi_authldaps` table (IGNORE for idempotency), final assert IdP descriptor still reachable post-deploy
+- `roles/glpi/templates/glpi-saml-config.php.j2` — php-saml/onelogin-style SP + IdP config array: SP entity ID, ACS URL, SLO URL, security settings (wantAssertionsSigned, RSA-SHA256, SHA-256 digest), attribute mapping (uid/mail/givenName/sn/groups), auto-provision enabled
+- `roles/glpi/tasks/main.yml` — added `keycloak-saml.yml` import guarded by `glpi_enable_keycloak_saml`
+
+**Integration test (`it-stack-glpi`):**
+- `docker/glpi-ldap-seed.ldif` — FreeIPA-compatible LDAP seed: 3 users (`glpiadmin`, `glpiuser1`, `glpiuser2`), 2 groups (`cn=admins`, `cn=glpi-users`), objectClass inetOrgPerson + groupOfNames
+- `docker/docker-compose.integration.yml` — added `glpi-i05-ldap-seed` init service with `ldapadd` LDIF injection; Keycloak `depends_on: ldap-seed: service_completed_successfully`; `KC_SAML_IDP_METADATA_URL`, `KC_SAML_SP_ENTITY_ID`, `KC_SAML_ACS_URL` env vars added to GLPI app container
+- `tests/labs/test-lab-17-05.sh` — INT-07 full test suite (392 lines): Phase 1-7: docker up + 90s wait, container health checks (6 containers + seed exit code), MariaDB + WireMock + KC ready loop + GLPI web loop, LDAP seed (exit code, ≥3 users, ≥2 groups, `glpiadmin` present, readonly bind), KC realm + LDAP federation + full sync + ≥3 users + `glpiadmin` present, SAML IdP descriptor (HTTP 200, EntityDescriptor, IDPSSODescriptor, X.509 cert), GLPI SAML env vars + internal KC reachability, WireMock Zammad stubs + GLPI → Zammad mock escalation, volume + env assertions
+- `.github/workflows/ci.yml` — `lab-05-smoke` updated to INT-07, `python3` added, wait order fixed: MariaDB → OpenLDAP → LDAP seed exit → Keycloak(300s via health/ready) → WireMock → GLPI
 
 ---
 

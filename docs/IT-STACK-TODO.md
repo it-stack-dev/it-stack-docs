@@ -392,7 +392,7 @@ All 5 repos have:
 - [x] SuiteCRM ↔ Keycloak SAML  ← **INT-04 DONE** (Sprint 33: saml-clients.yml + saml_settings.php.j2 + integration test)
 - [x] Odoo ↔ Keycloak OIDC  ← **INT-05 DONE** (Sprint 34: keycloak-oidc.yml + auth.oauth.provider via JSON-RPC + integration test)
 - [x] Zammad ↔ Keycloak OIDC  ← **INT-06 DONE** (Sprint 35: keycloak-oidc.yml + Zammad channels API + integration test)
-- [ ] GLPI ↔ Keycloak SAML
+- [x] GLPI ↔ Keycloak SAML  ← **INT-07 DONE** (Sprint 36: keycloak-saml.yml + glpi-saml-config.php.j2 + SAML IdP metadata + integration test)
 - [ ] Taiga ↔ Keycloak OIDC
 
 ### Business Workflow Integrations
