@@ -9,7 +9,24 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Remaining SSO integrations (INT-08 through INT-08b)
+- Remaining SSO integrations (INT-08b)
+
+---
+
+## [1.33.0] — 2026-03-04
+
+### Added — Sprint 37: INT-08 Taiga ↔ Keycloak OIDC
+
+**Ansible (`it-stack-ansible`):**
+- `roles/taiga/tasks/keycloak-oidc.yml` — INT-08 idempotent 8-step OIDC playbook: assert KC discovery reachable, extract all endpoints, pip-install `taiga-contrib-oidc-auth` in venv, deploy `taiga-oidc-settings.py.j2`, inject `from .oidc import *` into `local.py`, update INSTALLED_APPS, flush handlers, final assert
+- `roles/taiga/templates/taiga-oidc-settings.py.j2` — Django `mozilla-django-oidc` settings template: `OIDC_RP_*` + `OIDC_OP_*` endpoints from KC discovery facts, RS256 signing, session cookie config, KC logout redirect
+- `roles/taiga/tasks/main.yml` — added `keycloak-oidc.yml` import guarded by `taiga_enable_keycloak_oidc | default(true)`
+
+**Integration test (`it-stack-taiga`):**
+- `docker/taiga-ldap-seed.ldif` — FreeIPA-style LDAP seed (cn=accounts tree, users: taigaadmin/taigauser1/taigauser2, groups: admins/taiga-users)
+- `docker/docker-compose.integration.yml` — added `taiga-i05-ldap-seed` init service, wired KC `depends_on: service_completed_successfully`, injected `OIDC_DISCOVERY_URL` into Taiga Back
+- `tests/labs/test-lab-15-05.sh` — rewritten: 8-phase INT-08 test (container health, LDAP seed verify, KC realm + LDAP federation + OIDC client registration, OIDC discovery + password-grant token + userinfo, Taiga env var assertions, WireMock Mattermost stubs + webhook reach, volume assertions)
+- `.github/workflows/ci.yml` — lab-05-smoke updated (name, python3 tool, wait order: PG → OpenLDAP → LDAP seed exit → KC 300 s health/ready → WireMock → Taiga Back)
 
 ---
 

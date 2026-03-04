@@ -393,7 +393,7 @@ All 5 repos have:
 - [x] Odoo ↔ Keycloak OIDC  ← **INT-05 DONE** (Sprint 34: keycloak-oidc.yml + auth.oauth.provider via JSON-RPC + integration test)
 - [x] Zammad ↔ Keycloak OIDC  ← **INT-06 DONE** (Sprint 35: keycloak-oidc.yml + Zammad channels API + integration test)
 - [x] GLPI ↔ Keycloak SAML  ← **INT-07 DONE** (Sprint 36: keycloak-saml.yml + glpi-saml-config.php.j2 + SAML IdP metadata + integration test)
-- [ ] Taiga ↔ Keycloak OIDC
+- [x] Taiga ↔ Keycloak OIDC  ← **INT-08 DONE** (Sprint 37: keycloak-oidc.yml + taiga-contrib-oidc-auth + taiga-oidc-settings.py.j2 + integration test)
 
 ### Business Workflow Integrations
 - [ ] FreePBX ↔ SuiteCRM (click-to-call, call logging)
