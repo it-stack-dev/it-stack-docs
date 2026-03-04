@@ -398,7 +398,7 @@ All 5 repos have:
 
 ### Business Workflow Integrations
 - [x] FreePBX ↔ SuiteCRM (click-to-call, call logging)  ← **INT-09 DONE** (Sprint 39: suitecrm-cti.yml + freepbx-cti.yml + AGI script + CTI WireMock stubs + integration test)
-- [ ] FreePBX ↔ Zammad (automatic phone tickets)
+- [x] FreePBX ↔ Zammad (automatic phone tickets)  ← **INT-10 DONE** (Sprint 40: zammad-webhook.yml + freepbx-cti.yml + AGI script + WireMock + Zammad CTI channel API)
 - [ ] FreePBX ↔ FreeIPA (extension provisioning from directory)
 - [ ] SuiteCRM ↔ Odoo (customer data sync)
 - [ ] SuiteCRM ↔ Nextcloud (calendar sync)

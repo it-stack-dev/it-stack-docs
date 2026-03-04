@@ -9,7 +9,31 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Business workflow integrations (FreePBX↔Zammad, SuiteCRM↔Odoo, Zabbix↔Mattermost, etc.)
+- Business workflow integrations (SuiteCRM↔Odoo, Zabbix↔Mattermost, etc.)
+
+---
+
+## [1.36.0] — 2026-03-04
+
+### Added — Sprint 40: INT-10 FreePBX → Zammad auto-ticket creation (phone call webhook)
+
+**Ansible (`it-stack-ansible`):**
+- `roles/freepbx/tasks/zammad-webhook.yml` — INT-10 idempotent 7-step webhook playbook: assert Zammad tickets API + users API, set facts, deploy `freepbx-zammad-webhook.conf.j2` Asterisk dialplan, deploy `freepbx-zammad-webhook.py.j2` AGI script (mode 0750), flush handlers, stat assert
+- `roles/freepbx/templates/freepbx-zammad-webhook.conf.j2` — Asterisk config: `[zammad-webhook-globals]`, `[macro-zammad-phone-ticket]` (AGI with create_ticket args), `[macro-zammad-call-complete]`, `[zammad-inbound-notify]` context, `[zammad-outbound-complete]` hook
+- `roles/freepbx/templates/freepbx-zammad-webhook.py.j2` — Python AGI: `create_ticket()` POSTs call metadata to Zammad `/api/v1/tickets` (type=phone, tags=freepbx,cti-int10); `update_ticket()` appends duration note via ticket article
+- `roles/freepbx/tasks/main.yml` — added `zammad-webhook.yml` import guarded by `freepbx_enable_zammad_webhook | default(true)`
+- `roles/zammad/tasks/freepbx-cti.yml` — INT-10 idempotent 7-step Zammad-side playbook: assert FreePBX web + REST API, set facts, deploy `zammad-freepbx-cti.json.j2`, register CTI phone channel via Zammad API (`cti_generic_api` adapter, inbound AMI host/port, outbound `/api/rest.php`), flush handlers, stat assert
+- `roles/zammad/templates/zammad-freepbx-cti.json.j2` — JSON channel config: `adapter: cti_generic_api`, inbound AMI options, outbound FreePBX REST URL + credentials
+- `roles/zammad/tasks/main.yml` — added `freepbx-cti.yml` import guarded by `zammad_enable_freepbx_cti | default(true)`
+
+**Zammad integration test (`it-stack-zammad`):**
+- `docker/docker-compose.integration.yml` — added `zammad-int-mock` WireMock 3.x service (port 8027), added `FREEPBX_URL`, `FREEPBX_AMI_HOST`, `FREEPBX_AMI_PORT`, `FREEPBX_AMI_USER`, `FREEPBX_AMI_PASSWORD` to `x-zammad-int-env`, header updated with INT-10 notes
+- `tests/labs/test-lab-11-05.sh` — added Phase 8: WireMock health check, FreePBX `/api/rest.php` originate + `/admin/config.php` stubs, originate response verify, `FREEPBX_*` env var assertions in railsserver, railsserver→WireMock reach, Zammad CTI `cti_generic_api` channel registration via API; updated header + banner + results to INT-06 + INT-10
+- `.github/workflows/ci.yml` — lab-05-smoke renamed to include INT-10, added WireMock wait step (port 8027)
+
+**FreePBX integration test (`it-stack-freepbx`):**
+- `docker/docker-compose.integration.yml` — header updated to credit INT-09 + INT-10
+- `.github/workflows/ci.yml` — lab-05-smoke renamed to `Lab 10-05 -- FreePBX Advanced Integration (INT-09 SuiteCRM CTI + INT-10 Zammad phone tickets)`
 
 ---
 
