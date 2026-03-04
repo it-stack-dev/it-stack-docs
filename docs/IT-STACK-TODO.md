@@ -390,7 +390,7 @@ All 5 repos have:
 - [x] Nextcloud ↔ Keycloak OIDC  ← **INT-02 DONE** (Sprint 31: Ansible tasks + integration test)
 - [x] Mattermost ↔ Keycloak OIDC  ← **INT-03 DONE** (Sprint 32: Ansible tasks + integration test)
 - [x] SuiteCRM ↔ Keycloak SAML  ← **INT-04 DONE** (Sprint 33: saml-clients.yml + saml_settings.php.j2 + integration test)
-- [ ] Odoo ↔ Keycloak OIDC
+- [x] Odoo ↔ Keycloak OIDC  ← **INT-05 DONE** (Sprint 34: keycloak-oidc.yml + auth.oauth.provider via JSON-RPC + integration test)
 - [ ] Zammad ↔ Keycloak OIDC
 - [ ] GLPI ↔ Keycloak SAML
 - [ ] Taiga ↔ Keycloak OIDC

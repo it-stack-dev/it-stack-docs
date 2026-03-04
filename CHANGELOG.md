@@ -9,8 +9,23 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- INT-05 Odoo ↔ Keycloak OIDC
 - Remaining SSO integrations (INT-06 through INT-08b)
+
+---
+
+## [1.30.0] — 2026-03-03
+
+### Added — Sprint 34: INT-05 Odoo ↔ Keycloak OIDC
+
+**Ansible (`it-stack-ansible`):**
+- `roles/odoo/tasks/keycloak-oidc.yml` — INT-05 idempotent OIDC integration: assert KC discovery URL, authenticate to Odoo JSON-RPC, ensure `auth_oauth` module installed (install + re-auth if missing), create or update `auth.oauth.provider` record (name, client_id, client_secret, auth/token/validation/jwks endpoints), set `web.base.url` system parameter, assert provider enabled
+- `roles/odoo/tasks/main.yml` — added `keycloak-oidc.yml` import guarded by `odoo_enable_keycloak_oidc`
+
+**Integration test (`it-stack-odoo`):**
+- `docker/odoo-ldap-seed.ldif` — FreeIPA-compatible LDAP seed: 3 users (`odooadmin`, `odoouser1`, `odoouser2`), 2 groups (`cn=admins`, `cn=odoo-users`)
+- `docker/docker-compose.integration.yml` — added `odoo-int-ldap-seed` init service; Keycloak `depends_on: ldap-seed: service_completed_successfully`; `LDAP_BASE_DN` updated to `cn=users,cn=accounts,dc=lab,dc=local`; OIDC env vars: `KEYCLOAK_URL`, `KEYCLOAK_REALM`, `KEYCLOAK_CLIENT_ID`
+- `tests/labs/test-lab-13-05.sh` — INT-05 full test suite: Phase 3 (WireMock stubs, LDAP seed exit code, ≥3 users / ≥2 groups, readonly bind), Phase 4 (KC admin token, create `it-stack` realm, LDAP federation component, full sync, ≥3 users synced, `odooadmin` present), Phase 5 (OIDC discovery, register `odoo` client, Odoo JSON-RPC auth + `auth.oauth.provider` count), Phase 6 (OIDC token for `odooadmin`, userinfo sub + preferred_username claims, token introspection active=true); removed duplicate dead-code stub
+- `.github/workflows/ci.yml` — `lab-05-smoke` updated to INT-05, `python3` added, wait order: PostgreSQL → OpenLDAP → LDAP seed exit → WireMock → Keycloak(240s) → Mailhog → Odoo
 
 ---
 
