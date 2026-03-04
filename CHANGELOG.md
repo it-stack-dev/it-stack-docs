@@ -9,7 +9,23 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Remaining SSO integrations (INT-06 through INT-08b)
+- Remaining SSO integrations (INT-07 through INT-08b)
+
+---
+
+## [1.31.0] — 2026-03-04
+
+### Added — Sprint 35: INT-06 Zammad ↔ Keycloak OIDC
+
+**Ansible (`it-stack-ansible`):**
+- `roles/zammad/tasks/keycloak-oidc.yml` — INT-06 idempotent OIDC integration: assert KC OIDC discovery URL, authenticate to Zammad API (`POST /api/v1/users/signin`, fingerprint header), list existing channels, build OIDC channel payload (adapter `auth_oidc`, issuer, client_id, client_secret, scope), create or update OIDC channel via `POST /api/v1/channels` / `PUT /api/v1/channels/:id`, configure LDAP source via `GET`/`POST /api/v1/ldap_configs`, assert OIDC channel with correct client_id present post-provision
+- `roles/zammad/tasks/main.yml` — added `keycloak-oidc.yml` import guarded by `zammad_enable_keycloak_oidc`
+
+**Integration test (`it-stack-zammad`):**
+- `docker/zammad-ldap-seed.ldif` — FreeIPA-compatible LDAP seed: 3 users (`zammadadmin`, `zammaduser1`, `zammaduser2`), 2 groups (`cn=admins`, `cn=zammad-users`), objectClass inetOrgPerson + groupOfNames
+- `docker/docker-compose.integration.yml` — added `zammad-int-ldap-seed` init service with `ldapadd` LDIF injection; Keycloak `depends_on: ldap-seed: service_completed_successfully`; Keycloak image bumped `24.0→24.0.3`; `KEYCLOAK_URL`, `KEYCLOAK_REALM`, `KEYCLOAK_CLIENT_ID` env vars added to `x-zammad-int-env` anchor
+- `tests/labs/test-lab-11-05.sh` — INT-06 full test suite (392 lines): Phase 1–7: docker up + health checks (8 containers, PG, Redis, ES cluster health, KC ready loop, Zammad nginx loop), LDAP seed verification (exit code, ≥3 users, ≥2 groups, readonly bind), KC realm + LDAP federation + full sync + ≥3 users + `zammadadmin` present, OIDC discovery + `zammad` client registration + Zammad LDAP/OIDC API calls, OIDC token for `zammadadmin` + userinfo claims + token introspection, container env var assertions
+- `.github/workflows/ci.yml` — `lab-05-smoke` updated to INT-06, `python3` added, wait order fixed: OpenLDAP → LDAP seed exit → Keycloak(240s) → Elasticsearch → Zammad
 
 ---
 
