@@ -13,6 +13,30 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ---
 
+## [1.37.0] — 2026-03-04
+
+### Added — Sprint 41: INT-11 FreePBX ↔ FreeIPA (LDAP-driven extension provisioning)
+
+**Ansible (`it-stack-ansible`):**
+- `roles/freepbx/tasks/freeipa-sync.yml` — INT-11 idempotent 7-step playbook: assert LDAP port, verify bind account ldapsearch, set_fact, deploy `freepbx-freeipa-sync.conf.j2` (Asterisk PJSIP include + templates), deploy `freepbx-freeipa-sync.py.j2` Python sync script (mode 0750), install nightly cron job, flush + stat assert
+- `roles/freepbx/templates/freepbx-freeipa-sync.conf.j2` — Asterisk config: `[freeipa-sync-globals]`, PJSIP endpoint/auth/aor templates, `#include freeipa_endpoints_dynamic.conf`
+- `roles/freepbx/templates/freepbx-freeipa-sync.py.j2` — Python: ldap3 (+ ldapsearch CLI fallback), `create_ticket()` queries `(telephoneNumber=*)`, generates PJSIP endpoint configs in `freeipa_endpoints_dynamic.conf`, hash-based idempotency, triggers `pjsip reload`
+- `roles/freepbx/tasks/main.yml` — added `freeipa-sync.yml` import guarded by `freepbx_enable_freeipa_sync | default(true)`
+- `roles/freeipa/tasks/freepbx-service-account.yml` — INT-11 idempotent 9-step playbook: assert FreeIPA UI, set_fact, deploy `freeipa-freepbx-bind.ldif.j2`, `ipa user-add freepbx-bind` (idempotent via already-exists guard), set bind account password, ensure test users have `telephoneNumber` (100/101/102), verify bind account ldapsearch, flush + stat assert
+- `roles/freeipa/templates/freeipa-freepbx-bind.ldif.j2` — LDIF: `cn=freepbx-bind` service account in `cn=sysaccounts,cn=etc` (for OpenLDAP lab environments)
+- `roles/freeipa/tasks/main.yml` — added `freepbx-service-account.yml` import guarded by `freeipa_create_freepbx_svc | default(true)`
+
+**FreePBX integration test (`it-stack-freepbx`):**
+- `docker/docker-compose.integration.yml` — added `FREEIPA_LDAP_URL`, `FREEIPA_BIND_DN`, `FREEIPA_BIND_PW`, `FREEIPA_BASE_DN`, `FREEIPA_EXTEN_ATTR` env vars; header updated with INT-11
+- `tests/labs/test-lab-10-05.sh` — added Phase 9: LDAP port check, users-with-telephoneNumber search, per-uid extension assertions (100/101/102), FREEIPA env var checks, FreePBX→OpenLDAP :389 reach; updated header + banner + results to INT-09 + INT-10 + INT-11
+- `.github/workflows/ci.yml` — lab-05-smoke name updated to include INT-11
+
+**FreeIPA integration test (`it-stack-freeipa`):**
+- `tests/labs/test-lab-01-05.sh` — added Section 10: FreePBX bind account LDAP search test (readonly bind, telephoneNumber for pbxadmin/pbxuser1/pbxuser2, ldapsearch fallback); Section 11 score updated
+- `.github/workflows/ci.yml` — lab-05-smoke name updated to include INT-11
+
+---
+
 ## [1.36.0] — 2026-03-04
 
 ### Added — Sprint 40: INT-10 FreePBX → Zammad auto-ticket creation (phone call webhook)
