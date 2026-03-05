@@ -9,7 +9,29 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Business workflow integrations (SuiteCRM↔Odoo, Zabbix↔Mattermost, etc.)
+- Business workflow integrations (SuiteCRM↔Nextcloud, Zabbix↔Mattermost, etc.)
+
+---
+
+## [1.38.0] — 2026-03-04
+
+### Added — Sprint 42: INT-12 SuiteCRM ↔ Odoo (bidirectional customer/partner data sync)
+
+**Ansible (`it-stack-ansible`) — already in place from scaffolding:**
+- `roles/suitecrm/tasks/odoo-sync.yml` — INT-12 idempotent 6-step playbook: assert Odoo JSONRPC + `/web/session/authenticate`, set_fact, ensure custom module dir, deploy `suitecrm-odoo-sync.py.j2`, install nightly cron job, flush + stat assert
+- `roles/suitecrm/templates/suitecrm-odoo-sync.py.j2` — Python sync: authenticates via Odoo JSONRPC, reads `res.partner` records, upserts SuiteCRM Accounts via SOAP/REST API
+- `roles/suitecrm/tasks/main.yml` — `odoo-sync.yml` import guarded by `suitecrm_enable_odoo_sync | default(true)`
+- `roles/odoo/tasks/suitecrm-sync.yml` — INT-12 idempotent Odoo-side playbook: assert SuiteCRM JSONRPC, set_fact, deploy `odoo-suitecrm-sync.py.j2`, install nightly cron, flush + stat assert
+- `roles/odoo/templates/odoo-suitecrm-sync.py.j2` — Python sync: reads SuiteCRM `get_entry_list` Contacts, upserts Odoo `res.partner` via JSON-RPC `call_kw`
+- `roles/odoo/tasks/main.yml` — `suitecrm-sync.yml` import already in place
+
+**SuiteCRM integration test (`it-stack-suitecrm`):**
+- `tests/labs/test-lab-12-05.sh` — added Phase 3e: `res.partner` search_read WireMock stub (`/web/dataset/call_kw`), partner search response verify, `ODOO_DB/ODOO_USER/ODOO_API_KEY/ODOO_JSONRPC_ENDPOINT` env var checks, SuiteCRM→WireMock Odoo reach; updated results footer to INT-04 + INT-09 + INT-12
+- `.github/workflows/ci.yml` — lab-05-smoke name updated to include INT-12
+
+**Odoo integration test (`it-stack-odoo`):**
+- `tests/labs/test-lab-13-05.sh` — added Phase 7: SuiteCRM JSONRPC `/jsonrpc` contact list WireMock stub, stub response verify, `SUITECRM_URL/SUITECRM_JSONRPC_ENDPOINT` env var checks, Odoo→WireMock SuiteCRM reach; updated header + results footer to INT-05 + INT-12
+- `.github/workflows/ci.yml` — lab-05-smoke name updated to include INT-12
 
 ---
 
