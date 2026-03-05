@@ -401,7 +401,7 @@ All 5 repos have:
 - [x] FreePBX ↔ Zammad (automatic phone tickets)  ← **INT-10 DONE** (Sprint 40: zammad-webhook.yml + freepbx-cti.yml + AGI script + WireMock + Zammad CTI channel API)
 - [x] FreePBX ↔ FreeIPA (extension provisioning from directory)  ← **INT-11 DONE** (Sprint 41: freeipa-sync.yml + freeipa-sync.py + freepbx-service-account.yml + ldif.j2 + compose env vars + test Phase 9)
 - [x] SuiteCRM ↔ Odoo (customer data sync)  ← **INT-12 DONE** (Sprint 42: Ansible odoo-sync.yml + suitecrm-sync.yml + both Python templates + WireMock partner/contact stubs + integration tests)
-- [ ] SuiteCRM ↔ Nextcloud (calendar sync)
+- [x] SuiteCRM ↔ Nextcloud (calendar sync)  ← **INT-13 DONE** (Sprint 43: nextcloud-caldav.yml + suitecrm-nextcloud-caldav.py.j2 + suitecrm-share.yml + compose WireMock nc-int-mock:8105 + SuiteCRM Phase 3f + Nextcloud Section 13)
 - [ ] SuiteCRM ↔ OpenKM (document linking)
 - [ ] Odoo ↔ FreeIPA (employee sync)
 - [ ] Odoo ↔ Taiga (time tracking export)

@@ -9,7 +9,29 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Business workflow integrations (SuiteCRM↔Nextcloud, Zabbix↔Mattermost, etc.)
+- Business workflow integrations (SuiteCRM↔OpenKM, Zabbix↔Mattermost, etc.)
+
+---
+
+## [1.39.0] — 2026-03-04
+
+### Added — Sprint 43: INT-13 SuiteCRM ↔ Nextcloud (CalDAV calendar sync)
+
+**Ansible (`it-stack-ansible`):**
+- `roles/suitecrm/tasks/nextcloud-caldav.yml` — INT-13 idempotent 7-step playbook: assert Nextcloud CalDAV PROPFIND + status.php, set_fact, ensure custom module dir, deploy `suitecrm-nextcloud-caldav.py.j2`, install nightly cron (03:00 www-data), flush + stat assert
+- `roles/suitecrm/templates/suitecrm-nextcloud-caldav.py.j2` — Python: requests session with HTTP basic-auth, `meeting_to_ical()` builds iCalendar VEVENT, `caldav_propfind()` lists .ics hrefs (PROPFIND Depth:1), `caldav_put()` PUTs VEVENT to CalDAV endpoint, `suitecrm_get_meetings()` calls SuiteCRM REST v8; bidirectional sync with dry-run + verbose flags
+- `roles/suitecrm/tasks/main.yml` — added `nextcloud-caldav.yml` import guarded by `suitecrm_enable_nextcloud_caldav | default(true)`
+- `roles/nextcloud/tasks/suitecrm-share.yml` — INT-13 idempotent 7-step playbook: assert Nextcloud status.php + CalDAV PROPFIND, set_fact, create `suitecrm-sync` service account via `occ user:add` (idempotent: already-exists guard), create SuiteCRM calendar via `occ dav:create-calendar` (idempotent), write status marker, flush + stat assert
+- `roles/nextcloud/tasks/main.yml` — added `suitecrm-share.yml` import guarded by `nextcloud_enable_suitecrm_share | default(true)`
+
+**Nextcloud integration test (`it-stack-nextcloud`):**
+- `docker/docker-compose.integration.yml` — added `SUITECRM_URL/SUITECRM_CALDAV_USER/SUITECRM_CALDAV_PATH` to `x-nc-int-env` anchor; added `nc-int-mock` WireMock 3.5.2 service on port 8105; header updated with INT-13 + port 8105
+- `tests/labs/test-lab-06-05.sh` — added Section 13 (INT-13): WireMock health on 8105, CalDAV PUT stub registration, Nextcloud CalDAV PROPFIND 207, SUITECRM_URL env check, nc-int-app→nc-int-mock reachability
+- `.github/workflows/ci.yml` — lab-05-smoke name updated to include INT-13
+
+**SuiteCRM integration test (`it-stack-suitecrm`):**
+- `tests/labs/test-lab-12-05.sh` — added Phase 3f (INT-13): NEXTCLOUD_USER + NEXTCLOUD_CALDAV_PATH env var checks, CalDAV PROPFIND WireMock stub registration, stub 207 response verify, SuiteCRM→WireMock CalDAV endpoint reachability; updated results footer to INT-04 + INT-09 + INT-12 + INT-13
+- `.github/workflows/ci.yml` — lab-05-smoke name updated to include INT-13
 
 ---
 
