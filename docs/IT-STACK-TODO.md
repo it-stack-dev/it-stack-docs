@@ -388,19 +388,18 @@ All 5 repos have:
 ### SSO Integrations (via Keycloak)
 - [x] FreeIPA ↔ Keycloak LDAP Federation  ← **INT-01 DONE** (Sprint 30: Ansible tasks + integration test)
 - [x] Nextcloud ↔ Keycloak OIDC  ← **INT-02 DONE** (Sprint 31: Ansible tasks + integration test)
-- [x] Mattermost ↔ Keycloak OIDC  ← **INT-03 DONE** (Sprint 32: Ansible tasks + integration test)
-- [x] SuiteCRM ↔ Keycloak SAML  ← **INT-04 DONE** (Sprint 33: saml-clients.yml + saml_settings.php.j2 + integration test)
-- [x] Odoo ↔ Keycloak OIDC  ← **INT-05 DONE** (Sprint 34: keycloak-oidc.yml + auth.oauth.provider via JSON-RPC + integration test)
-- [x] Zammad ↔ Keycloak OIDC  ← **INT-06 DONE** (Sprint 35: keycloak-oidc.yml + Zammad channels API + integration test)
-- [x] GLPI ↔ Keycloak SAML  ← **INT-07 DONE** (Sprint 36: keycloak-saml.yml + glpi-saml-config.php.j2 + SAML IdP metadata + integration test)
-- [x] Taiga ↔ Keycloak OIDC  ← **INT-08 DONE** (Sprint 37: keycloak-oidc.yml + taiga-contrib-oidc-auth + taiga-oidc-settings.py.j2 + integration test)
-- [x] Snipe-IT ↔ Keycloak SAML  ← **INT-08b DONE** (Sprint 38: keycloak-saml.yml + snipeit-saml-settings.env.j2 + LDAP seed + integration test)
+- [ ] Mattermost ↔ Keycloak OIDC
+- [ ] SuiteCRM ↔ Keycloak SAML
+- [ ] Odoo ↔ Keycloak OIDC
+- [ ] Zammad ↔ Keycloak OIDC
+- [ ] GLPI ↔ Keycloak SAML
+- [ ] Taiga ↔ Keycloak OIDC
 
 ### Business Workflow Integrations
-- [x] FreePBX ↔ SuiteCRM (click-to-call, call logging)  ← **INT-09 DONE** (Sprint 39: suitecrm-cti.yml + freepbx-cti.yml + AGI script + CTI WireMock stubs + integration test)
-- [x] FreePBX ↔ Zammad (automatic phone tickets)  ← **INT-10 DONE** (Sprint 40: zammad-webhook.yml + freepbx-cti.yml + AGI script + WireMock + Zammad CTI channel API)
-- [x] FreePBX ↔ FreeIPA (extension provisioning from directory)  ← **INT-11 DONE** (Sprint 41: freeipa-sync.yml + freeipa-sync.py + freepbx-service-account.yml + ldif.j2 + compose env vars + test Phase 9)
-- [x] SuiteCRM ↔ Odoo (customer data sync)  ← **INT-12 DONE** (Sprint 42: Ansible odoo-sync.yml + suitecrm-sync.yml + both Python templates + WireMock partner/contact stubs + integration tests)
+- [ ] FreePBX ↔ SuiteCRM (click-to-call, call logging)
+- [ ] FreePBX ↔ Zammad (automatic phone tickets)
+- [ ] FreePBX ↔ FreeIPA (extension provisioning from directory)
+- [ ] SuiteCRM ↔ Odoo (customer data sync)
 - [x] SuiteCRM ↔ Nextcloud (calendar sync)  ← **INT-13 DONE** (Sprint 43: nextcloud-caldav.yml + suitecrm-nextcloud-caldav.py.j2 + suitecrm-share.yml + compose WireMock nc-int-mock:8105 + SuiteCRM Phase 3f + Nextcloud Section 13)
 - [ ] SuiteCRM ↔ OpenKM (document linking)
 - [ ] Odoo ↔ FreeIPA (employee sync)
