@@ -401,26 +401,26 @@ All 5 repos have:
 - [ ] FreePBX ↔ FreeIPA (extension provisioning from directory)
 - [ ] SuiteCRM ↔ Odoo (customer data sync)
 - [x] SuiteCRM ↔ Nextcloud (calendar sync)  ← **INT-13 DONE** (Sprint 43: nextcloud-caldav.yml + suitecrm-nextcloud-caldav.py.j2 + suitecrm-share.yml + compose WireMock nc-int-mock:8105 + SuiteCRM Phase 3f + Nextcloud Section 13)
-- [ ] SuiteCRM ↔ OpenKM (document linking)
-- [ ] Odoo ↔ FreeIPA (employee sync)
-- [ ] Odoo ↔ Taiga (time tracking export)
-- [ ] Odoo ↔ Snipe-IT (asset procurement)
-- [ ] Taiga ↔ Mattermost (notifications)
-- [ ] Snipe-IT ↔ GLPI (asset sync)
-- [ ] GLPI ↔ Zammad (ticket sync / escalation)
-- [ ] OpenKM ↔ Nextcloud (document storage backend)
-- [ ] Zabbix ↔ Mattermost (infrastructure alerts)
-- [ ] Graylog ↔ Zabbix (log-based alerting)
+- [x] SuiteCRM ↔ OpenKM (document linking)  ← **INT-14 DONE** (Sprints 26-35: openkm-docs.yml + suitecrm-openkm-docs.py.j2)
+- [x] Odoo ↔ FreeIPA (employee sync)  ← **INT-15 DONE** (Sprints 26-35: freeipa-ldap.yml + odoo-freeipa-ldap.conf.j2 + setup.py.j2 + sync.timer.j2)
+- [x] Odoo ↔ Taiga (time tracking export)  ← **INT-16 DONE** (Sprints 26-35: taiga-timetrack.yml + odoo-taiga-timetrack.py.j2)
+- [x] Odoo ↔ Snipe-IT (asset procurement)  ← **INT-17 DONE** (Sprints 26-35: snipeit-assets.yml + odoo-snipeit-assets.py.j2)
+- [x] Taiga ↔ Mattermost (notifications)  ← **INT-18 DONE** (Sprints 26-35: mattermost-webhook.yml — pure REST API, no template)
+- [x] Snipe-IT ↔ GLPI (asset sync)  ← **INT-19 DONE** (Sprints 26-35: glpi-sync.yml + snipeit-glpi-sync.py.j2)
+- [x] GLPI ↔ Zammad (ticket sync / escalation)  ← **INT-20 DONE** (Sprints 26-35: zammad-escalation.yml + glpi-zammad-escalation.php.j2 + glpi-zammad-sync.py.j2)
+- [x] OpenKM ↔ Nextcloud (document storage backend)  ← **INT-21 DONE** (Sprints 26-35: nextcloud-storage.yml + openkm-nextcloud-bridge.py.j2)
+- [x] Zabbix ↔ Mattermost (infrastructure alerts)  ← **INT-22 DONE** (Sprints 26-35: mattermost-alerts.yml + zabbix-mattermost-media.xml.j2)
+- [x] Graylog ↔ Zabbix (log-based alerting)  ← **INT-23 DONE** (Sprints 26-35: zabbix-alerts.yml + graylog-zabbix-sender.sh.j2)
 
 ---
 
 ## Production Readiness
 
 ### Security Hardening
-- [ ] TLS on all services (via Traefik Let's Encrypt or internal CA)
-- [ ] All secrets managed via Ansible Vault (no plaintext credentials in repos)
-- [ ] Firewall rules documented and applied
-- [ ] SSH key-only authentication on all servers
+- [x] TLS on all services (via Traefik internal CA)  ← `playbooks/tls-setup.yml` + `make tls`
+- [x] All secrets managed via Ansible Vault (no plaintext credentials in repos)
+- [x] Firewall rules documented and applied  ← `roles/common/tasks/firewall.yml` + UFW per-host
+- [x] SSH key-only authentication on all servers  ← `playbooks/harden.yml` + `vault_ssh_authorized_keys`
 - [ ] FreeIPA Kerberos tickets for internal service auth
 - [ ] Regular security scan (Trivy) on all Docker images in CI
 
@@ -432,24 +432,24 @@ All 5 repos have:
 - [ ] On-call escalation policy documented
 
 ### Backup & Recovery
-- [ ] PostgreSQL automated daily backup (all 10+ databases)
-- [ ] Nextcloud file backup scheduled
-- [ ] Configuration backups (Ansible playbook: `backup-configs.yml`)
+- [x] PostgreSQL automated daily backup (all 10+ databases)  ← `playbooks/backup.yml` Play 1 + cron 02:00 UTC
+- [x] Nextcloud file backup scheduled  ← `playbooks/backup.yml` Play 2 + cron 03:00 UTC
+- [x] Configuration backups (Ansible playbook: `playbooks/backup.yml`)  ← Play 3 + optional GPG encrypt
 - [ ] Backup restoration tested (RPO/RTO documented)
-- [ ] Disaster recovery runbook written
+- [x] Disaster recovery runbook written  ← `docs/05-guides/17-admin-runbook.md`
 
 ### Capacity Planning
-- [ ] Hardware/VM inventory documented
-- [ ] Resource utilization baselines captured
-- [ ] Growth projections (user count × service resource needs)
-- [ ] Scale-out plan per service documented
+- [x] Hardware/VM inventory documented  ← `docs/02-implementation/15-capacity-planning.md`
+- [x] Resource utilization baselines captured  ← service RAM/CPU table in capacity-planning.md
+- [x] Growth projections (user count × service resource needs)  ← 50/100/200/500/1000-user tables
+- [x] Scale-out plan per service documented  ← scale-out plan table in capacity-planning.md
 
 ### Documentation & Handover
 - [ ] All `docs/` content pushed to `it-stack-docs` repo
-- [ ] Runbooks for each service written or linked
+- [x] Runbooks for each service written or linked  ← `docs/05-guides/17-admin-runbook.md`
 - [x] Network diagram (with IP addresses) in `docs/07-architecture/`
-- [ ] User onboarding guide (how to get SSO account, access each service)
-- [ ] Admin handover guide (passwords in vault, backup procedures)
+- [x] User onboarding guide (how to get SSO account, access each service)  ← `docs/05-guides/16-user-onboarding.md`
+- [x] Admin handover guide (passwords in vault, backup procedures)  ← `docs/05-guides/17-admin-runbook.md`
 
 ---
 
