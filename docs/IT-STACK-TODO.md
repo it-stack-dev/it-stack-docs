@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–4 Complete · Phase 1 Labs In Progress · Direction: Go Deep on Phase 1
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Phase 1 Azure Standalone Testing COMPLETE (18/18) · Local Docker Test Runner: Phase 1 ✅ · Phases 2–4 fixes pending
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -313,6 +313,44 @@ All 5 repos have:
 - [x] `scripts/utilities/create-repo-template.ps1` — Scaffold a new module repo
 - [x] `scripts/deployment/deploy-stack.sh` — Full stack deployment
 - [x] `scripts/testing/run-all-labs.sh` — Run all 120 lab tests
+- [x] `scripts/testing/lab-phase1.sh` — Phase 1 standalone test runner (18 tests) · **18/18 PASS on Azure Standard_D4s_v4** ✅
+- [x] `scripts/testing/freeipa-patch/Dockerfile` — FreeIPA custom image for Docker 29.x + cgroupv2-only kernels (Fix 1: cgroupv2 RAM check; Fix 2: PrivateTmp=false in httpd.service)
+- [x] `scripts/test-local-docker.ps1` — PowerShell local Docker test runner for all 4 phases
+- [-] Local Docker test runner Phase 2 failures — Zammad healthcheck `[ ]`
+- [-] Local Docker test runner Phase 3 failures — FreePBX init time `[ ]`
+- [-] Local Docker test runner Phase 4 failures — Graylog/Snipe-IT healthcheck tuning `[ ]`
+
+---
+
+## Azure Lab Testing
+
+> Track actual hardware validation of lab scripts on Azure VMs.
+> These are distinct from lab *script* completion (all 120 done) — this tracks verifying scripts run correctly on target hardware.
+
+### Azure VM: `lab-single` (Phase 1 — Standard_D4s_v4, Ubuntu 24.04, Docker 29.3)
+
+| Module | Lab 01 (Azure) | Notes |
+|--------|---------------|-------|
+| 01 · FreeIPA | [x] ✅ | patched image (`it-stack-freeipa-patched:almalinux-9`), 390s install |
+| 02 · Keycloak | [x] ✅ | HTTP 302, OIDC token, /health/ready |
+| 03 · PostgreSQL | [x] ✅ | pg_isready, CRUD, multi-db |
+| 04 · Redis | [x] ✅ | PING, SET/GET, LPUSH/LLEN, AOF |
+| 18 · Traefik | [x] ✅ | file provider (Docker 29.x API incompatibility), /ping, dashboard, reverse proxy |
+
+**Azure Phase 1 result: 18/18 PASS** (2026-03-07, commit `e3ddab0`)
+
+### Azure VM Phase 2+ (Pending)
+
+| Module | Lab 01 (Azure) | Notes |
+|--------|---------------|-------|
+| 06 · Nextcloud | [ ] | — |
+| 07 · Mattermost | [ ] | — |
+| 08 · Jitsi | [ ] | — |
+| 09 · iRedMail | [ ] | — |
+| 11 · Zammad | [ ] | — |
+
+> Restart VM: `az vm start --resource-group rg-it-stack-phase1 --name lab-single`  
+> The `it-stack-freeipa-patched:almalinux-9` image and test logs survive VM deallocation.
 
 ---
 
@@ -522,6 +560,6 @@ All 5 repos have:
 
 ---
 
-**Document Version:** 2.0  
+**Document Version:** 2.1  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-05 — Sprint 25: 7 category spec docs complete · Phase 5 + 6 status corrected · ES Lab 06 table fixed — Sprint 25 done ✅
+**Last Updated:** 2026-03-07 — Sprint 44: Phase 1 Azure lab testing complete (18/18 PASS) · `lab-phase1.sh` + FreeIPA Dockerfile committed · Azure VM `lab-single` deallocated · Local Docker Phase 1 ✅ · Phases 2–4 fixes pending

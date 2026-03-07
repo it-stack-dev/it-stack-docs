@@ -9,7 +9,48 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ## [Unreleased]
 
 ### Planned — Next Up
-- Business workflow integrations (SuiteCRM↔OpenKM, Zabbix↔Mattermost, etc.)
+- Fix Phase 2/3/4 local Docker test runner failures (Zammad, FreePBX, Graylog, Snipe-IT healthchecks)
+- Azure Phase 2 standalone lab testing (Nextcloud, Mattermost, Jitsi, iRedMail, Zammad)
+- Remaining SSO integrations: Mattermost ↔ Keycloak, SuiteCRM ↔ Keycloak SAML, Zammad ↔ Keycloak, GLPI ↔ Keycloak, Taiga ↔ Keycloak, Odoo ↔ Keycloak
+
+---
+
+## [1.40.0] — 2026-03-07
+
+### Added — Sprint 44: Phase 1 Azure Lab Testing + FreeIPA Docker Patches
+
+**Azure VM lab testing (`it-stack-docs`, `it-stack-installer`):**
+- Provisioned `lab-single` Azure VM (Standard_D4s_v4, 4 vCPU / 16 GB, Ubuntu 24.04 LTS, kernel 6.14.0-1017-azure, westus2, resource group `rg-it-stack-phase1`) for Phase 1 standalone lab validation
+- Installed Docker 29.3.0, Docker Compose v5.1.0, Ansible 2.16.3 via `get.docker.com` + manual Compose binary install
+- **All 18 Phase 1 standalone lab tests PASS on real Azure hardware** (18/18 PASS)
+
+**`it-stack-dev/scripts/testing/lab-phase1.sh` (new):**
+- Phase 1 standalone lab test runner — 18 assertions across 5 modules
+- `run_keycloak()` — HTTP 302 redirect, OIDC admin token, `/health/ready` UP → 3/3 PASS
+- `run_postgresql()` — `pg_isready`, CRUD (CREATE/INSERT/SELECT), multi-db (`appdb` + `testdb` created) → 3/3 PASS
+- `run_redis()` — PING/PONG, SET/GET, LPUSH/LLEN, AOF persistence enabled → 4/4 PASS
+- `run_traefik()` — file provider (not Docker discovery), `/ping` OK, dashboard API HTTP 200, `whoami` router loaded, reverse proxy routed → 4/4 PASS
+- `run_freeipa()` — `docker run --cgroupns host` (direct run, not Compose), `it-stack-freeipa-patched:almalinux-9`, `ipactl status`, LDAP bind, `kinit admin`, web UI HTTP 301 → 4/4 PASS
+- Supports `--skip-freeipa` flag (14-test quick run, ~3 min) and `--only-freeipa` flag
+- Idempotent: cleans up all containers + volumes after each module test
+
+**`it-stack-dev/scripts/testing/freeipa-patch/Dockerfile` (new):**
+- Custom image from `freeipa/freeipa-server:almalinux-9` with two production patches required for Docker 29.x / cgroupv2-only kernels:
+  - **Fix 1 (cgroupv2):** `patch-memcheck.py` rewrites `installutils.py` RAM check to read `/proc/meminfo` instead of the cgroupv1 path `/sys/fs/cgroup/memory/memory.limit_in_bytes` (which does not exist on Azure kernel 6.14 — cgroupv2 only)
+  - **Fix 2 (gssproxy/PrivateTmp):** `sed -i 's/^PrivateTmp=true/PrivateTmp=false/'` on `/usr/lib/systemd/system/httpd.service` — prevents `mod_auth_gssapi` GSS socket isolation when container runs `--privileged`; fixes `ipa-client-install` `KerberosError: No valid Negotiate header` at ~18-minute mark of server setup
+
+**`docs/05-guides/18-azure-lab-deployment.md` (updated):**
+- Added accurate VM specs: Standard_D4s_v4 4 vCPU / 16 GB, kernel 6.14.0-1017-azure, Docker 29.3.0
+- Added `lab-phase1.sh` usage block with `--skip-freeipa` and full run instructions
+- Added complete expected output (18 tests, all PASS) with per-module pass lines
+- Added troubleshooting row: Traefik Docker 29.x API v1.24 → v1.40 issue + file-provider workaround
+- Added note on FreeIPA timing (~20-25 min for first boot install)
+- Added vCPU quota note: Azure Student westus2 limited to 6 vCPUs; D4s_v4 (4 vCPU) is the correct size
+
+**Known issues / constraints documented:**
+- Docker Compose v5 schema validator rejects `cgroupns: host` key → FreeIPA must use `docker run` directly
+- Docker Engine 29.x raised minimum accepted client API from 1.24 to 1.40; Traefik v3.x defaults to 1.24 → Docker discovery fails on this VM; file provider used as workaround for Lab 01
+- `/etc/systemd/system` in FreeIPA container image is a broken symlink to `/data/etc/systemd/system` (volume not mounted during `docker build`) → unit file patches must target `/usr/lib/systemd/system/` directly
 
 ---
 
