@@ -2,7 +2,7 @@
 
 > **Purpose:** Step-by-step instructions for deploying and running IT-Stack labs on Microsoft Azure using the provided PowerShell automation scripts.
 > **Audience:** Engineers and students running IT-Stack labs from a Windows workstation.
-> **Prerequisites:** Azure subscription with sufficient credit (Azure Student works), Windows with PowerShell 7+, Azure CLI, SSH.
+> **Prerequisites:** Azure subscription with sufficient credit (Azure Student works), Windows with PowerShell 5.1+ (or 7+), Azure CLI, SSH.
 
 ---
 
@@ -10,14 +10,16 @@
 
 | Profile | VM(s) | Size | RAM | Daily Cost | Labs | Use Case |
 |---------|--------|------|-----|-----------|------|----------|
-| **Phase1** | 1 VM | Standard_D8s_v4 | 32 GB | ~$3 / day | 01–03 | First-time setup, Azure Student start |
+| **Phase1** | 1 VM | Standard_D4s_v4 | 16 GB | ~$1.50 / day | 01–03 | First-time setup, Azure Student start |
 | **FullStack** | 1 VM | Standard_E16s_v4 | 128 GB | ~$8 / day | 01–05 | All 20 modules, integration testing |
 | **Lab06HA** | 8 VMs | per-server | varies | ~$16 / day | 01–06 | Production HA, Ansible playbooks, DR drills |
 
 > **Azure Student ($100 credit):**  
-> - Phase1 → ~33 days of 8-hour sessions  
+> - Phase1 → ~65 days of 8-hour sessions  
 > - FullStack → ~12 days of 8-hour sessions  
 > - Lab06HA → use sparingly — 1–2 full sessions for Lab 06
+>
+> **Azure Student vCPU quota:** Student subscriptions in westus2 are typically limited to 6 vCPUs. Phase1 uses `Standard_D4s_v4` (4 vCPUs) to stay within this limit. Do not use `Standard_D8s_v4` (8 vCPUs) — deployment will fail with a quota error.
 
 ---
 
@@ -75,7 +77,7 @@ cd it-stack-installer
 | Resource | Value |
 |----------|-------|
 | Resource Group | `rg-it-stack-phase1` |
-| VM | `lab-single` (Standard_D8s_v4, 64 GB disk) |
+| VM | `lab-single` (Standard_D4s_v4, 64 GB disk — 4 vCPU / 16 GB RAM) |
 | Private IP | `10.0.50.10` |
 | Public IP | Yes (assigned to lab-single) |
 | OS | Ubuntu 24.04 LTS |
@@ -108,32 +110,52 @@ ssh itstack@<PUBLIC_IP>
 After SSH-ing into the VM:
 
 ```bash
-# ── Step 1: Navigate to installer repo (pre-cloned) ──────────────────────────
-cd ~/it-stack-installer
+# ── Upload and run the Phase 1 standalone lab suite ──────────────────────────
+# (from your Windows machine — run before SSH, or paste into a terminal)
+# scp path/to/it-stack-dev/scripts/testing/lab-phase1.sh itstack@<IP>:~/lab-phase1.sh
 
-# ── Step 2: Run Lab 01 (FreeIPA standalone) ───────────────────────────────────
-bash tests/labs/01-01-standalone.sh
-# Expected: FreeIPA container starts, LDAP health check passes
+# On the VM: run all 5 Phase 1 modules (without FreeIPA for a quick ~3-min run)
+bash ~/lab-phase1.sh --skip-freeipa
 
-# ── Step 3: Run Lab 01 (Keycloak standalone) ──────────────────────────────────
-bash tests/labs/02-01-standalone.sh
-# Expected: Keycloak starts, admin UI accessible on port 8080
-
-# ── Step 4: Run Lab 01 (PostgreSQL standalone) ────────────────────────────────
-bash tests/labs/03-01-standalone.sh
-# Expected: PostgreSQL starts, pg_isready passes
-
-# ── Step 5: Run Lab 01 (Redis standalone) ─────────────────────────────────────
-bash tests/labs/04-01-standalone.sh
-# Expected: Redis starts, PONG response to PING
-
-# ── Step 6: Run Lab 01 (Traefik standalone) ───────────────────────────────────
-bash tests/labs/18-01-standalone.sh
-# Expected: Traefik dashboard accessible on port 8080
-
-# ── Or run all Phase 1 labs at once ───────────────────────────────────────────
-bash scripts/run-phase1-labs.sh
+# Run everything including FreeIPA (~20-25 min total — FreeIPA installs on first boot)
+bash ~/lab-phase1.sh
 ```
+
+**Expected output (all pass):**
+
+```
+>> Lab 02-01 — Keycloak Standalone
+  [PASS] Keycloak HTTP endpoint responds (HTTP 302)
+  [PASS] Keycloak admin login and OIDC token issued
+  [PASS] Keycloak /health/ready: UP
+
+>> Lab 03-01 — PostgreSQL Standalone
+  [PASS] PostgreSQL pg_isready: accepting connections
+  [PASS] PostgreSQL CRUD: CREATE TABLE + INSERT + SELECT
+  [PASS] PostgreSQL multi-db: appdb and testdb created
+
+>> Lab 04-01 — Redis Standalone
+  [PASS] Redis PING: PONG
+  [PASS] Redis SET/GET key-value
+  [PASS] Redis LPUSH/LLEN list operations
+  [PASS] Redis AOF persistence enabled
+
+>> Lab 18-01 — Traefik Standalone
+  [PASS] Traefik /ping: OK
+  [PASS] Traefik dashboard API: HTTP 200
+  [PASS] Traefik file provider: 'whoami' router loaded
+  [PASS] Traefik reverse proxy: request routed to whoami backend
+
+>> Lab 01-01 — FreeIPA Standalone
+  [PASS] FreeIPA ipactl status: services running
+  [PASS] FreeIPA LDAP bind: Directory Manager authenticated
+  [PASS] FreeIPA Kerberos: admin kinit succeeded
+  [PASS] FreeIPA web UI reachable (HTTP 301)
+
+All Phase 1 standalone lab tests PASSED!
+```
+
+> **Note — Traefik Docker provider (Docker 29.x):** Docker Engine 29.x raised the minimum accepted client API version from 1.24 to 1.40. Traefik v3.x defaults to API 1.24 for initial negotiation, causing Docker label discovery to fail on this VM. Lab 01 validates routing via the file provider instead (equivalent functionality). Docker label discovery is tested in Lab 02+ where the Docker daemon version is controlled.
 
 For Labs 02 and 03, see the individual lab guides in `docs/labs/`.
 
@@ -154,10 +176,12 @@ For Labs 02 and 03, see the individual lab guides in `docs/labs/`.
 
 | Activity | Duration | Cost |
 |----------|----------|------|
-| Deploy + 8hr session | 1 day | ~$3.00 |
+| Deploy + 8hr session (D4s_v4) | 1 day | ~$1.55 |
 | Stop overnight (disk only) | 16 hrs | ~$0.05 |
-| 1 week (8hrs/day, stopped overnight) | 7 days | ~$21.35 |
+| 1 week (8hrs/day, stopped overnight) | 7 days | ~$11.20 |
 | Delete between sessions | — | $0.00 |
+
+> **Standard_D4s_v4** (4 vCPU / 16 GB) costs ~$0.192/hr in westus2 as of 2026.
 
 ---
 
@@ -571,12 +595,13 @@ az snapshot list --resource-group rg-it-stack-phase1 --output table
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | `az login` opens wrong account | Multiple accounts | `az account set --subscription <id>` |
-| VM creation fails with "quota exceeded" | Azure Student vCPU limits | Use a different region (`-Location westus2`) or request quota increase |
+| VM creation fails with "quota exceeded" | Azure Student limits to 6 vCPUs in westus2 | Script defaults to `Standard_D4s_v4` (4 vCPUs). Do NOT use D8s_v4 (8 vCPUs) on Student subs. |
 | SSH timeout | VM still starting | Wait 2–3 min and retry |
 | SSH "connection refused" | VM auto-shutdown triggered | `.\teardown-azure-lab.ps1 -StartAll` |
 | Docker not ready after SSH | Cloud-init still running | `journalctl -u cloud-final --no-pager -n 50` |
 | `ansible: command not found` on VM | Cloud-init incomplete | Wait 5 min, then `sudo apt-get install -y ansible-core` |
 | Lab test fails: "port 443 not open" | Traefik not running | `docker compose -f docker/docker-compose.standalone.yml up -d` |
+| Traefik Docker provider error: "client version 1.24 is too old" | Docker 29.x raised min API to 1.40; Traefik v3.x defaults to 1.24 | Use file provider for Lab 01 routing tests. Docker label discovery works in controlled environments (Docker ≤ 28.x or patched Traefik). |
 | Public IP shows `null` | Pip not yet assigned | Wait 2 min: `az network public-ip show -g <rg> -n pip-lab-single --query ipAddress -o tsv` |
 | Multi-VM: can't SSH to internal VMs | ~/.ssh/config not set up | See "SSH Access" section above |
 | Ansible ping fails for some nodes | VMs still booting | `az vm wait -g rg-it-stack-lab06 -n lab-id1 --created` |
