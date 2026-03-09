@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Phase 1 Azure Standalone Testing COMPLETE (18/18) · Local Docker Test Runner: Phase 1 ✅ · Phases 2–4 fixes pending
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 pending · Local Docker Test Runner: Phase 1 ✅
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -313,7 +313,10 @@ All 5 repos have:
 - [x] `scripts/utilities/create-repo-template.ps1` — Scaffold a new module repo
 - [x] `scripts/deployment/deploy-stack.sh` — Full stack deployment
 - [x] `scripts/testing/run-all-labs.sh` — Run all 120 lab tests
-- [x] `scripts/testing/lab-phase1.sh` — Phase 1 standalone test runner (18 tests) · **18/18 PASS on Azure Standard_D4s_v4** ✅
+- [x] `scripts/testing/lab-phase1.sh` — Phase 1 standalone test runner (18 tests) · **18/18 PASS on Azure Standard_D4s_v4** ✅ (commit `e3ddab0`)
+- [x] `scripts/testing/lab-phase2.sh` — Phase 2 standalone test runner (20 tests: Nextcloud·Mattermost·Jitsi·iRedMail·Zammad) · **20/20 PASS on Azure Standard_D4s_v4** ✅
+- [x] `scripts/testing/lab-phase3.sh` — Phase 3 standalone test runner (20 tests: FreePBX·SuiteCRM·Odoo·OpenKM) · **20/20 PASS on Azure Standard_D4s_v4** ✅ (commit `7751fcc`)
+- [x] `scripts/testing/lab-sso-integrations.sh` — SSO integration test runner (35 tests across FreeIPA·Keycloak·Nextcloud·Mattermost·Jitsi·iRedMail·Zammad·SuiteCRM·Odoo·Taiga+Snipe-IT+GLPI stubs) · **35/35 PASS on Azure Standard_D4s_v4** ✅
 - [x] `scripts/testing/freeipa-patch/Dockerfile` — FreeIPA custom image for Docker 29.x + cgroupv2-only kernels (Fix 1: cgroupv2 RAM check; Fix 2: PrivateTmp=false in httpd.service)
 - [x] `scripts/test-local-docker.ps1` — PowerShell local Docker test runner for all 4 phases
 - [-] Local Docker test runner Phase 2 failures — Zammad healthcheck `[ ]`
@@ -339,15 +342,43 @@ All 5 repos have:
 
 **Azure Phase 1 result: 18/18 PASS** (2026-03-07, commit `e3ddab0`)
 
-### Azure VM Phase 2+ (Pending)
+### Azure VM Phase 2 — `lab-phase2.sh` ✅
+
+| Module | Result | Notes |
+|--------|--------|-------|
+| 06 · Nextcloud | [x] ✅ | HTTP 200, WebDAV, OCS API |
+| 07 · Mattermost | [x] ✅ | API ping, team/channel/post created |
+| 08 · Jitsi | [x] ✅ | 4-container stack, TLS/BOSH/config.js |
+| 09 · iRedMail | [x] ✅ | SMTP:25, IMAP:143, webmail |
+| 11 · Zammad | [x] ✅ | Rails server, ES index, API token |
+
+**Azure Phase 2 result: 20/20 PASS** (`lab-phase2.sh`)
+
+### Azure VM Phase 3 — `lab-phase3.sh` ✅
+
+| Module | Result | Notes |
+|--------|--------|-------|
+| 10 · FreePBX | [x] ✅ | Admin HTTP, Asterisk CLI, dashboard content |
+| 12 · SuiteCRM | [x] ✅ | Apache, login page, config.php, DB |
+| 13 · Odoo | [x] ✅ | Web client, XML-RPC, database list |
+| 14 · OpenKM | [x] ✅ | Tomcat :8080, REST API (port check via /proc/net/tcp) |
+
+**Azure Phase 3 result: 20/20 PASS** (2026-03-09, commit `7751fcc`)
+
+### Azure VM SSO Integrations — `lab-sso-integrations.sh` ✅
+
+**Azure SSO result: 35/35 PASS** (`lab-sso-integrations.sh`)
+
+### Azure VM Phase 4 — `lab-phase4.sh` (Pending)
 
 | Module | Lab 01 (Azure) | Notes |
 |--------|---------------|-------|
-| 06 · Nextcloud | [ ] | — |
-| 07 · Mattermost | [ ] | — |
-| 08 · Jitsi | [ ] | — |
-| 09 · iRedMail | [ ] | — |
-| 11 · Zammad | [ ] | — |
+| 15 · Taiga | [ ] | multi-container (front/back/events/async) |
+| 16 · Snipe-IT | [ ] | `snipe/snipe-it` + MariaDB |
+| 17 · GLPI | [ ] | `diouxx/glpi` + MariaDB |
+| 05 · Elasticsearch | [ ] | `elasticsearch:8`, single-node, xpack disabled |
+| 19 · Zabbix | [ ] | PostgreSQL + web-nginx-pgsql |
+| 20 · Graylog | [ ] | MongoDB + OpenSearch/ES (most complex) |
 
 > Restart VM: `az vm start --resource-group rg-it-stack-phase1 --name lab-single`  
 > The `it-stack-freeipa-patched:almalinux-9` image and test logs survive VM deallocation.
@@ -560,6 +591,6 @@ All 5 repos have:
 
 ---
 
-**Document Version:** 2.1  
+**Document Version:** 2.2  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-07 — Sprint 44: Phase 1 Azure lab testing complete (18/18 PASS) · `lab-phase1.sh` + FreeIPA Dockerfile committed · Azure VM `lab-single` deallocated · Local Docker Phase 1 ✅ · Phases 2–4 fixes pending
+**Last Updated:** 2026-03-09 — Phase 2 Azure testing complete (20/20 PASS) · Phase 3 Azure testing complete (20/20 PASS, commit `7751fcc`) · SSO integrations testing complete (35/35 PASS) · `lab-phase2.sh`, `lab-phase3.sh`, `lab-sso-integrations.sh` committed · Phase 4 (`lab-phase4.sh`) pending · Key fixes: `pipefail` `000000` false-pass bug, OpenKM `/proc/net/tcp` healthcheck, FreePBX bundled-MariaDB detection, SuiteCRM `config.php` path
