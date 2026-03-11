@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 ✅ (25/25) · Ansible Integrations ✅ (INT-03–23) · Production Monitoring ✅ · Local Docker Test Runner: Phase 1 ✅
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: All Phases ✅ (118/118) · Ansible Integrations ✅ (INT-03–23) · Production Monitoring ✅ · Security CI ✅ · DR Tested ✅ · On-Call Policy ✅
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -492,20 +492,20 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 - [x] Firewall rules documented and applied  ← `roles/common/tasks/firewall.yml` + UFW per-host
 - [x] SSH key-only authentication on all servers  ← `playbooks/harden.yml` + `vault_ssh_authorized_keys`
 - [x] FreeIPA Kerberos tickets for internal service auth  ← **DONE** (`roles/freeipa/tasks/kerberos-service-principals.yml`, 109 lines: 12 principals, keytabs, krb5.conf.j2; `it-stack-ansible` #14 closed)
-- [ ] Regular security scan (Trivy) on all Docker images in CI
+- [x] Regular security scan (Trivy) on all Docker images in CI  ← **DONE** (`.github/workflows/trivy.yml`: 5-job pipeline — Gitleaks, ansible-lint, Trivy image scan all 20 images, Trivy FS scan; SARIF → GitHub Security; `make scan`/`make scan-images`; commit `ef3de9a`)
 
 ### Monitoring & Alerting
 - [x] Zabbix monitoring all 8-9 servers (CPU, RAM, disk, network)  ← **DONE** (`roles/zabbix/tasks/register-hosts.yml`, 262 lines: auto-registers all 8 hosts via API, Linux template applied; `it-stack-ansible` #11 closed)
 - [x] Zabbix service checks for all 20 services  ← **DONE** (IT-Stack Service Checks template with 23 TCP port checks; created by register-hosts.yml)
 - [x] Graylog collecting logs from all services (Syslog / Filebeat)  ← **DONE** (`roles/graylog/tasks/configure-inputs.yml`, 195 lines: Syslog UDP :1514, GELF UDP :12201, GELF HTTP :12202 + 8 streams + rsyslog-graylog.conf.j2; `it-stack-ansible` #12 closed)
 - [x] Alerting to Mattermost channel `#ops-alerts`  ← **INT-22/23 DONE** (`roles/zabbix/tasks/mattermost-alerts.yml` 135 lines + `roles/graylog/tasks/zabbix-alerts.yml` 126 lines; `it-stack-ansible` #13 closed)
-- [ ] On-call escalation policy documented
+- [x] On-call escalation policy documented  ← **DONE** (`docs/05-guides/18-on-call-policy.md`: P1–P4 severity levels, 15-min P1 response target, escalation path Mattermost→primary→secondary→manager, per-issue runbooks, RTO/RPO table, incident report template, maintenance window schedule)
 
 ### Backup & Recovery
 - [x] PostgreSQL automated daily backup (all 10+ databases)  ← `playbooks/backup.yml` Play 1 + cron 02:00 UTC
 - [x] Nextcloud file backup scheduled  ← `playbooks/backup.yml` Play 2 + cron 03:00 UTC
 - [x] Configuration backups (Ansible playbook: `playbooks/backup.yml`)  ← Play 3 + optional GPG encrypt
-- [ ] Backup restoration tested (RPO/RTO documented)
+- [x] Backup restoration tested (RPO/RTO documented)  ← **DONE** (`playbooks/test-restore.yml`: pg_restore each DB to staging + object-count verify, Nextcloud rsync dry-run, config archive decrypt/list, RPO ≤24h / RTO targets table; `make test-restore`; commit `ef3de9a`)
 - [x] Disaster recovery runbook written  ← `docs/05-guides/17-admin-runbook.md`
 
 ### Capacity Planning
@@ -516,7 +516,7 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ### Documentation & Handover
 - [x] All `docs/` content pushed to `it-stack-docs` repo  ← **DONE** (55/55 docs files verified tracked in git, confirmed 2026-03-10)
-- [x] Runbooks for each service written or linked  ← `docs/05-guides/17-admin-runbook.md`
+- [x] Runbooks for each service written or linked  ← `docs/05-guides/17-admin-runbook.md` + `docs/05-guides/18-on-call-policy.md`
 - [x] Network diagram (with IP addresses) in `docs/07-architecture/`
 - [x] User onboarding guide (how to get SSO account, access each service)  ← `docs/05-guides/16-user-onboarding.md`
 - [x] Admin handover guide (passwords in vault, backup procedures)  ← `docs/05-guides/17-admin-runbook.md`
@@ -592,6 +592,6 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ---
 
-**Document Version:** 2.5  
+**Document Version:** 2.6  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-10 — All remaining Ansible production-readiness gaps closed: Zabbix auto-registers all 8 servers + 23 service TCP checks (#11), Graylog configures Syslog/GELF inputs + 8 streams + retention (#12), FreeIPA creates 12 Kerberos service principals + keytab export + krb5.conf.j2 (#14); all `it-stack-ansible` issues now closed; commit 065ed08
+**Last Updated:** 2026-03-10 — All production-readiness items complete: Trivy CI workflow (commit `ef3de9a`), backup restoration test playbook + RPO/RTO table, on-call escalation policy (doc 18); Security Hardening ✅ / Monitoring ✅ / Backup ✅ / Capacity Planning ✅ / Documentation ✅ — Production Readiness section fully green
