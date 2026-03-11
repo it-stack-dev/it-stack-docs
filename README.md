@@ -3,11 +3,12 @@
 > **Complete enterprise IT platform built entirely from open-source software — $0 in software licensing.**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-CI%2FCD%20Complete-brightgreen.svg)](docs/project/todo.md)
-[![Modules](https://img.shields.io/badge/Modules-20%20scaffolded-green.svg)](https://github.com/orgs/it-stack-dev/repositories)
-[![Labs](https://img.shields.io/badge/Labs-10%2F120%20complete-blue.svg)](docs/labs/overview.md)
-[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational.svg)](https://it-stack-dev.github.io/it-stack-docs/)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](docs/IT-STACK-TODO.md)
+[![Modules](https://img.shields.io/badge/Modules-20%20Complete-green.svg)](https://github.com/orgs/it-stack-dev/repositories)
+[![Labs](https://img.shields.io/badge/Labs-120%2F120%20PASS-success.svg)](docs/03-labs/)
+[![Integrations](https://img.shields.io/badge/Integrations-23%2F23%20PASS-success.svg)](docs/02-implementation/12-integration-guide.md)
 [![CI](https://img.shields.io/badge/CI-20%2F20%20passing-success.svg)](https://github.com/orgs/it-stack-dev/repositories)
+[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational.svg)](https://it-stack-dev.github.io/it-stack-docs/)
 
 ---
 
@@ -197,25 +198,26 @@ See the full list of [26 repositories](https://github.com/orgs/it-stack-dev/repo
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| 0 | Planning & documentation | ✅ Complete |
-| 1 | GitHub org bootstrap (26 repos, 120 issues, 5 projects) | ✅ Complete |
+| 0 | Planning & documentation (~600 pages, 14 source docs) | ✅ Complete |
+| 1 | GitHub org bootstrap (26 repos, 120 issues, 5 projects, labels) | ✅ Complete |
 | 2 | Local dev environment (`C:\IT-Stack\it-stack-dev\`) | ✅ Complete |
 | 3 | Docs site (MkDocs Material, GitHub Pages) | ✅ Complete |
-| 4 | All 20 module repos scaffolded | ✅ Complete |
-| 5 | CI/CD workflows (20/20 passing) | ✅ Complete |
-| 6 | Ansible playbooks — Phase 1 modules (76 files, 6 roles) | ✅ Complete |
-| 7 | Lab 01 Docker Compose + test scripts — all 5 Phase 1 modules | ✅ Complete |
-| 8 | Lab 02 LAN stacks + test scripts — all 5 Phase 1 modules | ✅ Complete |
-| 9 | Lab 03 Advanced Features — all 5 Phase 1 modules | 🔲 Next |
+| 4 | All 20 module repos scaffolded + CI/CD (20/20 passing) | ✅ Complete |
+| 5 | Ansible playbooks — all 20 modules (76+ files, 20 roles, 23 integrations) | ✅ Complete |
+| 6 | Lab 01–06 Docker Compose + test scripts — all 20 modules (120 labs) | ✅ Complete — 120/120 PASS on Azure |
+| 7 | SSO integrations tested (FreeIPA→Keycloak→all 9 services) | ✅ Complete — 35/35 PASS on Azure |
+| 8 | Production readiness (Security · Monitoring · Backup · DR · Capacity) | ✅ Complete |
+| 9 | Phase 5: Kubernetes / Helm deployment | 🔲 Next |
 
 ---
 
 ## Getting Started
 
 1. **Browse** the docs at https://it-stack-dev.github.io/it-stack-docs/
-2. **Read** [docs/project/master-index.md](docs/project/master-index.md) for the full documentation map
-3. **Track progress** in [docs/project/todo.md](docs/project/todo.md)
-4. **Deploy Phase 1** using [docs/labs/part2-identity-database.md](docs/labs/part2-identity-database.md)
+2. **Read** [docs/05-guides/01-master-index.md](docs/05-guides/01-master-index.md) for the full documentation map  
+3. **Deploy on real hardware** using the [Hardware Deployment Guide](docs/05-guides/19-hardware-deployment-guide.md)
+4. **Track progress** in [docs/IT-STACK-TODO.md](docs/IT-STACK-TODO.md)
+5. **Troubleshoot** using the [Production Troubleshooting Guide](docs/05-guides/21-production-troubleshooting.md)
 
 ---
 

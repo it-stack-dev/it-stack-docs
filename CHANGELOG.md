@@ -8,10 +8,52 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
-### Planned — Next Up
-- Fix Phase 2/3/4 local Docker test runner failures (Zammad, FreePBX, Graylog, Snipe-IT healthchecks)
-- Azure Phase 2 standalone lab testing (Nextcloud, Mattermost, Jitsi, iRedMail, Zammad)
-- Remaining SSO integrations: Mattermost ↔ Keycloak, SuiteCRM ↔ Keycloak SAML, Zammad ↔ Keycloak, GLPI ↔ Keycloak, Taiga ↔ Keycloak, Odoo ↔ Keycloak
+### Planned — Phase 5: Kubernetes / Helm Production Deployment
+- Helm charts for all 20 modules (`it-stack-helm` repo — scaffolded, not yet implemented)
+- k3s single-node and multi-node cluster manifests
+- Persistent Volume Claims for stateful services (PostgreSQL, Elasticsearch, Redis)
+- Ingress via Traefik CRDs (replacing standalone Traefik Docker container)
+- Kubernetes-native health probes and readiness gates for all services
+- Production HA topology with pod anti-affinity rules
+- Horizontal Pod Autoscaler (HPA) for stateless services (Keycloak, Mattermost, Jitsi)
+- GitOps workflow via ArgoCD or Flux CD
+- Kubernetes-native secret management (External Secrets Operator + Vault or Sealed Secrets)
+
+### Planned — Public Release Milestones
+- GitHub Pages documentation site live at `https://it-stack-dev.github.io/it-stack-docs/`
+- Docker Hub / GHCR images published for all 20 modules
+- Community announcement: r/selfhosted, r/homelab, Hacker News, Dev.to
+- YouTube demo video: full stack walkthrough (SSO login → Nextcloud → Mattermost → Odoo → GLPI)
+
+---
+
+## [1.41.0] — 2026-03-11
+
+### Fixed — Sprint 47: Local Docker Test Runner Failures (All 3 Phases)
+
+**`it-stack-dev/scripts/testing/lab-phase2.sh` — Zammad nginx healthcheck:**
+- Root cause: `nginx:1.25-alpine` does not include `curl`; Docker healthcheck command `curl -sf ...` always exited `sh: curl: not found`, keeping the container permanently in "unhealthy" state regardless of whether Zammad was actually serving traffic
+- Fix: replaced healthcheck test command with `wget -q -O /dev/null http://localhost:80/ && echo OK || exit 1` (wget ships in Alpine by default)
+- Increased healthcheck `retries` 20 → 40 (gives full 800s window at 20s interval)
+- Increased healthcheck `start_period` 60s → 120s (accounts for ES + zammad-init before nginx needs to respond)
+- Increased `wait_healthy` polling in test loop: 20×30=600s → 30×30=900s (15-minute cap)
+
+**`it-stack-dev/scripts/testing/lab-phase3.sh` — FreePBX first-run init time:**
+- Root cause: `tiredofit/freepbx:latest` performs a full module install (>100 FreePBX modules via `fwconsole ma upgradeall`) on first run, which takes 10–30 minutes on local Docker Desktop vs. 8–12 minutes on Azure D4s_v4; the 20-minute cap was insufficient and the fallback did a single immediate HTTP check before the web stack was ready
+- Added `wait_http` helper function (existed in phase4 but was missing from phase3)
+- Extended `wait_healthy` hard cap: 40×30=1200s → 60×30=1800s (30 minutes)
+- Replaced immediate-fail HTTP fallback with a `wait_http "http://localhost:8301/" 20 30` retry loop — 10 additional minutes of HTTP polling before declaring failure (total 40-minute cap)
+
+**`it-stack-dev/scripts/testing/lab-phase4.sh` — Snipe-IT and Graylog healthchecks:**
+- **Snipe-IT** — Root cause: Docker healthcheck `retries: 20` at 20s interval = 400s hard cap; first-run Laravel migrations + asset compilation take 6–8 minutes on local Docker Desktop; both the Docker healthcheck and `wait_healthy 24 10` (240s) timed out before migrations completed
+  - Increased healthcheck `retries` 20 → 30 (600s hard cap)
+  - Doubled `wait_healthy` polling: 24×10=240s → 48×10=480s
+- **Graylog** — Root cause: default `GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE` is 5 GB; local Docker Desktop has limited disk I/O throughput causing journal segment creation to take >720s; Docker healthcheck `retries: 24` at 20s = 630s cap meant Docker marked the container "unhealthy" before it was ready, causing `wait_healthy` to immediately exit false
+  - Increased healthcheck `retries` 24 → 36 (870s hard cap, consistent with `start_period: 150s` + 720s window)
+  - Increased `wait_healthy` polling: 36×20=720s → 54×20=1080s (18-minute cap)
+
+**`docs/IT-STACK-TODO.md` — v2.6 → v2.7:**
+- Marked all 3 remaining open items as `[x]`; zero open items remain in the entire project as originally scoped
 
 ---
 

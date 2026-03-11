@@ -592,6 +592,72 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ---
 
+## Phase 5: Kubernetes / Helm Production Deployment
+
+> **Goal:** Migrate the full IT-Stack from Docker Compose to production-grade Kubernetes,  
+> enabling HA, auto-scaling, rolling updates, and GitOps for the 8-server topology.
+
+### Infrastructure Layer
+
+- [ ] `it-stack-helm` repo — initialize chart structure (umbrella chart + 20 sub-charts)
+- [ ] k3s single-node install playbook (`playbooks/k3s-single.yml`)
+- [ ] k3s multi-node HA install playbook (`playbooks/k3s-ha.yml` — 3 control-plane nodes)
+- [ ] StorageClass definitions (local-path for labs, Longhorn for production)
+- [ ] MetalLB load-balancer config (IP pool 10.0.50.100–.150)
+- [ ] cert-manager install + ClusterIssuer (Let's Encrypt + internal CA)
+- [ ] Traefik CRD IngressRoute replacing standalone Traefik container
+
+### Identity Layer
+
+- [ ] Helm chart: FreeIPA StatefulSet + PVC (LDAP + Kerberos data)
+- [ ] Helm chart: Keycloak (Bitnami chart override, externalDatabase PostgreSQL)
+- [ ] NetworkPolicy: FreeIPA ↔ Keycloak LDAP federation (TCP 389/636)
+
+### Database Layer
+
+- [ ] Helm chart: PostgreSQL cluster (Bitnami HA, 1 primary + 2 replicas)
+- [ ] Helm chart: Redis Sentinel (3-node sentinel + 1 primary + 2 replicas)
+- [ ] Helm chart: Elasticsearch (2-node cluster, 512 MB heap each)
+- [ ] PersistentVolumeClaims: 50 GB PostgreSQL, 20 GB Redis AOF, 100 GB Elasticsearch
+
+### Collaboration Layer
+
+- [ ] Helm chart: Nextcloud (Apache, externalDatabase, externalRedis, PVC 200 GB)
+- [ ] Helm chart: Mattermost (externalDB, externalRedis, file store via Nextcloud S3)
+- [ ] Helm chart: Jitsi (videoBridge DaemonSet + web Deployment, UDP hostPort 10000)
+
+### Communications Layer
+
+- [ ] Helm chart: iRedMail (StatefulSet, hostNetwork for SMTP/IMAP port binding)
+- [ ] Helm chart: Zammad (6-container set: pg, es, redis, init, rails, nginx)
+- [ ] Helm chart: FreePBX (StatefulSet, hostNetwork for SIP/RTP port binding)
+
+### Business Layer
+
+- [ ] Helm chart: SuiteCRM (Apache + PVC for uploads)
+- [ ] Helm chart: Odoo (+ workers Deployment, externalDB)
+- [ ] Helm chart: OpenKM (Tomcat StatefulSet + PVC)
+
+### IT Management Layer
+
+- [ ] Helm chart: Taiga (back + front + celery + rabbitmq, externalDB)
+- [ ] Helm chart: Snipe-IT (Apache + externalDB MariaDB or PG)
+- [ ] Helm chart: GLPI (Apache + externalDB)
+- [ ] Helm chart: Zabbix (server + web, externalDB PG)
+- [ ] Helm chart: Graylog (+ MongoDB StatefulSet)
+
+### Operations
+
+- [ ] HorizontalPodAutoscaler for: Keycloak web, Mattermost, Jitsi web, Taiga-back
+- [ ] PodDisruptionBudgets for all StatefulSets
+- [ ] ArgoCD install + ApplicationSet for all 20 modules
+- [ ] Kubernetes-native secret management (Sealed Secrets or External Secrets Operator)
+- [ ] Helm umbrella chart `it-stack` — deploy full stack in one command
+- [ ] `make k8s-install` / `make k8s-destroy` convenience targets
+- [ ] GitHub Actions: `helm lint` + `helm template` + `kubeval` in CI for all charts
+
+---
+
 **Document Version:** 2.7  
 **Project:** IT-Stack | **Org:** it-stack-dev  
 **Last Updated:** 2026-03-11 — All TODO items complete ✅. Local Docker test runner fixes: Phase 2 Zammad nginx healthcheck (wget not curl in Alpine, retries→40, wait→900s); Phase 3 FreePBX init time (added wait_http helper, extended cap to 40 min); Phase 4 Snipe-IT (wait doubled to 480s, retries→30), Graylog (wait→1080s, retries→36). Zero open items remain.
