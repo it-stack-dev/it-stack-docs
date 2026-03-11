@@ -112,6 +112,25 @@ wait_healthy() {
   return 1
 }
 
+# ###########################################################################
+# HELPER: wait_http <url> [max_iters] [interval_s]
+#   Polls a URL until it returns a valid HTTP response — for containers
+#   that lack a Docker healthcheck or whose healthcheck times out before
+#   the app is fully ready (e.g. FreePBX first-run module install).
+# ###########################################################################
+wait_http() {
+  local url="$1" max="${2:-30}" interval="${3:-10}"
+  local code
+  for i in $(seq 1 "$max"); do
+    sleep "$interval"
+    code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url" 2>/dev/null | tr -d '[:space:]'; true)
+    http_ok "${code:-000}" && { echo ""; return 0; }
+    echo -ne "    ${i}/${max} (HTTP ${code:-000}) \r"
+  done
+  echo ""
+  return 1
+}
+
 WORKDIR="$HOME/it-stack-labs"
 mkdir -p "$WORKDIR"
 
@@ -194,17 +213,18 @@ COMPOSE
   info "Waiting for MariaDB to be healthy (up to 2 min)..."
   wait_healthy "$db" 12 10 || { fail "MariaDB not healthy"; docker compose down -v 2>/dev/null; return; }
 
-  # FreePBX first-run installs >100 modules — can take 10-20 min
-  info "Waiting for FreePBX to complete first-run module install (up to 20 min)..."
-  if wait_healthy "$app" 40 30; then
+  # FreePBX first-run installs >100 modules — can take 10-30 min on local Docker Desktop
+  info "Waiting for FreePBX to complete first-run module install (up to 30 min)..."
+  if wait_healthy "$app" 60 30; then
     pass "FreePBX started and healthy"
   else
-    info "Healthcheck timed out — checking HTTP directly..."
-    code=$(host_http "http://localhost:8301/")
-    if http_ok "$code"; then
-      pass "FreePBX serving HTTP $code (healthcheck still initialising)"
+    # Healthcheck timed out — FreePBX web may still be coming up; poll HTTP for
+    # up to 10 more minutes before giving up (common on local Docker Desktop).
+    info "Healthcheck timed out — polling HTTP for up to 10 more min..."
+    if wait_http "http://localhost:8301/" 20 30; then
+      pass "FreePBX serving HTTP (healthcheck still initialising)"
     else
-      fail "FreePBX not healthy after 20 min (HTTP $code)"
+      fail "FreePBX not healthy after 40 min total (HTTP unreachable)"
       docker logs "$app" 2>&1 | tail -20
       docker compose down -v 2>/dev/null; cd "$WORKDIR"; return
     fi

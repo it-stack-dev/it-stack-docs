@@ -319,9 +319,9 @@ All 5 repos have:
 - [x] `scripts/testing/lab-sso-integrations.sh` — SSO integration test runner (35 tests across FreeIPA·Keycloak·Nextcloud·Mattermost·Jitsi·iRedMail·Zammad·SuiteCRM·Odoo·Taiga+Snipe-IT+GLPI stubs) · **35/35 PASS on Azure Standard_D4s_v4** ✅
 - [x] `scripts/testing/freeipa-patch/Dockerfile` — FreeIPA custom image for Docker 29.x + cgroupv2-only kernels (Fix 1: cgroupv2 RAM check; Fix 2: PrivateTmp=false in httpd.service)
 - [x] `scripts/test-local-docker.ps1` — PowerShell local Docker test runner for all 4 phases
-- [-] Local Docker test runner Phase 2 failures — Zammad healthcheck `[ ]`
-- [-] Local Docker test runner Phase 3 failures — FreePBX init time `[ ]`
-- [-] Local Docker test runner Phase 4 failures — Graylog/Snipe-IT healthcheck tuning `[ ]`
+- [-] Local Docker test runner Phase 2 failures — Zammad healthcheck `[x]` ✅ Fixed: `nginx:alpine` uses `wget` healthcheck (no curl in Alpine); increased retries to 40, `start_period` 120s, `wait_healthy` 30×30=900s
+- [-] Local Docker test runner Phase 3 failures — FreePBX init time `[x]` ✅ Fixed: added `wait_http` helper; extended `wait_healthy` to 60×30=1800s + 10-min HTTP fallback poll (total 40 min cap)
+- [-] Local Docker test runner Phase 4 failures — Graylog/Snipe-IT healthcheck tuning `[x]` ✅ Fixed: Snipe-IT `wait_healthy` 48×10=480s + retries→30; Graylog `wait_healthy` 54×20=1080s + retries→36
 
 ---
 
@@ -592,6 +592,6 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ---
 
-**Document Version:** 2.6  
+**Document Version:** 2.7  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-10 — All production-readiness items complete: Trivy CI workflow (commit `ef3de9a`), backup restoration test playbook + RPO/RTO table, on-call escalation policy (doc 18); Security Hardening ✅ / Monitoring ✅ / Backup ✅ / Capacity Planning ✅ / Documentation ✅ — Production Readiness section fully green
+**Last Updated:** 2026-03-11 — All TODO items complete ✅. Local Docker test runner fixes: Phase 2 Zammad nginx healthcheck (wget not curl in Alpine, retries→40, wait→900s); Phase 3 FreePBX init time (added wait_http helper, extended cap to 40 min); Phase 4 Snipe-IT (wait doubled to 480s, retries→30), Graylog (wait→1080s, retries→36). Zero open items remain.

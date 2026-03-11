@@ -779,11 +779,12 @@ services:
       - zammad_data:/opt/zammad
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf -o /dev/null -w '%{http_code}' http://localhost:80/ | grep -qE '^[23]'"]
+      # nginx:alpine has no curl — use wget (included in Alpine by default)
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:80/ && echo OK || exit 1"]
       interval: 20s
       timeout: 10s
-      retries: 20
-      start_period: 60s
+      retries: 40
+      start_period: 120s
     networks:
       - it-stack-net
 
@@ -872,8 +873,8 @@ NGINX
   done
   echo ""
 
-  info "Waiting for Zammad nginx to become healthy (up to 10 min)..."
-  if wait_healthy "$nginx_name" 20 30; then
+  info "Waiting for Zammad nginx to become healthy (up to 15 min)..."
+  if wait_healthy "$nginx_name" 30 30; then
     true
   else
     # Check if rails is at least accepting connections

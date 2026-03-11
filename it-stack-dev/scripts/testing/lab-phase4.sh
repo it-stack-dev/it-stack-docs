@@ -342,7 +342,7 @@ services:
       test: ["CMD-SHELL", "curl -sf http://localhost/login || exit 1"]
       interval: 20s
       timeout: 10s
-      retries: 20
+      retries: 30
       start_period: 90s
 
 networks:
@@ -363,9 +363,9 @@ COMPOSE
     docker compose down -v 2>/dev/null; return
   fi
 
-  # Test 2: App container healthy (migrations + first run take up to 4 min)
-  info "Waiting for Snipe-IT app to become healthy (~4 min for first run migrations)..."
-  if wait_healthy "$app" 24 10; then
+  # Test 2: App container healthy (migrations + first run take up to 8 min on local Docker)
+  info "Waiting for Snipe-IT app to become healthy (~8 min for first run migrations on local Docker)..."
+  if wait_healthy "$app" 48 10; then
     pass "16-01 T2: Snipe-IT app container healthy"
   else
     fail "16-01 T2: Snipe-IT app not healthy (timeout)"
@@ -846,7 +846,7 @@ services:
       test: ["CMD-SHELL", "curl -sf http://localhost:9000/api/system/lbstatus | grep -qi ALIVE || exit 1"]
       interval: 20s
       timeout: 15s
-      retries: 24
+      retries: 36
       start_period: 150s
 
 networks:
@@ -878,9 +878,9 @@ COMPOSE
     docker compose down -v 2>/dev/null; return
   fi
 
-  # Test 3: Graylog healthy (~8-10 min on first start)
-  info "Waiting for Graylog to become healthy (~10 min for journal + index init)..."
-  if wait_healthy "$graylog" 36 20; then
+  # Test 3: Graylog healthy (~10-18 min on local Docker for journal + index init)
+  info "Waiting for Graylog to become healthy (~15 min for journal + index init on local Docker)..."
+  if wait_healthy "$graylog" 54 20; then
     pass "20-01 T3: Graylog container healthy"
   else
     fail "20-01 T3: Graylog container not healthy (timeout)"
