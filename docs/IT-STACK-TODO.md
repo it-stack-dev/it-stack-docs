@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 ✅ (25/25) · Ansible Integrations ✅ (INT-03–23) · Local Docker Test Runner: Phase 1 ✅
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 ✅ (25/25) · Ansible Integrations ✅ (INT-03–23) · Production Monitoring ✅ · Local Docker Test Runner: Phase 1 ✅
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -491,13 +491,13 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 - [x] All secrets managed via Ansible Vault (no plaintext credentials in repos)
 - [x] Firewall rules documented and applied  ← `roles/common/tasks/firewall.yml` + UFW per-host
 - [x] SSH key-only authentication on all servers  ← `playbooks/harden.yml` + `vault_ssh_authorized_keys`
-- [ ] FreeIPA Kerberos tickets for internal service auth
+- [x] FreeIPA Kerberos tickets for internal service auth  ← **DONE** (`roles/freeipa/tasks/kerberos-service-principals.yml`, 109 lines: 12 principals, keytabs, krb5.conf.j2; `it-stack-ansible` #14 closed)
 - [ ] Regular security scan (Trivy) on all Docker images in CI
 
 ### Monitoring & Alerting
-- [ ] Zabbix monitoring all 8-9 servers (CPU, RAM, disk, network)
-- [ ] Zabbix service checks for all 20 services
-- [ ] Graylog collecting logs from all services (Syslog / Filebeat)
+- [x] Zabbix monitoring all 8-9 servers (CPU, RAM, disk, network)  ← **DONE** (`roles/zabbix/tasks/register-hosts.yml`, 262 lines: auto-registers all 8 hosts via API, Linux template applied; `it-stack-ansible` #11 closed)
+- [x] Zabbix service checks for all 20 services  ← **DONE** (IT-Stack Service Checks template with 23 TCP port checks; created by register-hosts.yml)
+- [x] Graylog collecting logs from all services (Syslog / Filebeat)  ← **DONE** (`roles/graylog/tasks/configure-inputs.yml`, 195 lines: Syslog UDP :1514, GELF UDP :12201, GELF HTTP :12202 + 8 streams + rsyslog-graylog.conf.j2; `it-stack-ansible` #12 closed)
 - [x] Alerting to Mattermost channel `#ops-alerts`  ← **INT-22/23 DONE** (`roles/zabbix/tasks/mattermost-alerts.yml` 135 lines + `roles/graylog/tasks/zabbix-alerts.yml` 126 lines; `it-stack-ansible` #13 closed)
 - [ ] On-call escalation policy documented
 
@@ -592,6 +592,6 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ---
 
-**Document Version:** 2.4  
+**Document Version:** 2.5  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-10 — Ansible integration milestones confirmed complete: all 6 SSO (INT-03–08) + 3 FreePBX (INT-09–11) + SuiteCRM↔Odoo (INT-12) + alerting pipeline (INT-22/23); 11 `it-stack-ansible` GitHub issues closed (#1–10, #13); docs migration verified (55/55 files tracked)
+**Last Updated:** 2026-03-10 — All remaining Ansible production-readiness gaps closed: Zabbix auto-registers all 8 servers + 23 service TCP checks (#11), Graylog configures Syslog/GELF inputs + 8 streams + retention (#12), FreeIPA creates 12 Kerberos service principals + keytab export + krb5.conf.j2 (#14); all `it-stack-ansible` issues now closed; commit 065ed08
