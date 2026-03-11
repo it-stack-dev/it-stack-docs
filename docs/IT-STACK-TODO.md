@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 ✅ (25/25) · Local Docker Test Runner: Phase 1 ✅
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 ✅ (25/25) · Ansible Integrations ✅ (INT-03–23) · Local Docker Test Runner: Phase 1 ✅
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -458,18 +458,18 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 ### SSO Integrations (via Keycloak)
 - [x] FreeIPA ↔ Keycloak LDAP Federation  ← **INT-01 DONE** (Sprint 30: Ansible tasks + integration test)
 - [x] Nextcloud ↔ Keycloak OIDC  ← **INT-02 DONE** (Sprint 31: Ansible tasks + integration test)
-- [ ] Mattermost ↔ Keycloak OIDC
-- [ ] SuiteCRM ↔ Keycloak SAML
-- [ ] Odoo ↔ Keycloak OIDC
-- [ ] Zammad ↔ Keycloak OIDC
-- [ ] GLPI ↔ Keycloak SAML
-- [ ] Taiga ↔ Keycloak OIDC
+- [x] Mattermost ↔ Keycloak OIDC  ← **INT-03 DONE** (`roles/mattermost/tasks/keycloak-oidc.yml`, 172 lines; `it-stack-ansible` #1 closed)
+- [x] SuiteCRM ↔ Keycloak SAML  ← **INT-04 DONE** (`roles/suitecrm/tasks/keycloak-saml.yml`, 98 lines; `it-stack-ansible` #2 closed)
+- [x] Odoo ↔ Keycloak OIDC  ← **INT-05 DONE** (`roles/odoo/tasks/keycloak-oidc.yml`, 364 lines; `it-stack-ansible` #3 closed)
+- [x] Zammad ↔ Keycloak OIDC  ← **INT-06 DONE** (`roles/zammad/tasks/keycloak-oidc.yml`, 241 lines; `it-stack-ansible` #4 closed)
+- [x] GLPI ↔ Keycloak SAML  ← **INT-07 DONE** (`roles/glpi/tasks/keycloak-saml.yml`, 177 lines; `it-stack-ansible` #5 closed)
+- [x] Taiga ↔ Keycloak OIDC  ← **INT-08 DONE** (`roles/taiga/tasks/keycloak-oidc.yml`, 142 lines; `it-stack-ansible` #6 closed)
 
 ### Business Workflow Integrations
-- [ ] FreePBX ↔ SuiteCRM (click-to-call, call logging)
-- [ ] FreePBX ↔ Zammad (automatic phone tickets)
-- [ ] FreePBX ↔ FreeIPA (extension provisioning from directory)
-- [ ] SuiteCRM ↔ Odoo (customer data sync)
+- [x] FreePBX ↔ SuiteCRM (click-to-call, call logging)  ← **INT-09 DONE** (`roles/freepbx/tasks/suitecrm-cti.yml`, 89 lines; `it-stack-ansible` #7 closed)
+- [x] FreePBX ↔ Zammad (automatic phone tickets)  ← **INT-10 DONE** (`roles/freepbx/tasks/zammad-webhook.yml`, 76 lines; `it-stack-ansible` #8 closed)
+- [x] FreePBX ↔ FreeIPA (extension provisioning from directory)  ← **INT-11 DONE** (`roles/freepbx/tasks/freeipa-sync.yml`, 102 lines; `it-stack-ansible` #9 closed)
+- [x] SuiteCRM ↔ Odoo (customer data sync)  ← **INT-12 DONE** (`roles/suitecrm/tasks/odoo-sync.yml`; `it-stack-ansible` #10 closed)
 - [x] SuiteCRM ↔ Nextcloud (calendar sync)  ← **INT-13 DONE** (Sprint 43: nextcloud-caldav.yml + suitecrm-nextcloud-caldav.py.j2 + suitecrm-share.yml + compose WireMock nc-int-mock:8105 + SuiteCRM Phase 3f + Nextcloud Section 13)
 - [x] SuiteCRM ↔ OpenKM (document linking)  ← **INT-14 DONE** (Sprints 26-35: openkm-docs.yml + suitecrm-openkm-docs.py.j2)
 - [x] Odoo ↔ FreeIPA (employee sync)  ← **INT-15 DONE** (Sprints 26-35: freeipa-ldap.yml + odoo-freeipa-ldap.conf.j2 + setup.py.j2 + sync.timer.j2)
@@ -498,7 +498,7 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 - [ ] Zabbix monitoring all 8-9 servers (CPU, RAM, disk, network)
 - [ ] Zabbix service checks for all 20 services
 - [ ] Graylog collecting logs from all services (Syslog / Filebeat)
-- [ ] Alerting to Mattermost channel `#ops-alerts`
+- [x] Alerting to Mattermost channel `#ops-alerts`  ← **INT-22/23 DONE** (`roles/zabbix/tasks/mattermost-alerts.yml` 135 lines + `roles/graylog/tasks/zabbix-alerts.yml` 126 lines; `it-stack-ansible` #13 closed)
 - [ ] On-call escalation policy documented
 
 ### Backup & Recovery
@@ -515,7 +515,7 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 - [x] Scale-out plan per service documented  ← scale-out plan table in capacity-planning.md
 
 ### Documentation & Handover
-- [ ] All `docs/` content pushed to `it-stack-docs` repo
+- [x] All `docs/` content pushed to `it-stack-docs` repo  ← **DONE** (55/55 docs files verified tracked in git, confirmed 2026-03-10)
 - [x] Runbooks for each service written or linked  ← `docs/05-guides/17-admin-runbook.md`
 - [x] Network diagram (with IP addresses) in `docs/07-architecture/`
 - [x] User onboarding guide (how to get SSO account, access each service)  ← `docs/05-guides/16-user-onboarding.md`
@@ -592,6 +592,6 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ---
 
-**Document Version:** 2.3  
+**Document Version:** 2.4  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-10 — Phase 4 Azure testing complete (25/25 PASS, commit `22fac0f`) · All 4 lab test scripts committed (lab-phase1–4, lab-sso-integrations) · ALL Azure lab testing COMPLETE ✅ · Key Phase 4 fixes: Taiga direct HTTP poll, Graylog journal size cap, correct SHA256 hash
+**Last Updated:** 2026-03-10 — Ansible integration milestones confirmed complete: all 6 SSO (INT-03–08) + 3 FreePBX (INT-09–11) + SuiteCRM↔Odoo (INT-12) + alerting pipeline (INT-22/23); 11 `it-stack-ansible` GitHub issues closed (#1–10, #13); docs migration verified (55/55 files tracked)
