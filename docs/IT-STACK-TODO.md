@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 pending · Local Docker Test Runner: Phase 1 ✅
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: Phase 1 ✅ (18/18) · Phase 2 ✅ (20/20) · Phase 3 ✅ (20/20) · SSO Integrations ✅ (35/35) · Phase 4 ✅ (25/25) · Local Docker Test Runner: Phase 1 ✅
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -369,19 +369,20 @@ All 5 repos have:
 
 **Azure SSO result: 35/35 PASS** (`lab-sso-integrations.sh`)
 
-### Azure VM Phase 4 — `lab-phase4.sh` (Pending)
+### Azure VM Phase 4 — `lab-phase4.sh` ✅
 
-| Module | Lab 01 (Azure) | Notes |
-|--------|---------------|-------|
-| 15 · Taiga | [ ] | multi-container (front/back/events/async) |
-| 16 · Snipe-IT | [ ] | `snipe/snipe-it` + MariaDB |
-| 17 · GLPI | [ ] | `diouxx/glpi` + MariaDB |
-| 05 · Elasticsearch | [ ] | `elasticsearch:8`, single-node, xpack disabled |
-| 19 · Zabbix | [ ] | PostgreSQL + web-nginx-pgsql |
-| 20 · Graylog | [ ] | MongoDB + OpenSearch/ES (most complex) |
+| Module | Result | Notes |
+|--------|--------|-------|
+| 05 · Elasticsearch | ✅ | single-node, xpack disabled, vm.max_map_count, index CRUD |
+| 15 · Taiga | ✅ | PostgreSQL + Django back API + nginx front, wait_http polling |
+| 16 · Snipe-IT | ✅ | MariaDB healthcheck, HTTP 200, branding |
+| 17 · GLPI | ✅ | MariaDB + wait_http (no Docker healthcheck in image) |
+| 19 · Zabbix | ✅ | PostgreSQL + web-nginx-pgsql, API jsonrpc v7.2.15 |
+| 20 · Graylog | ✅ | MongoDB + ES 7.17, journal size 512mb, lbstatus ALIVE |
 
-> Restart VM: `az vm start --resource-group rg-it-stack-phase1 --name lab-single`  
-> The `it-stack-freeipa-patched:almalinux-9` image and test logs survive VM deallocation.
+**Azure Phase 4 result: 25/25 PASS** (2026-03-10, commit `22fac0f`)
+
+Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journal size cap (`GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=512mb`) for disk-constrained labs, correct SHA256 hash for Graylog root password.
 
 ---
 
@@ -591,6 +592,6 @@ All 5 repos have:
 
 ---
 
-**Document Version:** 2.2  
+**Document Version:** 2.3  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-09 — Phase 2 Azure testing complete (20/20 PASS) · Phase 3 Azure testing complete (20/20 PASS, commit `7751fcc`) · SSO integrations testing complete (35/35 PASS) · `lab-phase2.sh`, `lab-phase3.sh`, `lab-sso-integrations.sh` committed · Phase 4 (`lab-phase4.sh`) pending · Key fixes: `pipefail` `000000` false-pass bug, OpenKM `/proc/net/tcp` healthcheck, FreePBX bundled-MariaDB detection, SuiteCRM `config.php` path
+**Last Updated:** 2026-03-10 — Phase 4 Azure testing complete (25/25 PASS, commit `22fac0f`) · All 4 lab test scripts committed (lab-phase1–4, lab-sso-integrations) · ALL Azure lab testing COMPLETE ✅ · Key Phase 4 fixes: Taiga direct HTTP poll, Graylog journal size cap, correct SHA256 hash
