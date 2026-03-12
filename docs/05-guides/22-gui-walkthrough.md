@@ -83,13 +83,13 @@ All URLs use the VM's public IP. If you prefer SSH tunnels, replace `4.154.17.25
 | 18 | Traefik | 8080 | http://4.154.17.25:8080 | — | — |
 | 02 | Keycloak SSO | 8180 | http://4.154.17.25:8180 | admin | *(check keycloak-demo ENV)* |
 | 06 | Nextcloud | 8280 | http://4.154.17.25:8280 | admin | Lab02Password! |
-| 07 | Mattermost | 8265 | http://4.154.17.25:8265 | admin@lab.localhost | Lab02Password! |
+| 07 | Mattermost | 8265 | http://4.154.17.25:8265 | testadmin@gmail.com | testadmin |
 | 12 | SuiteCRM | 8302 | http://4.154.17.25:8302 | admin | Admin01! |
 | 13 | Odoo ERP | 8303 | http://4.154.17.25:8303 | admin | admin (DB: testdb) |
 | 16 | Snipe-IT | 8305 | http://4.154.17.25:8305 | admin | Lab01Password! |
-| 19 | Zabbix | 8307 | http://4.154.17.25:8307 | Admin | Lab01Password! |
+| 19 | Zabbix | 8307 | http://4.154.17.25:8307 | Admin | zabbix |
 | 08 | Jitsi Meet | 8880 | http://4.154.17.25:8880 | — | guest mode |
-| 15 | Taiga | 9001 | http://4.154.17.25:9001 | admin | 123123 |
+| 15 | Taiga | 9001 | http://4.154.17.25:9001 | admin | Lab01Password! |
 | 20 | Graylog | 9002 | http://4.154.17.25:9002 | admin | Admin01! |
 | — | docker-mailserver | 143/587 | IMAP/SMTP — see Thunderbird setup ↓ | admin@itstack.local | Lab01Password! |
 
@@ -444,9 +444,7 @@ docker compose down -v
 > ✅ **Already running** as `mm-demo` on port 8265. SMTP is configured via `mail-demo`. Skip directly to **Things to try** below.
 
 **Browse to:** http://4.154.17.25:8265  
-**Login:** `admin@lab.localhost` / `Lab02Password!`
-
-**Re-deploy from scratch (fresh VM only):**
+**Login:** `testadmin@gmail.com` / `testadmin`
 ```bash
 ssh itstack@4.154.17.25
 mkdir -p ~/demo/mattermost && cd ~/demo/mattermost
@@ -488,6 +486,7 @@ echo "Mattermost starting (~90s)..."
 
 **Browse to:** http://localhost:8265  
 **Setup:** Create admin account via the setup wizard (`admin@lab.localhost` / `Lab02Password!`)
+> **Note:** The existing deployment uses `testadmin@gmail.com` / `testadmin` as the admin account.
 
 ### Things to try:
 
@@ -1101,7 +1100,7 @@ bash ~/lab-phase4.sh --only-taiga
 ```
 
 **Browse to:** http://localhost:9001  
-**Login:** `admin` / `123123`
+**Login:** `admin` / `Lab01Password!`
 
 ### Things to try:
 

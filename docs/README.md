@@ -70,6 +70,8 @@ numbered files are copies with YAML front-matter added for catalogue indexing.
 | 21 | [21-production-troubleshooting.md](05-guides/21-production-troubleshooting.md) | Production troubleshooting reference |
 | 22 | [22-gui-walkthrough.md](05-guides/22-gui-walkthrough.md) | Browser-based tour of all running services with credentials |
 | 23 | [23-thunderbird-integration.md](05-guides/23-thunderbird-integration.md) | Thunderbird email, calendar, and contacts integration |
+| 24 | [24-keycloak-oidc-config.md](05-guides/24-keycloak-oidc-config.md) | Keycloak OIDC/SAML SSO configuration for all services |
+| 25 | [25-integrations-guide.md](05-guides/25-integrations-guide.md) | Mattermost↔Taiga, Graylog→Zabbix, IMAP sync, FreePBX↔SuiteCRM CTI |
 
 ### [06-technical-reference/](06-technical-reference/) — Full Technical Reference
 
@@ -132,3 +134,5 @@ Original source documents are numbered 01–14 for catalogue purposes:
 | 21 | Production Troubleshooting | guides |
 | 22 | GUI Walkthrough | guides |
 | 23 | Thunderbird Integration | guides |
+| 24 | Keycloak OIDC Configuration | guides |
+| 25 | Integrations Guide | guides |
