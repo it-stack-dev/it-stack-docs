@@ -311,9 +311,19 @@ Replaces:
 - ⭐⭐⭐ Advanced (Custom development)
 
 **Master Integration Table:**
-- 30+ integration points documented
+- 36+ integration points documented (including Thunderbird client)
 - All combinations covered
 - Testing checklist
+
+**Client Integration (New — 2026-03-11):**
+- **Thunderbird desktop email client** ([23-thunderbird-integration.md](23-thunderbird-integration.md))
+  - IMAP/SMTP → iRedMail (Module 09)
+  - CalDAV calendar sync → Nextcloud (Module 06)
+  - CardDAV contact sync → Nextcloud (Module 06)
+  - LDAP global address book → FreeIPA (Module 01)
+  - OAuth2 / modern auth → Keycloak (Module 02)
+  - S/MIME email signing → FreeIPA CA (Module 01)
+  - Enterprise autoconfig.xml for zero-touch user onboarding
 
 ---
 
@@ -399,8 +409,8 @@ Replaces:
 
 ### Technology Coverage
 
-**Services Documented:** 20+  
-**Integration Points:** 30+  
+**Services Documented:** 20+ (+Thunderbird client)  
+**Integration Points:** 36+  
 **Testing Scenarios:** 100+  
 **Command Examples:** 1,000+  
 
@@ -415,10 +425,27 @@ Replaces:
 | **Business** | SuiteCRM, Odoo, OpenKM | Complete |
 | **IT/Projects** | Taiga, Snipe-IT, GLPI | Complete |
 | **Infrastructure** | Traefik, Zabbix, Graylog | Complete |
+| **Desktop Client** | **Thunderbird** | **Complete** |
 
 ---
 
 ## 🚀 Quick Start Paths
+
+### Path 0: Cloud Lab — Already Running (Right Now) ⭐
+
+**Servers:** 1 Azure VM (`lab-single`, 4.154.17.25)  
+**Services:** 12 services live — Keycloak, Nextcloud, Mattermost, SuiteCRM, Odoo, Snipe-IT, Jitsi, Taiga, Zabbix, Graylog, Traefik, docker-mailserver  
+**Documents:**
+- [18-azure-lab-deployment.md](18-azure-lab-deployment.md) — live environment reference
+- [22-gui-walkthrough.md](22-gui-walkthrough.md) — browser-based tour of every service
+
+**Goal:** Immediately explore a running environment — no provisioning needed  
+**Time to start:** 0 minutes — services are already up
+
+> This is the **recommended first step for all new readers**. Explore the live environment before
+> committing to a full on-premises deployment.
+
+---
 
 ### Path 1: Minimal Test (1 Week)
 **Servers:** 3  
@@ -574,7 +601,7 @@ Year 2+: $20,000/year (22x savings!)
 - Identity, Collaboration, Communications
 - Basic integration
 
-**Version 2.0 (Current):**
+**Version 2.0:**
 - Extended to 8-9 servers
 - Added back office suite:
   - VoIP/PBX (FreePBX)
@@ -587,6 +614,15 @@ Year 2+: $20,000/year (22x savings!)
 - Comprehensive integration guide
 - Extended testing scenarios
 - Complete workflow examples
+
+**Version 2.1 (Current — March 2026):**
+- Azure cloud lab deployment documented (single-VM, 12/20 services live)
+- Added [18-azure-lab-deployment.md](18-azure-lab-deployment.md) — Current Live Deployment section
+- Added cloud topology to [network-topology.md](../07-architecture/network-topology.md)
+- Updated [22-gui-walkthrough.md](22-gui-walkthrough.md) — reflects live service state
+- Thunderbird desktop integration ([23-thunderbird-integration.md](23-thunderbird-integration.md))
+- Admin Runbook, Production Troubleshooting, and On-Call Policy guides added
+- On-premises 8-server architecture documentation preserved in full
 
 **Future Enhancements:**
 - High availability configurations
@@ -684,8 +720,8 @@ This documentation set represents **the most comprehensive open-source enterpris
 
 ---
 
-**Document Version:** 2.0  
-**Last Updated:** February 2026  
-**Total Documentation:** ~600 pages, 20+ services, 30+ integrations  
+**Document Version:** 2.1 *(+Thunderbird client integration)*  
+**Last Updated:** March 2026  
+**Total Documentation:** ~620 pages, 20+ services, 36+ integrations  
 **License:** Open documentation for open-source software  
 **Support:** Community-driven

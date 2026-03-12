@@ -1,7 +1,7 @@
 # IT-Stack — Master TODO & Implementation Checklist
 ## Project: `it-stack` | GitHub Org: `it-stack-dev`
 **Created:** February 27, 2026  
-**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: All Phases ✅ (118/118) · Ansible Integrations ✅ (INT-03–23) · Production Monitoring ✅ · Security CI ✅ · DR Tested ✅ · On-Call Policy ✅
+**Status:** Phases 0–7 Complete · ALL 120 Labs Scripted · Azure Testing: All Phases ✅ (118/118) · Ansible Integrations ✅ (INT-03–23) · Production Monitoring ✅ · Security CI ✅ · DR Tested ✅ · On-Call Policy ✅ · **Thunderbird Integration: INT-24 ✅ · INT-25–29 In Progress**
 
 > This is the living task list for implementing the IT-Stack project using the framework defined in `PROJECT-FRAMEWORK-TEMPLATE.md`.  
 > Check items off as you complete them. Each section maps to a Phase or infrastructure domain.
@@ -482,6 +482,21 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 - [x] Zabbix ↔ Mattermost (infrastructure alerts)  ← **INT-22 DONE** (Sprints 26-35: mattermost-alerts.yml + zabbix-mattermost-media.xml.j2)
 - [x] Graylog ↔ Zabbix (log-based alerting)  ← **INT-23 DONE** (Sprints 26-35: zabbix-alerts.yml + graylog-zabbix-sender.sh.j2)
 
+### Thunderbird Client Integration (INT-24–29)
+
+> **Status:** INT-24 DONE ✅ — `docker-mailserver` deployed on Azure VM (port 143/587, no SSL), 3 accounts created, Nextcloud Mail webmail enabled. Guide updated 2026-03-11 in `docs/05-guides/23-thunderbird-integration.md`
+
+- [x] **INT-24** Thunderbird ↔ docker-mailserver (IMAP port 143 / SMTP port 587, no SSL) — **DONE** (container `mail-demo` running, accounts: admin/jdoe/jsmith, Nextcloud Mail webmail at port 8280 ✅)
+- [x] **Email test suite** `scripts/testing/test-email.sh` — **47/47 PASS** on Azure VM ✅ (`bash ~/test-email.sh`)
+- [ ] **INT-25** Thunderbird ↔ Nextcloud (CalDAV calendar sync) via TbSync add-on — documented, test with TbSync after Thunderbird install
+- [ ] **INT-26** Thunderbird ↔ Nextcloud (CardDAV contact sync) via TbSync add-on — documented, test with TbSync after Thunderbird install
+- [ ] **INT-27** Thunderbird ↔ FreeIPA (LDAP global address book) — LDAP directory config documented; requires FreeIPA running (`bash ~/lab-phase1.sh --only-freeipa`)
+- [ ] **INT-28** Thunderbird ↔ Keycloak (OAuth2 modern auth for IMAP/SMTP) — production feature; Dovecot OAuth2 config + Keycloak client `thunderbird-mailserver`
+- [ ] **INT-29** Thunderbird ↔ FreeIPA CA (S/MIME email signing) — production feature; cert issuance workflow + Thunderbird import guide
+- [ ] Deploy `autoconfig.xml` via Traefik for zero-touch Thunderbird onboarding (points to docker-mailserver port 143/587)
+- [ ] Add Thunderbird lab test scripts to `it-stack-iredmail` repo (`tests/labs/test-lab-05.sh` — SSO integration)
+- [ ] Issue GitHub items in `it-stack-iredmail` for INT-25–29 (INT-24 complete)
+
 ---
 
 ## Production Readiness
@@ -658,6 +673,75 @@ Key fixes: Taiga direct HTTP poll (Django migrations 8–10 min), Graylog journa
 
 ---
 
+## Phase: Cloud Lab Deployment (Azure Single-VM — March 2026)
+
+> This phase tracks the manual Docker-based deployment on a single Azure VM (`lab-single`, `rg-it-stack-phase1`).  
+> Unlike previous phases which ran automated lab scripts, this was a live, hands-on provisioning session.
+
+### Azure Infrastructure
+
+- [x] Azure VM provisioned: `lab-single`, Standard_D4s_v4 (4 vCPU / 16 GB RAM), West US 2
+- [x] Static public IP assigned: `4.154.17.25`
+- [x] NSG rules opened: ports 8080, 8180, 8265, 8280, 8302–8305, 8307, 8880, 9001, 9002, 25, 143, 587
+- [x] Private DNS zone: `lab.it-stack.local`
+- [x] Auto-shutdown configured: 22:00 UTC daily (Azure DevTest Labs policy)
+- [ ] Expand OS disk from 30 GB → 64 GB (blocked by quota — pending resize via Azure Portal)
+- [ ] Delete 2 idle static IPs: `vnet-westus2-IPv4`, `workspace-1-vnet-IPv4` (saves ~$7.44/month)
+- [x] Bastion `workspace-1-vnet-bastion` deleted (was billing ~$140/month idle)
+- [ ] Bastion `rg-stack-test1` deletion confirm (delete queued with `--no-wait`)
+
+### Services Deployed
+
+- [x] docker-mailserver (`mail-demo`) — SMTP :25/:587, IMAP :143, domain: itstack.local
+- [x] Traefik dashboard (`traefik-demo`) — port 8080
+- [x] Keycloak SSO (`keycloak-demo`) — port 8180; Nginx proxy sidecar added
+- [x] Nextcloud (`nc-demo`) — port 8280; 57 apps enabled; SMTP configured
+- [x] Mattermost (`mm-demo`) — port 8265; SMTP configured
+- [x] SuiteCRM (`crm-demo`) — port 8302; SMTP via config_override.php (Bitnami path corrected)
+- [x] Odoo ERP (`odoo-demo`) — port 8303; DB: `testdb`; SMTP via ir_mail_server insert
+- [x] Snipe-IT (`snipe-demo`) — port 8305; 506 error fixed (duplicate migration marked + re-run); admin user created; SMTP via ENV vars
+- [x] Jitsi Meet (`jitsi-web-lab01`) — port 8880; guest mode; JVB on UDP :10000
+- [x] Taiga (`taiga-front-s01`) — port 9001; backend internal on :9000
+- [x] Zabbix (`zabbix-web-s01`) — port 8307; VM host added; Zabbix Agent 2 installed on host
+- [x] Graylog (`graylog-s01`) — port 9002; GELF UDP :12201 input live; Syslog UDP :1514 input live
+- [ ] Zammad — BLOCKED: disk 100% full; retry after disk expansion to 64 GB
+
+### Disk Management
+
+- [x] Removed `mailhog/mailhog:latest` (freed 572 MB) — replaced by docker-mailserver
+- [x] Removed `elasticsearch:8.17.3` (freed 2 GB) — was orphaned (Graylog uses bundled ES)
+- [ ] Run `docker image prune -f` after Zammad deployment to recover additional space
+- [ ] Expand OS disk: Azure Portal → `lab-single_OsDisk` → Size + performance → 64 GB, then `sudo growpart /dev/sda 1 && sudo resize2fs /dev/root`
+
+### Post-Deployment Configuration
+
+- [x] Snipe-IT: migration conflict resolved (`2018_05_14_223646_add_indexes_to_assets` marked in migrations table)
+- [x] Snipe-IT: admin user created via `artisan snipeit:create-admin`
+- [x] Nextcloud: 57 apps installed (`install-nc-apps.sh`)
+- [x] SuiteCRM: SMTP configured via `/bitnami/suitecrm/public/legacy/config_override.php`
+- [x] Odoo: SMTP configured via direct SQL insert into `ir_mail_server` + `ir_config_parameter`
+- [x] Graylog: GELF + Syslog inputs created via REST API on first run
+- [x] Zabbix: lab-single VM added as monitored host via JSON-RPC API
+- [ ] Configure Docker GELF log driver on host (`/etc/docker/daemon.json`) to route all container logs to Graylog
+- [ ] Set up Zabbix → Mattermost webhook alert channel (`#ops-alerts`)
+- [ ] Create Nextcloud external storage config pointing to shared volume
+- [ ] Enable Keycloak OIDC realm clients for Nextcloud and Mattermost
+- [ ] Configure Mattermost slash commands / webhooks for key services
+
+### Documentation Updates (this session)
+
+- [x] `docs/05-guides/18-azure-lab-deployment.md` — Added "Current Live Deployment (March 2026)" section with full service table, compose commands, fix procedures, cost summary
+- [x] `docs/07-architecture/network-topology.md` — Added "Cloud Single-VM Topology" section with container diagram, port map table, and limitations comparison
+- [x] `README.md` — Added Cloud Lab Deployment callout section; updated Project Status table with Cloud row; updated Getting Started
+- [x] `CHANGELOG.md` — Added [2.1.0] — 2026-03-12 entry documenting all cloud lab work
+- [x] `docs/05-guides/22-gui-walkthrough.md` — Updated entire document to reflect live services: corrected Service Directory table (real credentials, ✅ active vs ⏳ pending split), fixed NSG/SSH-tunnel commands to active ports only, added ✅ Already Running callout to each deployed module, added ⏳ Not yet deployed notice to Zammad and FreeIPA, removed stale MailHog reference
+- [x] `docs/05-guides/01-master-index.md` — Added Path 0 (Cloud Lab live environment), updated Documentation Versioning to v2.1
+- [x] `docs/05-guides/17-admin-runbook.md` — Added Deployment Context table (Cloud Lab vs On-Prem), added Cloud Lab VM operations section with health check and user management procedures
+- [x] `docs/05-guides/21-production-troubleshooting.md` — Added deployment context note clarifying single-VM vs multi-server command differences
+
+---
+
 **Document Version:** 2.7  
 **Project:** IT-Stack | **Org:** it-stack-dev  
-**Last Updated:** 2026-03-11 — All TODO items complete ✅. Local Docker test runner fixes: Phase 2 Zammad nginx healthcheck (wget not curl in Alpine, retries→40, wait→900s); Phase 3 FreePBX init time (added wait_http helper, extended cap to 40 min); Phase 4 Snipe-IT (wait doubled to 480s, retries→30), Graylog (wait→1080s, retries→36). Zero open items remain.
+**Last Updated:** 2026-03-12 — Added Phase: Cloud Lab Deployment (Azure Single-VM). 12/13 services live. Zammad pending disk expansion. Documentation updated to reflect live environment.
+

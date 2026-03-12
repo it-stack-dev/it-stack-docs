@@ -1,7 +1,11 @@
 # IT-Stack Production Troubleshooting Guide
 
-> **Comprehensive reference for diagnosing and resolving issues in a running IT-Stack production environment.**  
+> **Comprehensive reference for diagnosing and resolving issues in a running IT-Stack environment.**  
 > For issues encountered during development/testing, see [Complete Issue History](../06-technical-reference/troubleshooting-complete.md).
+
+> **Deployment Context:**  
+> - **Cloud Lab VM** (`lab-single` at `4.154.17.25`): all services are Docker containers on a single host. Replace multi-host SSH commands with `ssh itstack@4.154.17.25`. Container names follow the pattern `<service>-demo` or `<service>-s01`.  
+> - **On-Prem 8-Server**: services are spread across dedicated hosts (`lab-id1`, `lab-db1`, `lab-app1`...) and managed via Ansible. Use the server-specific sections below directly.
 
 ---
 

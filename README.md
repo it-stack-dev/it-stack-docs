@@ -194,6 +194,23 @@ See the full list of [26 repositories](https://github.com/orgs/it-stack-dev/repo
 
 ---
 
+## Cloud Lab Deployment (Live — March 2026)
+
+> **12 services are currently running** on a single Azure VM as a live demo/lab environment.
+
+| Property | Value |
+|----------|-------|
+| VM | `lab-single` — Standard_D4s_v4 (4 vCPU / 16 GB RAM) |
+| Public IP | `4.154.17.25` |
+| Region | West US 2 |
+| Status | ✅ Running — auto-shuts down 22:00 UTC |
+
+**Live services:** Keycloak · Nextcloud (57 apps) · Mattermost · SuiteCRM · Odoo · Snipe-IT · Jitsi Meet · Taiga · Zabbix · Graylog · Traefik · docker-mailserver
+
+See [docs/05-guides/18-azure-lab-deployment.md](docs/05-guides/18-azure-lab-deployment.md) — **Current Live Deployment** section — for all ports, credentials, compose commands, and cost breakdown.
+
+---
+
 ## Project Status
 
 | Phase | Description | Status |
@@ -207,17 +224,19 @@ See the full list of [26 repositories](https://github.com/orgs/it-stack-dev/repo
 | 6 | Lab 01–06 Docker Compose + test scripts — all 20 modules (120 labs) | ✅ Complete — 120/120 PASS on Azure |
 | 7 | SSO integrations tested (FreeIPA→Keycloak→all 9 services) | ✅ Complete — 35/35 PASS on Azure |
 | 8 | Production readiness (Security · Monitoring · Backup · DR · Capacity) | ✅ Complete |
+| Cloud | Single-VM Azure lab — 12/20 services live on 4.154.17.25 | ✅ Live — March 2026 |
 | 9 | Phase 5: Kubernetes / Helm deployment | 🔲 Next |
 
 ---
 
 ## Getting Started
 
-1. **Browse** the docs at https://it-stack-dev.github.io/it-stack-docs/
-2. **Read** [docs/05-guides/01-master-index.md](docs/05-guides/01-master-index.md) for the full documentation map  
-3. **Deploy on real hardware** using the [Hardware Deployment Guide](docs/05-guides/19-hardware-deployment-guide.md)
-4. **Track progress** in [docs/IT-STACK-TODO.md](docs/IT-STACK-TODO.md)
-5. **Troubleshoot** using the [Production Troubleshooting Guide](docs/05-guides/21-production-troubleshooting.md)
+1. **Deploy now** — follow [docs/05-guides/00-quick-start-deploy.md](docs/05-guides/00-quick-start-deploy.md) for cloud (Azure) or on-prem step-by-step setup
+2. **Browse** the docs at https://it-stack-dev.github.io/it-stack-docs/
+3. **Read** [docs/05-guides/01-master-index.md](docs/05-guides/01-master-index.md) for the full documentation map
+4. **Walk through the UI** — see [docs/05-guides/22-gui-walkthrough.md](docs/05-guides/22-gui-walkthrough.md) for every service with credentials
+5. **Track progress** in [docs/IT-STACK-TODO.md](docs/IT-STACK-TODO.md)
+6. **Troubleshoot** using the [Production Troubleshooting Guide](docs/05-guides/21-production-troubleshooting.md)
 
 ---
 

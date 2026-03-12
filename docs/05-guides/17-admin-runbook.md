@@ -6,9 +6,77 @@
 
 ---
 
-## Overview
+## Deployment Context
 
-This runbook covers day-to-day and incident-response procedures for IT-Stack administrators. All configuration management is done via Ansible. All secrets are in `vault/secrets.yml` (Ansible Vault encrypted).
+This runbook covers two operating environments. Identify which one applies before following any procedure:
+
+| | Cloud Lab VM | On-Premises Production |
+|-|-------------|----------------------|
+| **When** | Current live lab (March 2026) | Full 8-server on-prem deployment |
+| **VM / Host** | `lab-single` at `4.154.17.25` | `lab-id1`, `lab-db1`, `lab-app1`... |
+| **Services run as** | Docker containers | systemd services |
+| **Identity** | Keycloak standalone | Keycloak + FreeIPA LDAP |
+| **Config management** | Direct `docker exec` / ENV | Ansible + Ansible Vault |
+| **Service restart** | `docker restart <container>` | `systemctl restart <service>` |
+| **Logs** | `docker logs <container>` | `journalctl -u <service>` |
+
+> **Cloud Lab quick reference:** for the live Azure environment, see the [Current Live Deployment section](18-azure-lab-deployment.md) in the Azure deployment guide and the [GUI Walkthrough](22-gui-walkthrough.md).
+
+---
+
+## Cloud Lab VM — Operations Reference
+
+### Daily Health Check (Azure VM)
+
+```bash
+ssh itstack@4.154.17.25
+
+# All containers status
+docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+
+# Disk usage (critical — 30 GB disk)
+df -h /
+
+# Recent errors across all containers
+docker ps -q | xargs -I{} docker logs --since=1h {} 2>&1 | grep -iE "error|fatal|exception" | tail -20
+```
+
+### Start / Stop Services (Cloud Lab)
+
+```bash
+# Restart a single container
+docker restart <container-name>
+
+# Check a container's logs
+docker logs --tail 100 <container-name>
+
+# Stop all services gracefully
+docker ps -q | xargs docker stop
+
+# Start services defined in a compose stack
+docker compose -f ~/it-stack-labs/<service>/docker-compose.yml up -d
+
+# List all compose stacks
+ls ~/it-stack-labs/
+```
+
+### User Management (Cloud Lab — Keycloak Standalone)
+
+Since FreeIPA is not deployed on the cloud lab VM, user management goes through Keycloak directly:
+
+1. Open http://4.154.17.25:8180 → Admin Console
+2. Select realm `it-stack` (or `master` for admin users)
+3. **Users** → **Add user** → fill in username, email → **Create**
+4. **Credentials** tab → **Set password** → disable **Temporary**
+5. **Groups** tab → assign to appropriate groups
+
+---
+
+## On-Premises Production — Operations Reference
+
+> All procedures below apply to the **8-server on-prem deployment** using Ansible for configuration management.
+
+---
 
 **Ansible repo:** `C:\IT-Stack\it-stack-dev\repos\meta\it-stack-ansible\`  
 **Quick reference:** `make help` from the repo root

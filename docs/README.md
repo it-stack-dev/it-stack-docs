@@ -57,9 +57,19 @@ numbered files are copies with YAML front-matter added for catalogue indexing.
 
 | # | File | Content |
 |---|------|---------|
+| 00 | [00-quick-start-deploy.md](05-guides/00-quick-start-deploy.md) | **Start here** — Cloud or on-prem step-by-step deployment |
 | 01 | [01-master-index.md](05-guides/01-master-index.md) | Master index and reading guide |
 | 02 | [02-lab-manual-structure.md](05-guides/02-lab-manual-structure.md) | 6-lab methodology overview |
 | 14 | [14-project-framework.md](05-guides/14-project-framework.md) | Project framework blueprint (canonical) |
+| 16 | [16-user-onboarding.md](05-guides/16-user-onboarding.md) | End-user onboarding and first-login guide |
+| 17 | [17-admin-runbook.md](05-guides/17-admin-runbook.md) | Admin day-to-day operations and incident response |
+| 18 | [18-azure-lab-deployment.md](05-guides/18-azure-lab-deployment.md) | Azure cloud lab deployment — live environment reference |
+| 18b | [18-on-call-policy.md](05-guides/18-on-call-policy.md) | On-call escalation policy |
+| 19 | [19-hardware-deployment-guide.md](05-guides/19-hardware-deployment-guide.md) | On-prem 8-server Ansible deployment guide |
+| 20 | [20-public-release-guide.md](05-guides/20-public-release-guide.md) | Public release and GitHub Pages publishing guide |
+| 21 | [21-production-troubleshooting.md](05-guides/21-production-troubleshooting.md) | Production troubleshooting reference |
+| 22 | [22-gui-walkthrough.md](05-guides/22-gui-walkthrough.md) | Browser-based tour of all running services with credentials |
+| 23 | [23-thunderbird-integration.md](05-guides/23-thunderbird-integration.md) | Thunderbird email, calendar, and contacts integration |
 
 ### [06-technical-reference/](06-technical-reference/) — Full Technical Reference
 
@@ -98,6 +108,7 @@ Original source documents are numbered 01–14 for catalogue purposes:
 
 | # | Title | Category |
 |---|-------|---------|
+| 00 | Quick Start Deployment Guide | deployment |
 | 01 | Master Index | project |
 | 02 | Lab Manual Structure | labs |
 | 03 | Lab Deployment Plan | deployment |
@@ -112,3 +123,12 @@ Original source documents are numbered 01–14 for catalogue purposes:
 | 12 | Integration Guide | deployment |
 | 13 | GitHub Organization Guide | github |
 | 14 | Project Framework Template | contributing |
+| 15 | IT-STACK-TODO | project |
+| 16 | User Onboarding Guide | guides |
+| 17 | Admin Runbook | guides |
+| 18 | Azure Lab Deployment Guide | deployment |
+| 19 | Hardware Deployment Guide | deployment |
+| 20 | Public Release Guide | guides |
+| 21 | Production Troubleshooting | guides |
+| 22 | GUI Walkthrough | guides |
+| 23 | Thunderbird Integration | guides |

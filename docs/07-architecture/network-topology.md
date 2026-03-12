@@ -1,7 +1,114 @@
 # IT-Stack Network Topology
 
-> This document describes the production network layout for IT-Stack.  
-> For the architecture decision behind this layout see [ADR-006](adr-006-8server-layout.md).
+> This document describes the network topology for IT-Stack in two deployment modes:  
+> **Cloud (current live env)** and **On-Premises 8-Server (production reference)**.  
+> For the architecture decision behind the 8-server layout see [ADR-006](adr-006-8server-layout.md).
+
+---
+
+## Cloud Single-VM Topology (Azure — Live, March 2026)
+
+This is the **currently running lab environment** on a single Azure VM, established during the Phase 1 cloud lab session. All services are containers on a shared Docker bridge network.
+
+### Azure Resources
+
+| Property | Value |
+|----------|-------|
+| Resource Group | `rg-it-stack-phase1` |
+| Region | West US 2 |
+| VM Name | `lab-single` |
+| VM Size | Standard_D4s_v4 (4 vCPU / 16 GB RAM) |
+| OS | Ubuntu 24.04 LTS |
+| OS Disk | 30 GB Premium SSD P4 |
+| Public IP | `4.154.17.25` (static, Standard SKU) |
+| SSH User | `itstack` |
+| Docker bridge | `it-stack-demo` |
+| DNS Zone | `lab.it-stack.local` (Azure Private DNS) |
+
+### Container Layout
+
+```
+Internet
+    │
+    │  TLS (per-service, self-signed / no TLS in lab mode)
+    ▼
+4.154.17.25 — lab-single (Azure VM, West US 2)
+    │
+    ├── NSG: nsg-lab-single
+    │   Inbound open: 8080, 8180, 8265, 8280, 8302, 8303, 8305,
+    │                 8307, 8380, 8880, 9001, 9002, 9005, 25, 143, 587
+    │
+    └── Docker bridge: it-stack-demo (172.18.0.0/16)
+        │
+        ├── :8080  traefik-demo        (Traefik — dashboard)
+        ├── :8180  keycloak-demo       (Keycloak SSO)
+        │          keycloak-proxy      (Nginx reverse proxy for Keycloak)
+        ├── :8265  mm-demo             (Mattermost)
+        │          mm-db               (PostgreSQL for Mattermost)
+        ├── :8280  nc-demo             (Nextcloud — 57 apps)
+        │          nc-db               (PostgreSQL for Nextcloud)
+        ├── :8302  crm-demo            (SuiteCRM)
+        │          crm-db              (MariaDB for SuiteCRM)
+        ├── :8303  odoo-demo           (Odoo ERP, DB: testdb)
+        │          odoo-db             (PostgreSQL for Odoo)
+        ├── :8305  snipe-demo          (Snipe-IT, 506 error fixed)
+        │          snipe-db            (MySQL for Snipe-IT)
+        ├── :8880  jitsi-web-lab01     (Jitsi Meet front end)
+        │          jitsi-prosody       (XMPP signalling)
+        │          jitsi-jicofo        (conference focus)
+        │          jitsi-jvb           (video bridge — UDP :10000)
+        ├── :9001  taiga-front-s01     (Taiga project management)
+        │   :9000  taiga-back-s01      (Taiga Django API — internal)
+        │          taiga-db-s01        (PostgreSQL for Taiga)
+        ├── :8307  zabbix-web-s01      (Zabbix web UI)
+        │          zabbix-srv-s01      (Zabbix server — :10051)
+        │          zabbix-db-s01       (PostgreSQL for Zabbix)
+        ├── :9002  graylog-s01         (Graylog — GELF UDP :12201, Syslog UDP :1514)
+        │          graylog-es-s01      (Elasticsearch for Graylog)
+        │          graylog-mongo-s01   (MongoDB for Graylog config)
+        └── :587   mail-demo           (docker-mailserver — SMTP :25/:587, IMAP :143)
+```
+
+### Port Map (public-facing, via NSG)
+
+| Port | Protocol | Service | Auth |
+|------|----------|---------|------|
+| 22 | TCP | SSH | Key-based |
+| 8080 | TCP | Traefik dashboard | None |
+| 8180 | TCP | Keycloak admin | admin/password |
+| 8265 | TCP | Mattermost | Email/password |
+| 8280 | TCP | Nextcloud | admin/password |
+| 8302 | TCP | SuiteCRM | admin/password |
+| 8303 | TCP | Odoo | admin/password |
+| 8305 | TCP | Snipe-IT | admin/password |
+| 8307 | TCP | Zabbix | Admin/password |
+| 8880 | TCP | Jitsi Meet | None (guest) |
+| 9001 | TCP | Taiga | admin/123123 |
+| 9002 | TCP | Graylog | admin/password |
+| 9005 | TCP | Email test UI | None |
+| 25 | TCP | SMTP (inbound) | — |
+| 143 | TCP | IMAP | credentials |
+| 587 | TCP | SMTP submission | credentials |
+| 10000 | UDP | Jitsi JVB | — |
+| 12201 | UDP | Graylog GELF | — |
+| 1514 | UDP | Graylog Syslog | — |
+
+### Limitations vs. Production
+
+| Aspect | Cloud Single-VM | On-Prem 8-Server |
+|--------|----------------|-----------------|
+| TLS | Self-signed / none | Let's Encrypt via Traefik |
+| Identity | Keycloak standalone | Keycloak + FreeIPA LDAP |
+| DB isolation | Per-service containers | Dedicated lab-db1 host |
+| HA | Single point of failure | HA pairs per service |
+| Network | Public IP, NSG | Private VLAN, Traefik ingress |
+| DNS | Azure Private DNS (lab.it-stack.local) | FreeIPA DNS (it-stack.lab) |
+| Monitoring | Basic Zabbix + Graylog | Full Zabbix + Graylog + alerting |
+| Cost | ~$105/month (Azure) | Hardware / co-lo |
+
+---
+
+## On-Premises 8-Server Topology (Production Reference)
 
 ---
 

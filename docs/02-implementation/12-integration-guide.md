@@ -29,9 +29,10 @@ This guide provides complete integration instructions for connecting all systems
 4. [CRM Integrations](#crm-integrations)
 5. [ERP Integrations](#erp-integrations)
 6. [Document Management Integrations](#document-management-integrations)
-7. [Workflow Automation](#workflow-automation)
-8. [API Integration Examples](#api-integration-examples)
-9. [Complete Workflow Scenarios](#complete-workflow-scenarios)
+7. [Client Integrations](#client-integrations) ← **Thunderbird, mobile apps**
+8. [Workflow Automation](#workflow-automation)
+9. [API Integration Examples](#api-integration-examples)
+10. [Complete Workflow Scenarios](#complete-workflow-scenarios)
 
 ---
 
@@ -1002,12 +1003,52 @@ sudo crontab -e
 | All Apps | Traefik | HTTP | Reverse proxy | ⭐ Basic |
 | All Apps | Zabbix | Agent | Monitoring | ⭐ Basic |
 | All Apps | Graylog | Syslog | Logging | ⭐ Basic |
+| **Thunderbird** | **iRedMail** | **IMAP/SMTP** | **Desktop email client** | **⭐ Basic** |
+| Thunderbird | Nextcloud | CalDAV | Calendar sync | ⭐ Basic |
+| Thunderbird | Nextcloud | CardDAV | Contact sync | ⭐ Basic |
+| Thunderbird | FreeIPA | LDAP | Global address book | ⭐ Basic |
+| Thunderbird | Keycloak | OAuth2 | Modern auth (no password stored) | ⭐⭐ Moderate |
+| Thunderbird | FreeIPA CA | S/MIME (X.509) | Email signing & encryption | ⭐⭐⭐ Advanced |
 
-**Total Integrations:** 30+  
+**Total Integrations:** 36+  *(+6 Thunderbird client integrations)*  
 **Complexity:**
 - ⭐ Basic: Configuration only, no code
 - ⭐⭐ Moderate: Some scripting required
 - ⭐⭐⭐ Advanced: Custom development needed
+
+---
+
+## Client Integrations
+
+### Thunderbird Email Client
+
+Thunderbird is the recommended enterprise desktop email client for IT-Stack deployments. It integrates with five modules through standard open protocols.
+
+**Quick-start reference:**
+
+| What | Protocol | Server (Lab) | Port | Auth |
+|------|----------|-------------|------|------|
+| Email (receive) | IMAP over SSL | `4.154.17.25` | `993` | password |
+| Email (send) | SMTP + STARTTLS | `4.154.17.25` | `587` | password |
+| Calendar | CalDAV (TbSync add-on) | `http://4.154.17.25:8280/remote.php/dav/` | 8280 | password |
+| Contacts | CardDAV (TbSync add-on) | `http://4.154.17.25:8280/remote.php/dav/` | 8280 | password |
+| Address book | LDAP | `4.154.17.25` | `389` | bind DN |
+| Modern auth (prod) | OAuth2 | Keycloak `http://4.154.17.25:8180` | 8180 | browser SSO |
+
+**Required Thunderbird add-ons:**
+1. **TbSync** — sync framework (installs from Thunderbird add-on manager)
+2. **Provider for CalDAV & CardDAV** — TbSync plugin for Nextcloud
+
+**LDAP Base DN (FreeIPA lab):**
+```
+cn=users,cn=accounts,dc=lab,dc=localhost
+```
+
+**Enterprise autoconfig:** Deploy `autoconfig.xml` at  
+`https://mail.yourcompany.com/.well-known/autoconfig/mail/config-v1.1.xml`  
+Thunderbird fetches it automatically when a user enters their email address — zero manual setup.
+
+> **Full guide:** See [docs/05-guides/23-thunderbird-integration.md](../05-guides/23-thunderbird-integration.md) for complete step-by-step instructions, OAuth2 setup, S/MIME signing, and the holistic onboarding workflow.
 
 ---
 
@@ -1052,6 +1093,16 @@ sudo crontab -e
 - [ ] Extension provisioned
 - [ ] Asset assigned in Snipe-IT
 - [ ] GLPI ticket for onboarding
+
+**Thunderbird Client Integration:**
+- [ ] Thunderbird connects IMAP to iRedMail (port 993 SSL)
+- [ ] Thunderbird sends email via SMTP (port 587 STARTTLS)
+- [ ] TbSync syncs Nextcloud Calendar (CalDAV)
+- [ ] TbSync syncs Nextcloud Contacts (CardDAV)
+- [ ] LDAP global address book autocomplete resolves FreeIPA users
+- [ ] OAuth2 auth via Keycloak — no password stored in Thunderbird (production)
+- [ ] S/MIME signing with FreeIPA CA certificate (production)
+- [ ] autoconfig.xml deployed — new users get zero-touch Thunderbird config
 
 ---
 

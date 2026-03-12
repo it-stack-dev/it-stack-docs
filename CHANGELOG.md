@@ -27,6 +27,64 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ---
 
+## [2.1.0] — 2026-03-12
+
+### Added — Cloud Lab Deployment (Azure Single-VM)
+
+This release documents the live hands-on deployment of IT-Stack services on a single Azure VM (`lab-single`, West US 2), establishing the first public-IP-accessible demo environment for IT-Stack.
+
+**Infrastructure**
+- Azure VM `lab-single`: Standard_D4s_v4 (4 vCPU / 16 GB RAM), Ubuntu 24.04 LTS, 30 GB Premium SSD
+- Static public IP `4.154.17.25` with NSG ports opened for all service UIs and protocols
+- Azure Private DNS zone `lab.it-stack.local` mapped to private IP
+- Auto-shutdown policy: 22:00 UTC daily (saves ~33% of compute cost)
+- docker-mailserver `mail-demo` deployed as real SMTP/IMAP relay (domain: itstack.local)
+
+**New Services Deployed**
+- Jitsi Meet (`jitsi-web-lab01`) — port 8880; 4-container stack (web, prosody, jicofo, JVB)
+- Taiga (`taiga-front-s01` + `taiga-back-s01`) — ports 9001/9000; project management
+- Zabbix (`zabbix-web-s01`) — port 8307; full monitoring stack + Zabbix Agent 2 on host
+- Graylog (`graylog-s01`) — port 9002; GELF UDP :12201 + Syslog UDP :1514 inputs live
+
+**Existing Services Configured / Fixed**
+- Nextcloud: 57 apps installed and enabled (collaboration, security, field operations, storage, integration)
+- SuiteCRM: SMTP configured via `config_override.php` (Bitnami image path corrected)
+- Odoo: SMTP configured via direct SQL into `ir_mail_server` + `ir_config_parameter`
+- Mattermost: SMTP wired to `mail-demo`
+- Snipe-IT: 506 Internal Server Error root-caused and fixed — duplicate migration `2018_05_14_223646_add_indexes_to_assets` marked as completed in `migrations` table; remaining migrations applied; admin user created via `artisan snipeit:create-admin`
+- Snipe-IT: SMTP settings injected via container ENV vars (not DB config)
+- Keycloak: Nginx reverse proxy sidecar added for subdirectory routing
+
+### Fixed
+- Snipe-IT 506 error caused by pre-existing `assets_created_at_index` conflicting with migration attempt
+- SuiteCRM SMTP path: Bitnami container stores config in `/bitnami/suitecrm/public/legacy/` — not `/var/www/html/`
+- Odoo SMTP: initial DB created with name `testdb` (not `odoo`) — all DB commands must target `testdb`
+- Disk space: removed orphaned `elasticsearch:8.17.3` image (2 GB) and unused `mailhog/mailhog` (572 MB)
+
+### Documentation
+- `docs/05-guides/18-azure-lab-deployment.md` — New major section: "Current Live Deployment (March 2026)" covering VM specs, all 12+ services and ports, access URLs, NSG rules, SMTP configs, Snipe-IT fix procedure, Graylog/Zabbix setup commands, disk expansion guide, and Azure cost breakdown
+- `docs/07-architecture/network-topology.md` — New major section: "Cloud Single-VM Topology" with full container diagram, port map table, and limitations comparison vs. 8-server on-prem
+- `README.md` — Added "Cloud Lab Deployment (Live — March 2026)" callout; added Cloud row to Project Status table; updated Getting Started steps
+- `docs/IT-STACK-TODO.md` — Added "Phase: Cloud Lab Deployment" section tracking all completed, pending, and blocked items
+- `docs/05-guides/22-gui-walkthrough.md` — Full accuracy pass: Service Directory table split into Active/Pending, all module sections annotated with ✅ Already running or ⏳ Pending, NSG/SSH commands updated to active ports only, corrected credentials (Snipe-IT, Zabbix, Odoo), removed stale MailHog entry, updated Zammad with disk expansion prerequisite
+- `docs/05-guides/01-master-index.md` — Added Path 0 (cloud lab, zero-setup), updated Documentation Versioning to v2.1
+- `docs/05-guides/17-admin-runbook.md` — Added Deployment Context table and Cloud Lab VM operations section (health check, container management, Keycloak user management)
+- `docs/05-guides/21-production-troubleshooting.md` — Added deployment context header clarifying single-VM vs multi-server command translation
+
+### Security / Cost
+- Deleted idle Bastion `workspace-1-vnet-bastion` (was billing ~$140/month while unused)
+- Queued deletion of second Bastion `rg-stack-test1`
+- Identified 2 unattached static IPs for deletion (saves ~$7.44/month)
+- Estimated monthly cost at 16 hrs/day runtime: ~$105/month (within Azure Students $100/month credit with recommended optimizations)
+
+### Known Issues / Pending
+- **Zammad** not deployed — 30 GB OS disk reached 100% capacity during JS asset write; requires disk expansion to 64 GB before retry
+- Docker GELF log driver not yet enabled globally on host (`/etc/docker/daemon.json`) — set up to route all container logs automatically to Graylog
+- Zabbix → Mattermost webhook alert channel (`#ops-alerts`) not yet configured
+- Keycloak OIDC realm clients for Nextcloud and Mattermost not yet wired end-to-end
+
+---
+
 ## [1.41.0] — 2026-03-11
 
 ### Fixed — Sprint 47: Local Docker Test Runner Failures (All 3 Phases)
